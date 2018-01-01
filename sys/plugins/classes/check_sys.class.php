@@ -48,12 +48,6 @@ class check_sys {
         } else {
             $this->errors[] = __('Требуется PHP >= %s (сейчас %s)', '5.2', PHP_VERSION);
         }
-        // проверка MySQL
-        if (function_exists('mysql_info')) {
-            $this->oks[] = 'MySQL: OK';
-        } else {
-            $this->errors[] = __('Невозможно получить информацию о MySQL');
-        }
 
         // проверка PDO
         if (class_exists('pdo')) {
