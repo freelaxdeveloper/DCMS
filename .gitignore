@@ -1,0 +1,16 @@
+*.bak
+*.old
+*.ser
+*.tmp
+/.idea/*
+/build/*
+/nbproject/*
+/sys/logs/*
+/sys/tmp/*
+/sys/files/*.!config.dir.ini
+/sys/languages/*/_*.lng
+/*ehthumbs.db
+/*desktop.ini
+/*Thumbs.db
+/*.Trashes
+/sys/ini/settings.ini

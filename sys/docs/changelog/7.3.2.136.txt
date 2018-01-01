@@ -1,0 +1,3 @@
+[title]7.3.2.136[/title]
+
+[change] Рефакторинг. Функции for_value, output_text, rus_mes, vremja, size_data помечены как устаревшие. Вместо них используются статичные методы в классах text и misc. [url=http://dcms.su/forum/theme.php?id=7872]Подробнее[/url]

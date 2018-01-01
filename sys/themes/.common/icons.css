@@ -1,0 +1,785 @@
+.DCMS_icon{
+display: inline-block;
+overflow: hidden;
+background-image: url(/sys/themes/.common/icons.png);
+}
+.DCMS_icon.up{
+width: 12px;
+height: 12px;
+background-position: -0px -0px;
+}
+.DCMS_icon.down{
+width: 12px;
+height: 12px;
+background-position: -12px -0px;
+}
+.DCMS_icon.delete{
+width: 14px;
+height: 14px;
+background-position: -24px -0px;
+}
+.DCMS_icon.guestbook{
+width: 14px;
+height: 14px;
+background-position: -38px -0px;
+}
+.DCMS_icon.blogs{
+width: 14px;
+height: 14px;
+background-position: -52px -0px;
+}
+.DCMS_icon.news{
+width: 14px;
+height: 14px;
+background-position: -66px -0px;
+}
+.DCMS_icon.photos{
+width: 14px;
+height: 14px;
+background-position: -80px -0px;
+}
+.DCMS_icon.file{
+width: 14px;
+height: 14px;
+background-position: -94px -0px;
+}
+.DCMS_icon.fileobmen{
+width: 14px;
+height: 14px;
+background-position: -108px -0px;
+}
+.DCMS_icon.err{
+width: 14px;
+height: 14px;
+background-position: -122px -0px;
+}
+.DCMS_icon.checked{
+width: 20px;
+height: 15px;
+background-position: -136px -0px;
+}
+.DCMS_icon.registration{
+width: 16px;
+height: 16px;
+background-position: -156px -0px;
+}
+.DCMS_icon.quote{
+width: 16px;
+height: 16px;
+background-position: -172px -0px;
+}
+.DCMS_icon.psd{
+width: 16px;
+height: 16px;
+background-position: -188px -0px;
+}
+.DCMS_icon.settings_dot_common{
+width: 16px;
+height: 16px;
+background-position: -204px -0px;
+}
+.DCMS_icon.settings_dot_adt{
+width: 16px;
+height: 16px;
+background-position: -220px -0px;
+}
+.DCMS_icon.pro_dot_support{
+width: 16px;
+height: 16px;
+background-position: -236px -0px;
+}
+.DCMS_icon.rename{
+width: 16px;
+height: 16px;
+background-position: -252px -0px;
+}
+.DCMS_icon.search{
+width: 16px;
+height: 16px;
+background-position: -268px -0px;
+}
+.DCMS_icon.resources{
+width: 16px;
+height: 16px;
+background-position: -284px -0px;
+}
+.DCMS_icon.pro_dot_remote_backup{
+width: 16px;
+height: 16px;
+background-position: -300px -0px;
+}
+.DCMS_icon.security{
+width: 16px;
+height: 16px;
+background-position: -316px -0px;
+}
+.DCMS_icon.russian{
+width: 16px;
+height: 16px;
+background-position: -332px -0px;
+}
+.DCMS_icon.reply{
+width: 16px;
+height: 16px;
+background-position: -348px -0px;
+}
+.DCMS_icon.send{
+width: 16px;
+height: 16px;
+background-position: -364px -0px;
+}
+.DCMS_icon.pdf{
+width: 16px;
+height: 16px;
+background-position: -380px -0px;
+}
+.DCMS_icon.log_dot_actions{
+width: 16px;
+height: 16px;
+background-position: -396px -0px;
+}
+.DCMS_icon.log_input{
+width: 16px;
+height: 16px;
+background-position: -412px -0px;
+}
+.DCMS_icon.mail{
+width: 16px;
+height: 16px;
+background-position: -428px -0px;
+}
+.DCMS_icon.lock{
+width: 16px;
+height: 16px;
+background-position: -444px -0px;
+}
+.DCMS_icon.license{
+width: 16px;
+height: 16px;
+background-position: -460px -0px;
+}
+.DCMS_icon.kill{
+width: 16px;
+height: 16px;
+background-position: -476px -0px;
+}
+.DCMS_icon.language{
+width: 16px;
+height: 16px;
+background-position: -492px -0px;
+}
+.DCMS_icon.melody{
+width: 16px;
+height: 16px;
+background-position: -0px -16px;
+}
+.DCMS_icon.menu_dot_editor{
+width: 16px;
+height: 16px;
+background-position: -16px -16px;
+}
+.DCMS_icon.notice{
+width: 16px;
+height: 16px;
+background-position: -32px -16px;
+}
+.DCMS_icon.order{
+width: 16px;
+height: 16px;
+background-position: -48px -16px;
+}
+.DCMS_icon.settings_dot_forum{
+width: 16px;
+height: 16px;
+background-position: -64px -16px;
+}
+.DCMS_icon.new{
+width: 16px;
+height: 16px;
+background-position: -80px -16px;
+}
+.DCMS_icon.music{
+width: 16px;
+height: 16px;
+background-position: -96px -16px;
+}
+.DCMS_icon.money{
+width: 16px;
+height: 16px;
+background-position: -112px -16px;
+}
+.DCMS_icon.move{
+width: 16px;
+height: 16px;
+background-position: -128px -16px;
+}
+.DCMS_icon.php{
+width: 16px;
+height: 16px;
+background-position: -144px -16px;
+}
+.DCMS_icon.settings_dot_password{
+width: 16px;
+height: 16px;
+background-position: -160px -16px;
+}
+.DCMS_icon.torrent{
+width: 16px;
+height: 16px;
+background-position: -176px -16px;
+}
+.DCMS_icon.unlock{
+width: 16px;
+height: 16px;
+background-position: -192px -16px;
+}
+.DCMS_icon.www{
+width: 16px;
+height: 16px;
+background-position: -208px -16px;
+}
+.DCMS_icon.tmp_dot_delete{
+width: 16px;
+height: 16px;
+background-position: -224px -16px;
+}
+.DCMS_icon.ticket{
+width: 16px;
+height: 16px;
+background-position: -240px -16px;
+}
+.DCMS_icon.theme{
+width: 15px;
+height: 16px;
+background-position: -256px -16px;
+}
+.DCMS_icon.thumb_down{
+width: 16px;
+height: 16px;
+background-position: -271px -16px;
+}
+.DCMS_icon.thumb_up{
+width: 16px;
+height: 16px;
+background-position: -287px -16px;
+}
+.DCMS_icon.update{
+width: 16px;
+height: 16px;
+background-position: -303px -16px;
+}
+.DCMS_icon.user_dot_0{
+width: 16px;
+height: 16px;
+background-position: -319px -16px;
+}
+.DCMS_icon.vote{
+width: 16px;
+height: 16px;
+background-position: -335px -16px;
+}
+.DCMS_icon.widget{
+width: 16px;
+height: 16px;
+background-position: -351px -16px;
+}
+.DCMS_icon.widgets{
+width: 16px;
+height: 16px;
+background-position: -367px -16px;
+}
+.DCMS_icon.vip{
+width: 16px;
+height: 16px;
+background-position: -383px -16px;
+}
+.DCMS_icon.video{
+width: 16px;
+height: 16px;
+background-position: -399px -16px;
+}
+.DCMS_icon.user_dot_1{
+width: 16px;
+height: 16px;
+background-position: -415px -16px;
+}
+.DCMS_icon.users{
+width: 16px;
+height: 16px;
+background-position: -431px -16px;
+}
+.DCMS_icon.system{
+width: 16px;
+height: 16px;
+background-position: -447px -16px;
+}
+.DCMS_icon.sys_dot_settings{
+width: 16px;
+height: 16px;
+background-position: -463px -16px;
+}
+.DCMS_icon.settings_dot_reg{
+width: 16px;
+height: 16px;
+background-position: -479px -16px;
+}
+.DCMS_icon.settings_dot_themes{
+width: 16px;
+height: 16px;
+background-position: -495px -16px;
+}
+.DCMS_icon.share{
+width: 16px;
+height: 16px;
+background-position: -0px -32px;
+}
+.DCMS_icon.settings_dot_private{
+width: 16px;
+height: 16px;
+background-position: -16px -32px;
+}
+.DCMS_icon.settings{
+width: 16px;
+height: 16px;
+background-position: -32px -32px;
+}
+.DCMS_icon.win_app{
+width: 16px;
+height: 16px;
+background-position: -48px -32px;
+}
+.DCMS_icon.js{
+width: 16px;
+height: 16px;
+background-position: -64px -32px;
+}
+.DCMS_icon.settings_dot_photo{
+width: 16px;
+height: 16px;
+background-position: -80px -32px;
+}
+.DCMS_icon.shit{
+width: 16px;
+height: 16px;
+background-position: -96px -32px;
+}
+.DCMS_icon.show{
+width: 16px;
+height: 16px;
+background-position: -112px -32px;
+}
+.DCMS_icon.sys_dot_antidos{
+width: 16px;
+height: 16px;
+background-position: -128px -32px;
+}
+.DCMS_icon.sys_dot_chmod{
+width: 16px;
+height: 16px;
+background-position: -144px -32px;
+}
+.DCMS_icon.sys_dot_info{
+width: 16px;
+height: 16px;
+background-position: -160px -32px;
+}
+.DCMS_icon.suspicions{
+width: 16px;
+height: 16px;
+background-position: -176px -32px;
+}
+.DCMS_icon.statistics{
+width: 16px;
+height: 16px;
+background-position: -192px -32px;
+}
+.DCMS_icon.star{
+width: 16px;
+height: 16px;
+background-position: -208px -32px;
+}
+.DCMS_icon.stat_dot_referers{
+width: 16px;
+height: 16px;
+background-position: -224px -32px;
+}
+.DCMS_icon.settings_dot_notify{
+width: 16px;
+height: 16px;
+background-position: -240px -32px;
+}
+.DCMS_icon.info{
+width: 16px;
+height: 16px;
+background-position: -256px -32px;
+}
+.DCMS_icon.country_dot_ru{
+width: 16px;
+height: 16px;
+background-position: -272px -32px;
+}
+.DCMS_icon.country_dot_ua{
+width: 16px;
+height: 16px;
+background-position: -288px -32px;
+}
+.DCMS_icon.country_dot_us{
+width: 16px;
+height: 16px;
+background-position: -304px -32px;
+}
+.DCMS_icon.country_dot_en{
+width: 16px;
+height: 16px;
+background-position: -320px -32px;
+}
+.DCMS_icon.country_dot_by{
+width: 16px;
+height: 16px;
+background-position: -336px -32px;
+}
+.DCMS_icon.cms{
+width: 16px;
+height: 16px;
+background-position: -352px -32px;
+}
+.DCMS_icon.code{
+width: 16px;
+height: 16px;
+background-position: -368px -32px;
+}
+.DCMS_icon.complaint{
+width: 16px;
+height: 16px;
+background-position: -384px -32px;
+}
+.DCMS_icon.create{
+width: 16px;
+height: 16px;
+background-position: -400px -32px;
+}
+.DCMS_icon.crown{
+width: 16px;
+height: 16px;
+background-position: -416px -32px;
+}
+.DCMS_icon.developers{
+width: 16px;
+height: 16px;
+background-position: -432px -32px;
+}
+.DCMS_icon.doc{
+width: 16px;
+height: 16px;
+background-position: -448px -32px;
+}
+.DCMS_icon.domain{
+width: 16px;
+height: 16px;
+background-position: -464px -32px;
+}
+.DCMS_icon.dev_dot_update_tables{
+width: 16px;
+height: 16px;
+background-position: -480px -32px;
+}
+.DCMS_icon.dev_dot_save_tables{
+width: 16px;
+height: 16px;
+background-position: -496px -32px;
+}
+.DCMS_icon.debian{
+width: 16px;
+height: 16px;
+background-position: -0px -48px;
+}
+.DCMS_icon.dev_dot_load_tables{
+width: 16px;
+height: 16px;
+background-position: -16px -48px;
+}
+.DCMS_icon.chat_mini{
+width: 16px;
+height: 16px;
+background-position: -32px -48px;
+}
+.DCMS_icon.changelog{
+width: 16px;
+height: 16px;
+background-position: -48px -48px;
+}
+.DCMS_icon.approve{
+width: 16px;
+height: 16px;
+background-position: -64px -48px;
+}
+.DCMS_icon.archive{
+width: 16px;
+height: 16px;
+background-position: -80px -48px;
+}
+.DCMS_icon.archive_rar{
+width: 16px;
+height: 16px;
+background-position: -96px -48px;
+}
+.DCMS_icon.ank_view{
+width: 16px;
+height: 16px;
+background-position: -112px -48px;
+}
+.DCMS_icon.ank_edit{
+width: 16px;
+height: 16px;
+background-position: -128px -48px;
+}
+.DCMS_icon.admin_dot_1{
+width: 16px;
+height: 16px;
+background-position: -144px -48px;
+}
+.DCMS_icon.adt{
+width: 16px;
+height: 16px;
+background-position: -160px -48px;
+}
+.DCMS_icon.authentication{
+width: 16px;
+height: 16px;
+background-position: -176px -48px;
+}
+.DCMS_icon.avatar{
+width: 16px;
+height: 16px;
+background-position: -192px -48px;
+}
+.DCMS_icon.bb_dot_notice{
+width: 16px;
+height: 16px;
+background-position: -208px -48px;
+}
+.DCMS_icon.bb_dot_secure{
+width: 16px;
+height: 16px;
+background-position: -224px -48px;
+}
+.DCMS_icon.birthday{
+width: 16px;
+height: 16px;
+background-position: -240px -48px;
+}
+.DCMS_icon.bb_dot_fix{
+width: 16px;
+height: 16px;
+background-position: -256px -48px;
+}
+.DCMS_icon.bb_dot_del{
+width: 16px;
+height: 16px;
+background-position: -272px -48px;
+}
+.DCMS_icon.bb_dot_add{
+width: 16px;
+height: 16px;
+background-position: -288px -48px;
+}
+.DCMS_icon.bb_dot_change{
+width: 16px;
+height: 16px;
+background-position: -304px -48px;
+}
+.DCMS_icon.donate{
+width: 16px;
+height: 16px;
+background-position: -320px -48px;
+}
+.DCMS_icon.download{
+width: 16px;
+height: 16px;
+background-position: -336px -48px;
+}
+.DCMS_icon.friends{
+width: 16px;
+height: 16px;
+background-position: -352px -48px;
+}
+.DCMS_icon.ftp{
+width: 16px;
+height: 16px;
+background-position: -368px -48px;
+}
+.DCMS_icon.guest{
+width: 16px;
+height: 16px;
+background-position: -384px -48px;
+}
+.DCMS_icon.forum_dot_topic{
+width: 16px;
+height: 16px;
+background-position: -400px -48px;
+}
+.DCMS_icon.forum_dot_theme_dot_1_dot_1{
+width: 16px;
+height: 16px;
+background-position: -416px -48px;
+}
+.DCMS_icon.forum_dot_theme_dot_0_dot_0{
+width: 16px;
+height: 16px;
+background-position: -432px -48px;
+}
+.DCMS_icon.forum_dot_theme_dot_0_dot_1{
+width: 16px;
+height: 16px;
+background-position: -448px -48px;
+}
+.DCMS_icon.forum_dot_theme_dot_1_dot_0{
+width: 16px;
+height: 16px;
+background-position: -464px -48px;
+}
+.DCMS_icon.hdd{
+width: 16px;
+height: 16px;
+background-position: -480px -48px;
+}
+.DCMS_icon.help{
+width: 16px;
+height: 16px;
+background-position: -496px -48px;
+}
+.DCMS_icon.install{
+width: 16px;
+height: 16px;
+background-position: -0px -64px;
+}
+.DCMS_icon.installer{
+width: 16px;
+height: 16px;
+background-position: -16px -64px;
+}
+.DCMS_icon.invite{
+width: 16px;
+height: 16px;
+background-position: -32px -64px;
+}
+.DCMS_icon.admin_dot_0{
+width: 16px;
+height: 16px;
+background-position: -48px -64px;
+}
+.DCMS_icon.image{
+width: 16px;
+height: 16px;
+background-position: -64px -64px;
+}
+.DCMS_icon.hide{
+width: 16px;
+height: 16px;
+background-position: -80px -64px;
+}
+.DCMS_icon.hosting{
+width: 16px;
+height: 16px;
+background-position: -96px -64px;
+}
+.DCMS_icon.forum_dot_search{
+width: 16px;
+height: 16px;
+background-position: -112px -64px;
+}
+.DCMS_icon.forum{
+width: 16px;
+height: 16px;
+background-position: -128px -64px;
+}
+.DCMS_icon.edit{
+width: 16px;
+height: 16px;
+background-position: -144px -64px;
+}
+.DCMS_icon.empty{
+width: 16px;
+height: 16px;
+background-position: -160px -64px;
+}
+.DCMS_icon.error{
+width: 16px;
+height: 16px;
+background-position: -176px -64px;
+}
+.DCMS_icon.dpanel_dot_stat{
+width: 16px;
+height: 16px;
+background-position: -192px -64px;
+}
+.DCMS_icon.dpanel_dot_smiles{
+width: 16px;
+height: 16px;
+background-position: -208px -64px;
+}
+.DCMS_icon.downloads{
+width: 16px;
+height: 16px;
+background-position: -224px -64px;
+}
+.DCMS_icon.dpanel{
+width: 16px;
+height: 16px;
+background-position: -240px -64px;
+}
+.DCMS_icon.exit{
+width: 16px;
+height: 16px;
+background-position: -256px -64px;
+}
+.DCMS_icon.ext{
+width: 16px;
+height: 16px;
+background-position: -272px -64px;
+}
+.DCMS_icon.forum_dot_lp{
+width: 16px;
+height: 16px;
+background-position: -288px -64px;
+}
+.DCMS_icon.forum_dot_lt{
+width: 16px;
+height: 16px;
+background-position: -304px -64px;
+}
+.DCMS_icon.forum_dot_my_themes{
+width: 16px;
+height: 16px;
+background-position: -320px -64px;
+}
+.DCMS_icon.java{
+width: 16px;
+height: 16px;
+background-position: -336px -64px;
+}
+.DCMS_icon.forum_dot_category{
+width: 16px;
+height: 16px;
+background-position: -352px -64px;
+}
+.DCMS_icon.flag{
+width: 16px;
+height: 16px;
+background-position: -368px -64px;
+}
+.DCMS_icon.flash{
+width: 16px;
+height: 16px;
+background-position: -384px -64px;
+}
+.DCMS_icon.folder{
+width: 16px;
+height: 16px;
+background-position: -400px -64px;
+}
+.DCMS_icon.settings_dot_services{
+width: 17px;
+height: 18px;
+background-position: -416px -64px;
+}

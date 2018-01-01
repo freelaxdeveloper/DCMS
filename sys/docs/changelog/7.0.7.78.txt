@@ -1,0 +1,3 @@
+[title]7.0.7.78[/title]
+
+[fix] Функция [b]get_called_class[/b] (PHP >= 5.3) заменена на [b]get_class[/b]

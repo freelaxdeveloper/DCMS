@@ -1,0 +1,8 @@
+[title]7.5.2.155[/title]
+
+[fix] Значение счетчика по умолчанию должно быть пустым.
+[fix] Браузеры, о которых 'Нет данных' будут иметь ID=0.
+[change] url для автоматического обновления в конфиге.
+[change] Флаг Украины более похож на тот, каким он должен быть ([url=https://bitbucket.org/DESURE/dcms/commits/ebe5ccf635d9c6c10ddbcd339042ba7bf4e95f98]ebe5ccf[/url]) // «[url=https://DCMS.su/profile.view.php?id=9]S1S13AF7[/url]»
+[change] Обновлён белоруский языковый пакет // «[url=https://dcms.su/profile.view.php?id=231]Borisov[/url]»
+[add] счетчик в журнале авторизаций  // «[url=https://dcms.su/profile.view.php?id=9]S1S13AF7[/url]»

@@ -1,0 +1,3 @@
+[title]7.0.2.35[/title]
+
+[fix] Исправлена ошибка [b]Undefined variable: scheme[/b] при обновлении

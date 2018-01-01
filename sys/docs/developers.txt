@@ -1,0 +1,38 @@
+[title]Разработчики[/title]
+[big]Создатель и главный разработчик:[/big]
+- [b][url="http://dcms.su/profile.view.php?id=1"]DESURE[/url][/b]
+[big]Исправление багов:[/big]
+- [b][url="http://misc.pp.ua/id1"]S1S13AF7[/url][/b]
+[big]Работа над PDO:[/big]
+- [b][url="http://dcms.su/profile.view.php?id=3336"]valerik[/url][/b]
+
+[b]Хотите присоединиться к числу разработчиков?[/b]
+[b]Обладаете хорошими знаниями PHP, MySQL и имеете опыт работы с DCMS?[/b]
+Пишите на [b]desure[/b]@mail.ru
+
+[big]Дизайнеры:[/big]
+- [b][url="http://dcms.su/profile.view.php?id=1"]DESURE[/url][/b]
+
+[b]Хотите присоединиться к числу дизайнеров?[/b]
+[b]У вас есть чувство стиля?[/b]
+[b]Имеются знания PHP, HTML, CSS и опыт верстки под различные устройства?[/b]
+[b]Имеете опыт работы с DCMS?[/b]
+Пишите на [b]desure[/b]@mail.ru
+
+[big]Локализация:[/big]
+- [b][url="http://misc.pp.ua/id1"]S1S13AF7[/url][/b]: Ukrainian
+- [b]Інверсія[/b]: English
+- [b]Zanger[/b]: Indonesian
+- [b][url="http://dcms.su/profile.view.php?id=2234"]deemuss[/url][/b]: Polish
+- [b][url="http://dcms.su/profile.view.php?id=231"]Borisov[/url][/b]: Belarus
+- [b][url="http://dcms.su/profile.view.php?id=2399"]GiGABYTE[/url][/b]: Azerbaycanca
+- [b][url="http://dcms.su/profile.view.php?id=5184"]kumku[/url][/b]: Kazakh
+- [b][url="http://dcms.su/profile.view.php?id=5072"]arturik_90[/url][/b]: Ўзбекча
+- [b][url="http://dcms.su/profile.view.php?id=6538"]Royal[/url][/b]: Romanian
+
+[big]Помощь проекту:[/big]
+Если Вы заинтересованы в дальнейшем развитии проекта и у Вас есть возможность поддержать разработчиков материально, Вы можете отправить любую сумму денег на один из WebMoney кошельков:
+[b]R428849816208
+Z308551840797
+E103245056189
+U335605254488[/b]

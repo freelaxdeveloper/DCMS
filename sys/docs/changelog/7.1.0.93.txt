@@ -1,0 +1,3 @@
+[title]7.1.0.93[/title]
+
+[fix] Исправлена ошибка Undefined class constant 'browser_type_auto' 

@@ -1,0 +1,390 @@
+
+#title {
+    /* Заголовок страницы */
+    text-align: center;
+    font-size: large;
+    overflow: hidden; 
+    white-space: nowrap;
+    padding: 10px 5px;
+    background-color: #3CA1FF;
+    color: white;
+    border-bottom: 1px #C1D3DF solid;
+}
+
+.theme_light.theme_light_light a {
+    color: #38599E;
+}
+
+#tabs{
+    text-align: center;
+    background-color: #DADADA;
+    border-bottom: 1px solid #CBCBCB;
+}
+
+#tabs .tab{
+    margin: 2px 3px;
+    display: inline-block;
+}
+
+#tabs .tab.sel1{
+    color: #000;
+    text-decoration: none;
+}
+
+#adt_top, #adt_bottom{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: large;
+}
+#adt_top a, #adt_bottom a{
+    display: block;
+    margin: 5px;
+}
+
+#adt_top{
+    border-radius: 5px;
+}
+
+#navigation_user {
+    padding: 2px 10px;
+    text-align: right;
+    background-color: #EBEBEB;
+    border-top: 1px solid #E7E7E7;
+    border-bottom: 1px solid #CCC;
+    font-size: medium;
+}
+
+#navigation_user  a{
+    display: inline-block;
+    padding: 1px 2px;
+}
+
+#messages > div{
+    margin: 5px auto;
+    padding: 5px 2%;
+    min-width: 50%;
+    text-align: center;
+    border-radius: 2px;
+    color: white;
+}
+#messages > .err{
+    background-color: #FF5757;    
+    border: 1px solid #B60505;    
+}
+#messages > .msg{
+    background-color: #00AC00;
+    border: 1px solid #016301;
+}
+
+#content{
+    padding: 3px;
+}
+
+.form{
+    border-radius: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #CCC;
+    padding: 3px;
+    background-color: #F0F4F7;
+    font-size: medium;
+}
+
+.form input[type="text"],.form input[type="password"]{
+    padding: 2px 5px;
+    margin-bottom: 4px;
+    margin-right: 2px;
+    border: 1px #A3CAF1 solid;
+    border-radius: 2px;
+    box-shadow: 0 1px 6px -3px #002F6B inset;
+}
+
+.form input[type="submit"]{
+    padding: 2px 5px;
+    margin-bottom: 4px;
+    margin-right: 2px;
+    border: 1px #0F78DA solid;
+    background-color: #3CA1FF;
+    border-radius: 2px;
+    color: white;
+    box-shadow: 0 0 1px 0 white inset, 0 1px 5px -2px black;
+}
+
+.form textarea{
+    margin-bottom: 4px;
+    border: 1px solid #A3CAF1;
+    padding: 2px;
+    box-shadow: 0 1px 6px -3px black inset;
+    border-radius: 2px;    
+}
+
+.form select{
+    margin: 1px;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+}
+
+.listing{
+    margin-bottom: 5px;
+}
+
+.post > table{
+    padding: 1px;
+}
+
+.post{
+    display: block !important;
+    border: 1px #ccc solid;
+    border-top-style: none !important;
+    background-color: #F2F4F8;
+}
+
+.post:first-child{
+    border-top-style: solid !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.post:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.post td{
+    padding: 2px;
+    color: #424242;
+}
+
+.post td.icon{
+    width: 16px;
+    height: 16px;
+}
+
+.post td.image{
+    width: 48px;
+}
+
+.post td.title{
+    font-size: medium;
+}
+
+.post.hightlight td.title{
+    font-weight: bold;
+    color: #6F6F6F;
+}
+
+a.post:hover{
+    text-decoration: none !important;
+}
+
+.post td.right{
+    width: 1px;
+    white-space: nowrap;
+    font-size: small;
+}
+
+.post td.content{
+    font-size: medium;
+    padding-left: 10px;
+}
+
+.post td.bottom{
+    text-align: right;
+    font-size: small;
+    color: #999;
+}
+
+.post .actions a{
+    padding: 2px;
+    opacity: 0.7;
+}
+
+.post .actions a:hover{
+    opacity: 1;
+}
+
+.post .time{
+    font-size: small;
+    color: #999;
+}
+
+.post .counter{
+    white-space: nowrap;
+    border-radius: 2px;
+    padding: 1px 4px;
+    float: right;
+    font-weight: bold;
+    color: #3F7EFD;
+    border: 1px #CCC solid;
+    background-color: #fff;
+    font-size: small;
+}
+
+#actions, #returns{
+    padding: 2px;
+    font-size: medium;
+}
+
+#actions div, #returns div{
+    display: block;
+    padding: 2px 5px;
+    border: 1px solid #ccc;
+    border-top-style: none !important;
+    background-color: #F2F4F8;
+}
+
+#actions div{
+    background-color: #4CA9FF;
+    border-color: #4791FF;
+}
+
+#actions a{
+    color: #fff;
+}
+
+#returns div{
+
+}
+
+#actions div:first-child, #returns div:first-child{
+    border-top-style: solid !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#actions div:last-child, #returns div:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#foot{
+    text-align: right;
+    color: #A7A7A7;
+    padding-right: 10px;
+    font-size: small;
+}
+
+#foot a{
+    color: #808183;
+    font-weight: bold;
+}
+
+.pages{
+    text-align: center;
+    padding: 5px;
+    font-size: medium;
+}
+
+.pages > *{
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 2px;
+    border: 1px #CCC solid;
+    border-radius: 2px;
+}
+
+.pages > span{
+    background-color: #4DA9FD;
+    color: white;
+}
+
+.pages > a{
+
+}
+
+.DCMS_photo {
+    background-color: #DFDFED;
+    margin: 1px;
+    padding: 4px;
+    border: 1px #CCCCE5 solid;
+}
+
+.DCMS_nick_on {
+    text-shadow: none;
+    border-bottom: 1px solid #26C026;
+    text-decoration: none;
+}
+
+
+/* выделение в результатах поиска */
+.DCMS_mark {
+    font-weight: bold;
+    color: #F6A21A;
+}
+
+table.links {
+    font-weight: bold;
+    background-color: #DCEDFF;
+    width: 100%;
+    text-align: center;
+}
+
+.DCMS_quote {
+    border: 1px solid #DFDFDF;
+    border-radius: 2px;
+    margin: 3px;
+    padding: 3px;
+    background-color: white;
+    font-size: small;
+    color: #666;
+}
+
+.DCMS_quote_title {
+    font-weight: bold;
+}
+
+/* ну мало ли...*/
+.DCMS_youtube iframe{
+    height: 240px;
+}
+
+/* Голосования */
+div.vote {
+    margin: 3px;
+    padding: 3px;
+    background-color: #fff;
+    border: 1px solid #B4B4B4;
+    border-radius: 5px;
+    font-size: medium;
+}
+
+div.vote a:hover {
+    text-decoration: none;
+}
+
+div.vote_name {
+    font-weight: bold;
+    padding-bottom: 4px;
+    text-align: center;
+}
+
+td.votes{
+    height: 16px;
+    border: 1px #CCC solid;
+    border-radius: 2px;
+    background-color: #EBEBEB;
+}
+
+div.votes{
+    background-color: #3CA1FF;
+    border-radius: 2px;
+    color: white;
+
+    text-align: right;
+    padding: 1px 3px;
+    box-sizing: border-box;
+}
+
+td.votes_add{
+    padding-left: 3px;
+    width: 19px;
+}
+
+td.votes_add a {
+    width: 16px;
+    height: 100%;
+    text-align: center;
+    display: block;
+    padding: 1px 3px;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+}

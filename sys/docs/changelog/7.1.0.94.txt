@@ -1,0 +1,3 @@
+[title]7.1.0.94[/title]
+
+[fix] При установке данной версии появлялась ошибка Notice: Trying to get property of non-object in /sys/plugins/classes/bbcode.class.php on line 896

@@ -1,0 +1,135 @@
+@charset "UTF-8";
+/*
+	В данном файле содержатся предопределенные системой классы
+	При создании своей темы оформления данный файл обязательно должен быть подгружен темой оформления
+*/
+
+* {
+	font-family: tahoma, arial, verdana, sans-serif, Lucida Sans;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+	vertical-align: top;
+}
+
+table {
+	border: 0;
+	border-spacing: 0;
+}
+
+td {
+	padding: 0;
+}
+
+.mark {
+	background: #FFEB90;
+}
+
+.desc {
+	border-bottom: 1px solid #5A7F97;
+	padding-top: 15px;
+}
+
+.DCMS_nick_on {
+
+}
+
+.DCMS_nick_off {
+
+}
+
+.DCMS_nick_donate,
+.DCMS_nick_birthday {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+}
+
+.DCMS_nick_donate {
+	background-image: url("/sys/images/icons/donate.png");
+}
+
+.DCMS_nick_birthday {
+	background-image: url("/sys/images/icons/birthday.png");
+}
+
+.DCMS_quote {
+	border: 1px solid #ccc;
+	font-size: 90%;
+}
+
+.DCMS_quote_title {
+
+}
+
+.DCMS_bb_image {
+	max-width: 100%;
+}
+
+.DCMS_phpcode {
+	max-width: 600px;
+	overflow: auto;
+	cursor: text;
+}
+
+.DCMS_font_bold {
+	font-weight: bold;
+}
+
+.DCMS_photo {
+
+}
+
+.DCMS_spoiler {
+
+}
+
+.DCMS_spoiler_title {
+
+}
+
+.DCMS_spoiler_content {
+
+}
+
+.DCMS_youtube,
+.DCMS_vk_video
+{
+	text-align: center;
+	padding: 5px 0;
+}
+
+.DCMS_youtube iframe,
+.DCMS_vk_video iframe
+{
+	width: 600px;
+	height: 360px;
+	display: inline-block;
+	max-width: 100%;
+}
+
+.DCMS_rating_up {
+	color: #00711B;
+}
+
+.DCMS_rating_down {
+	color: #96000E;
+}
+
+#banners {
+	text-align: center;
+}
+
+#banners img {
+	margin: 1px;
+	height:31px;
+	width: 88px;
+}
+
+#browsers > a#firefox { background: url(/sys/images/browsers/firefox.png) no-repeat 50% 17px; }
+#browsers > a#chrome { background: url(/sys/images/browsers/chrome.png) no-repeat 50% 17px; }
+#browsers > a#opera { background: url(/sys/images/browsers/opera.png) no-repeat 50% 15px; }

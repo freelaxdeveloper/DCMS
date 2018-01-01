@@ -1,0 +1,3 @@
+[title]7.4.1.147[/title]
+
+[fix] Light Touch - при отправке формы AJAX`ом она оставалась disabled

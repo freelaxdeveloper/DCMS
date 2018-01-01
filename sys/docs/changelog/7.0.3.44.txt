@@ -1,0 +1,3 @@
+[title]7.0.3.44[/title]
+
+[fix] Исправлена ошибка в [b]user.is_friend.php[/b]

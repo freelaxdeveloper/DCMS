@@ -1,0 +1,4 @@
+[title]7.3.0.128[/title]
+
+[add] При отсутствии META тегов Keywords и Description, их значение берется из заголовка.
+[add] Добавлен META тег Generator, указывающий название и версию CMS
