@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
   FREE TO USE

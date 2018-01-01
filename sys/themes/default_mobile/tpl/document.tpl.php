@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="<?= $path ?>/res/style.css" type="text/css"/>
     <meta name="viewport" content="minimum-scale=1.0,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <meta name="generator" content="DCMS <?= $dcms->version ?>"/>
-    <? if ($description) { ?>
-        <meta name="description" content="<?= $description ?>" /><? } ?>
-    <? if ($keywords) { ?>
-        <meta name="keywords" content="<?= $keywords ?>" /><? } ?>
+    <?php if ($description) { ?>
+        <meta name="description" content="<?= $description ?>" /><?php } ?>
+    <?php if ($keywords) { ?>
+        <meta name="keywords" content="<?= $keywords ?>" /><?php } ?>
     <script>
         window.translate = {
             'friends': "<?=__("Друзья")?>",
@@ -57,13 +57,13 @@
         </span>
         <span class="t"><?= $title ?></span>
     </header>
-    <? $this->displaySection('after_title') ?>
+    <?php $this->displaySection('after_title') ?>
     <?php if ($tabs) { ?>
         <div id="tabs">
             <?= $this->section($tabs, '<a class="tab sel{selected}" href="{url}">{name}</a>', true); ?>
         </div>
     <?php } ?>
-    <? $this->displaySection('before_content') ?>
+    <?php $this->displaySection('before_content') ?>
     <section id="content">
         <div id="messages">
             <?= $this->section($err, '<div class="error">{text}</div>'); ?>
@@ -71,8 +71,8 @@
         </div>
         <?php $this->displaySection('content') ?>
     </section>
-    <? $this->displaySection('after_content') ?>
-    <? $this->display('inc.foot.tpl') ?>
+    <?php $this->displaySection('after_content') ?>
+    <?php $this->display('inc.foot.tpl') ?>
     <footer id="footer">
         <?= /** @var string $document_generation_time */
         __("Время генерации страницы: %s сек", $document_generation_time) ?><br/>
@@ -86,7 +86,7 @@
         <a class="reg" href="/reg.php?return=<?= URL ?>"></a>
     </div>
     <div class="menu">
-        <? $this->displaySection('menu') ?>
+        <?php $this->displaySection('menu') ?>
     </div>
 </aside>
 </body>

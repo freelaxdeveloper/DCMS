@@ -1,7 +1,7 @@
 <div class="votes">
     <span class="votes_name"><?= $name ?></span>
     <table style="width: 100%">
-        <?
+        <?php
         foreach ($votes AS $vote) {
             ?>
             <tr>
@@ -16,12 +16,12 @@
                         <?= $vote['pc'] ?>%
                     </div>
                 </td>
-                <? if ($is_add) { ?>
+                <?php if ($is_add) { ?>
                     <td>
                         <a class="vote_plus" href="<?= $vote['url'] ?>">+</a>
                     </td>
-                <? } ?>
+                <?php } ?>
             </tr>        
-        <? } ?>
+        <?php } ?>
     </table>
 </div>

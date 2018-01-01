@@ -1,4 +1,4 @@
-<?
+<?php
 $classes = array('post', 'clearfix');
 if ($highlight) {
     $classes[] = 'highlight';
@@ -33,11 +33,11 @@ if ($content) {
     <div class="post_image"><img src="<?= $image ?>" alt=""></div>
     <div class="post_head">
         <span class="post_icon">
-            <? if ($icon_class) { ?>
+            <?php if ($icon_class) { ?>
                 <span class="<?= $icon_class ?>"></span>
-            <? } else { ?>
+            <?php } else { ?>
                 <img src="<?= $icon ?>" alt="">
-            <? } ?>
+            <?php } ?>
         </span>
         <a class="post_title" <?php if ($url) { ?>href="<?= $url ?>"<?php } ?>><?= $title ?></a>
         <span

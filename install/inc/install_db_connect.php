@@ -14,12 +14,28 @@ class install_db_connect {
         if (isset($_POST['mysql_pass']))$this->settings['mysql_pass'] = $_POST['mysql_pass'];
         if (isset($_POST['mysql_base']))$this->settings['mysql_base'] = $_POST['mysql_base'];
 
-        if (!@mysql_connect($this->settings['mysql_host'], $this->settings['mysql_user'], $this->settings['mysql_pass']))
-            $this->err_connect = true;
-        elseif (!@mysql_select_db($this->settings['mysql_base']))
-            $this->err_db = true;
-        else
+        // if (!@mysql_connect($this->settings['mysql_host'], $this->settings['mysql_user'], $this->settings['mysql_pass']))
+        //     $this->err_connect = true;
+        // elseif (!@mysql_select_db($this->settings['mysql_base']))
+        //     $this->err_db = true;
+        // else
+        //     $this->is_connected = true;
+
+
+        $dsn = 'mysql:host=' . $this->settings['mysql_host'] . ';dbname=' . $this->settings['mysql_base'] . ';charset=utf8';
+        $opt = [
+            \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            \PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
+        try {
+            new \PDO($dsn, $this->settings['mysql_user'], $this->settings['mysql_pass'], $opt);
             $this->is_connected = true;
+        } catch (Exception $e) {
+            $this->err_db = true;
+        }
+    
+
     }
 
     function actions()

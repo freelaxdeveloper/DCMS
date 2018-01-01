@@ -35,15 +35,19 @@ class install_load_sql {
             $tab = new table_structure($file);
             $sql = $tab->getSQLQueryCreate();     
              //echo '<pre>'.output_text($sql).';</pre><br />'; 
-            if (!DB::me()->query($sql))
-                $return = false;
+            if (!DB::me()->query($sql)){
+                //$return = false;
+            }
         }
         // exit;
         foreach ($files_sql as $file) {
+            echo 8;
             $sqls = sql_parser::getQueriesFromFile($file);
             foreach ($sqls as $sql) {
-                if (!DB::me()->query($sql))
-                    $return = false;
+                if (!DB::me()->query($sql)){
+                    //$return = false;
+                }
+                    
             }
         }
 
@@ -69,5 +73,3 @@ class install_load_sql {
     }
 
 }
-
-?>

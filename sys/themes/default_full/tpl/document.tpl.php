@@ -40,12 +40,12 @@
     <script charset="utf-8" src="/sys/themes/.common/elastic.js" type="text/javascript"></script>
     <script charset="utf-8" src="<?= $path ?>/js.js?6" type="text/javascript"></script>
     <meta name="generator" content="DCMS <?= dcms::getInstance()->version ?>"/>
-    <? if ($description) { ?>
+    <?php if ($description) { ?>
         <meta name="description" content="<?= $description ?>"/>
-    <? } ?>
-    <? if ($keywords) { ?>
+    <?php } ?>
+    <?php if ($keywords) { ?>
         <meta name="keywords" content="<?= $keywords ?>"/>
-    <? } ?>
+    <?php } ?>
     <script>
         user = <?=json_encode(current_user::getInstance()->getCustomData(array('id', 'group', 'mail_new_count', 'friend_new_count', 'nick')))?>;
         translates = {

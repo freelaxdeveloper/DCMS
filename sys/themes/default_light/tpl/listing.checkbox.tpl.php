@@ -1,4 +1,4 @@
-<?
+<?php
 $div = 'post gradient_grey border padding ' . ($highlight ? 'post_hightlight' : '');
 $post_time = $time ? '<span class="post_time">' . $time . '</span>' : '';
 $post_counter = $counter ? '<span class="post_counter">' . $counter . '</span>' : '';
@@ -20,21 +20,21 @@ $checked_st = $checked ? ' checked="checked"' : '';
             </tr>
 
 
-            <? if ($content) { ?>
+            <?php if ($content) { ?>
                 <tr>
                     <td class="content" colspan="10">
                         <?= $content ?>
                     </td>
                 </tr>
-            <? } ?>
+            <?php } ?>
 
-            <? if ($bottom) { ?>
+            <?php if ($bottom) { ?>
                 <tr>
                     <td class="bottom" colspan="10">
                         <?= $bottom ?>
                     </td>
                 </tr>
-            <? } ?>
+            <?php } ?>
         </table>
     </label>
 </div>

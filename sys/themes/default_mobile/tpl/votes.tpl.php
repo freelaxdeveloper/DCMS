@@ -1,7 +1,7 @@
 <div class="vote">
     <span class="vote_name"><?=$name?></span>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <? for ($i =0; $i< count($votes); $i++){?>
+        <?php for ($i =0; $i< count($votes); $i++){?>
         <tr>
             <td colspan="2">
                 <?=$votes[$i]['name']?>
@@ -17,14 +17,14 @@
 
                 </div>
             </td>
-            <?if ($is_add){?>
+            <?php if ($is_add){?>
             <td class="votes_add">
                 <div>
                     <a class="gradient_blue" href="<?=$votes[$i]['url']?>">+</a>
                 </div>
             </td>
-            <?}?>
+            <?php }?>
         </tr>        
-        <?}?>
+        <?php }?>
     </table>
 </div>

@@ -19,7 +19,7 @@ function _theme_pages_helper($page, $current, $url)
 
 ?>
 <div class="pages">
-    <?
+    <?php
     echo _theme_pages_helper(1, $page, $url);
     foreach ($show_pages as $p) {
         echo _theme_pages_helper($p, $page, $url);
