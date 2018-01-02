@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,files,files_file,captcha,form};
+
 $doc = new document(1); // инициализация документа для браузера
 $doc->title = __('Мой аватар');
 

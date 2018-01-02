@@ -30,23 +30,7 @@ if (@function_exists('ini_set')) {
 /**
  * @const H путь к корневой директории сайта
  */
-if (file_exists($_SERVER ['DOCUMENT_ROOT'] . '/sys/plugins/classes/dcms.class.php')) {
-    define('H', $_SERVER ['DOCUMENT_ROOT']); // корневая директория сайта
-} else {
-    /* Если $_SERVER ['DOCUMENT_ROOT'] не является корневой директорией сайта, то будем искать ее вручную */
-
-    $rel_path = '';
-    $searched_file = 'sys/plugins/classes/dcms.class.php';
-    for ($i = 0; $i < 10; $i++) {
-        if (file_exists($rel_path . $searched_file)) {
-            $abs_path = realpath($rel_path . $searched_file);
-            break;
-        }
-        $rel_path .= '../';
-    }
-    define('H', str_replace($searched_file, '', str_replace('\\', '/', $abs_path))); // корневая директория сайта
-    unset($rel_path, $searched_file, $abs_path);
-}
+define('H', $_SERVER ['DOCUMENT_ROOT']); // корневая директория сайта
 
 /**
  * @const TEMP временная папка
@@ -116,18 +100,6 @@ if (@function_exists('ini_set')) {
     ini_set('display_errors', true);
 }
 
-if (version_compare(PHP_VERSION, '5.4', '<=')){
-    // Исправлет ошибку php с удалением объектов, содержащих перекрестные ссылки. (Fatal error :  Exception thrown without a stack frame Unknown on line 0)
-    function shutdown()
-    {
-        if (@function_exists('ini_set')) {
-            // Выключаем отображение ошибок перед завершением работы скрипта.
-            ini_set('display_errors', false);
-        }
-    }
-    register_shutdown_function('shutdown');
-}
-
 /**
  * @const URL текущая страница.
  */
@@ -147,6 +119,7 @@ if (function_exists('iconv')) {
  * автоматическая загрузка классов
  * @param string $class_name имя класса
  */
+/*
 function dcmsAutoload($class_name) {
     $path = H . '/sys/plugins/classes/' . strtolower($class_name) . '.class.php';
     if (file_exists($path)) {
@@ -155,7 +128,8 @@ function dcmsAutoload($class_name) {
 }
 
 spl_autoload_register('dcmsAutoload');
-
+*/
+require_once(H . '/vendor/autoload.php');
 include_once (H . '/sys/plugins/classes/cache.class.php');
 
 /**
@@ -183,7 +157,7 @@ function passgen($len = 32) {
     }
     return $password;
 }
-
+use App\language_pack;
 /**
  * @global \language_pack $user_language_pack Текущий языковой пакет
  */

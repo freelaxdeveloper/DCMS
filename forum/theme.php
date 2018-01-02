@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,current_user,sprite,user,listing,misc,text,pages,groups};
+
 $doc = new document();
 $doc->title = __('Форум');
 

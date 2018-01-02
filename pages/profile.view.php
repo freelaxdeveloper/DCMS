@@ -6,6 +6,8 @@
  */
 
 include_once '../sys/inc/start.php';
+use App\{document,user,text,form,url,listing,misc,files};
+
 $doc = new document ();
 $doc->title = __('Анкета');
 

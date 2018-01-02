@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,url,form,text};
+
 $doc = new document();
 $doc->title = __('Новый раздел');
 

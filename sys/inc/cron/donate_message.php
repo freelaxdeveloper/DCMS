@@ -1,4 +1,6 @@
 <?php
+use App\{cache_events,bb,groups};
+
 if (!$dcms->donate_message && !cache_events::get('donate_message')) {
     cache_events::set('donate_message', true, mt_rand(82800, 86400));
 

@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text,user,pages,listing};
+
 $doc = new document(5);
 $doc->title = __('Назначить модератора темы');
 

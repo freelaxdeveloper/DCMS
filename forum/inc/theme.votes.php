@@ -1,4 +1,6 @@
 <?php
+use App\{votes};
+
 if ($theme['id_vote']) {
     $q = $db->prepare("SELECT * FROM `forum_vote` WHERE `id` = ? AND `group_view` <= ?");
     $q->execute(Array($theme['id_vote'], $user->group));

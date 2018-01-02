@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,captcha,form,url,misc};
+
 $doc = new document();
 $doc->title = __('Очистка категории');
 

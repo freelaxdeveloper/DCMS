@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\dpanel;
+
 if (isset($_GET['url'])) {
     header('Location: ' . $_GET['url']);
     $urlwithouthttp = preg_replace('#^(https?|ftp)://#', '', $_GET['url']);

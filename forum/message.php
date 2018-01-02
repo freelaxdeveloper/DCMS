@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,user,text,listing,misc,form,url};
+
 $doc = new document();
 $doc->title = 'Просмотр сообщения';
 

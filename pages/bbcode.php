@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,menu_code,bb};
+
 $doc = new document(1);
 $doc->title = __('Список bbcode');
 if (isset($_GET['info'])) {

@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,form};
+
 $doc = new document();
 $doc->title = __('Отписаться от рассылки');
 $unsubscribe = false;

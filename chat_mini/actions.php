@@ -1,6 +1,8 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,listing,user,text,misc};
+use App\Models\Chat_mini;
+
 $doc = new document();
 $doc->title = __('Действия');
 
@@ -11,26 +13,20 @@ if (!isset($_GET ['id']) || !is_numeric($_GET ['id'])) {
 }
 $id_message = (int) $_GET ['id'];
 
-$q = $db->prepare("SELECT * FROM `chat_mini` WHERE `id` = ? LIMIT 1");
-$q->execute(Array($id_message));
-
-if (!$message = $q->fetch()) {
+if (!$message = Chat_mini::find($id_message)) {
     $doc->toReturn('./');
     $doc->err(__('Сообщение не найдено'));
     exit();
 }
 
-
-
 $listing = new listing;
 
-
-$ank = new user($message['id_user']);
+$ank = new user($message->id_user);
 
 $post = $listing->post();
 $post->title = $ank->nick();
-$post->content = text::toOutput($message['message']);
-$post->time = misc::when($message['time']);
+$post->content = text::toOutput($message->message);
+$post->time = misc::when($message->time);
 $post->icon($ank->icon());
 
 $post = $listing->post();
@@ -63,4 +59,3 @@ $listing->display();
 
 
 $doc->ret(__('Вернуться'), './');
-?>

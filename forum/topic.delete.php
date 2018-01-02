@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,files,captcha,form,url};
+
 $doc = new document();
 
 $doc->title = __('Удаление раздела');

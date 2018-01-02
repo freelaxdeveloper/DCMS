@@ -2,6 +2,8 @@
 
 include_once '../sys/inc/start.php';
 include 'inc/functions.php';
+use App\{document,pages,listing,text,misc,current_user,user};
+
 $doc = new document();
 
 $doc->title = __('Форум');

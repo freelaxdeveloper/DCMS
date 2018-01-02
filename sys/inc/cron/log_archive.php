@@ -1,4 +1,6 @@
 <?php
+use App\cache_events;
+
 if (!cache_events::get('log_archive')) {
     cache_events::set('log_archive', true, mt_rand(82800, 86400));
     $log_files = (array) @glob(H.'/sys/logs/*.log');

@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,is_valid,crypt,user,form,url,design,mail};
+
 $doc = new document();
 $doc->title = __('Восстановление пароля');
 

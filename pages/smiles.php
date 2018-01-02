@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,smiles,pages,listing,text};
+
 $doc = new document();
 $doc->title = __('Смайлы');
 $smiles = smiles::get_ini();

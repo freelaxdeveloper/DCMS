@@ -2,6 +2,8 @@
 
 include_once '../sys/inc/start.php';
 include 'inc/functions.php';
+use App\{document,cache,current_user,listing,user,pages,text,misc};
+
 $doc = new document();
 $doc->title = __('Новые темы');
 

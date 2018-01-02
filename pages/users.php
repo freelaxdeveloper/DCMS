@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text,pages,listing,user,design,misc,form};
+
 $doc = new document();
 $doc->title = __('Пользователи');
 $none = __('Нет пользователей');

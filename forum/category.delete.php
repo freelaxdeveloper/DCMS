@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,captcha,files,url,form};
+
 $doc = new document();
 
 $doc->title = __('Удаление категории');

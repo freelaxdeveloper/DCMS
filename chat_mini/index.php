@@ -1,13 +1,15 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document_json,document,pages,text,antiflood,user,listing,misc,listing_post,form};
+use App\Models\Chat_mini;
+
 if (AJAX)
     $doc = new document_json();
 else
     $doc = new document();
 $doc->title = __('Мини чат');
 
-$pages = new pages($db->query("SELECT COUNT(*) FROM `chat_mini`")->fetchColumn());
+$pages = new pages(Chat_mini::count());
 
 $can_write = true;
 /** @var $user \user */
@@ -28,8 +30,13 @@ if ($can_write && $pages->this_page == 1) {
             $doc->err(__('Обнаружен мат: %s', $mat));
         } elseif ($message) {
             $user->balls += $dcms->add_balls_chat ;
-            $res = $db->prepare("INSERT INTO `chat_mini` (`id_user`, `time`, `message`) VALUES (?, ?, ?)");
-            $res->execute(Array($user->id, TIME, $message));
+
+            Chat_mini::create([
+                'id_user' => $user->id,
+                'message' => $message,
+                'time' => TIME,
+            ]);
+
             header('Refresh: 1; url=?' . passgen() . '&' . SID);
             $doc->ret(__('Вернуться'), '?' . passgen());
             $doc->msg(__('Сообщение успешно отправлено'));
@@ -82,31 +89,28 @@ $listing = new listing();
 if (!empty($form))
     $listing->setForm($form);
 
-
-$q = $db->query("SELECT * FROM `chat_mini` ORDER BY `id` DESC LIMIT ".$pages->limit);
+$messages = Chat_mini::orderBy('id', 'DESC')->paginate(15);
 $after_id = false;
-if ($arr = $q->fetchAll()) {
-    foreach ($arr AS $message) {
-        $ank = new user($message['id_user']);
+    foreach ($messages AS $message) {
+        $ank = new user($message->id_user);
         $post = $listing->post();
-        $post->id = 'chat_post_' . $message['id'];
-        $post->url = 'actions.php?id=' . $message['id'];
-        $post->time = misc::when($message['time']);
+        $post->id = 'chat_post_' . $message->id;
+        $post->url = 'actions.php?id=' . $message->id;
+        $post->time = misc::when($message->time);
         $post->title = $ank->nick();
-        $post->post = text::toOutput($message['message']);
+        $post->post = text::toOutput($message->message);
         $post->icon($ank->icon());
 
         if (!$doc->last_modified)
-            $doc->last_modified = $message['time'];
+            $doc->last_modified = $message->time;
 
         if ($doc instanceof document_json)
             $doc->add_post($post, $after_id);
 
         $after_id = $post->id;
     }
-}
 
-if ($doc instanceof document_json && !$arr){
+if ($doc instanceof document_json && !$messages){
     $post = new listing_post(__('Сообщения отсутствуют'));
     $post->icon('empty');
     $doc->add_post($post);

@@ -1,5 +1,5 @@
 <?php
-
+use App\DB;
 /**
  * Возвращает массив с количеством [новых, если указано время] сообщений в каждой теме
  * @param array $themes_ids Массив идентификаторов тем
@@ -12,7 +12,7 @@
 function forum_getMessagesCounters($themes_ids = array(), $time_from = 0, $group = 0)
 {
     $counters = array();
-    $sql_prep = db::me()->prepare('
+    $sql_prep = DB::me()->prepare('
 SELECT COUNT(*) AS `count`, `id_theme` FROM forum_messages WHERE group_show < :g AND id_theme IN (' .
         join(',', array_map('intval', $themes_ids)) . ') AND `time` > :t GROUP BY id_theme');
     $sql_prep->execute(array(':t' => $time_from, ':g' => $group));
@@ -35,7 +35,7 @@ function forum_getViewsCounters($themes_ids = array())
 {
     $counters = array();
 
-    $sql_prep = db::me()->prepare('
+    $sql_prep = DB::me()->prepare('
 SELECT COUNT(*) AS `count`, `id_theme` FROM forum_views WHERE id_theme IN (' .
         join(',', array_map('intval', $themes_ids)) . ') GROUP BY id_theme');
     $sql_prep->execute();
@@ -65,7 +65,7 @@ function forum_getLastViewsTimes($themes_ids = array(), $id_user = 0)
 {
     $counters = array();
 
-    $sql_prep = db::me()->prepare('
+    $sql_prep = DB::me()->prepare('
 SELECT MAX(`time`) AS `last_view_time`, `id_theme` FROM forum_views WHERE id_theme IN (' .
         join(',', array_map('intval', $themes_ids)) . ') AND `id_user` = :uid GROUP BY id_theme');
     $sql_prep->execute(array(':uid' => $id_user));

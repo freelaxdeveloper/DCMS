@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,captcha,text,form};
+
 $doc = new document(4);
 $doc->title = __('Создание новости');
 $doc->ret(__('К новостям'), './');

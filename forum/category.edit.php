@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,groups,text,url,form};
+
 $groups = groups::load_ini(); // загружаем массив групп
 $doc = new document();
 $doc->title = __('Редактирование категории');

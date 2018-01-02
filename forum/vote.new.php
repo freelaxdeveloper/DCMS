@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,text,form,url};
+
 $doc = new document();
 $doc->title = __('Форум: Голосование');
 

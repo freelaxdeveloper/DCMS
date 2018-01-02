@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,files,form,url,text};
+
 $doc = new document(2);
 $doc->title = __('Удаление темы');
 

@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,bb};
+
 $doc = new document();
 $doc->title = __('Правила сайта');
 $doc->act(__('Кодекс'), '/code.php');

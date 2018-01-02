@@ -1,4 +1,6 @@
 <?php
+use App\{cache_events,misc};
+
 if (defined('DCMS')) {
     $cron_pseudo = true;
 } else {

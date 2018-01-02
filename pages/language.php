@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,languages,language_pack,listing,url};
+
 $doc = new document(); // инициализация документа для браузера
 $doc->title = __('Настройки языка');
 

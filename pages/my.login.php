@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,is_valid,form,misc};
+
 $doc = new document(1);
 $doc->title = __('Мой логин');
 

@@ -1,11 +1,13 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,line_chart,line_chart_series,DB};
+
 $doc = new document(5);
 $doc->title = __('Форум - Статистика');
 
 $s_time = 86400; // кол-во секунд в сутках
 
-$cats = db::me()->query('SELECT * FROM `forum_categories`')->fetchAll();
+$cats = DB::me()->query('SELECT * FROM `forum_categories`')->fetchAll();
 
 $chart = new line_chart(__("Просмотры тем за последний месяц"));
 foreach ($cats AS $cat) {
@@ -26,7 +28,7 @@ foreach ($cats AS $cat) {
  WHERE `ft`.`id_category` = $cat[id] AND `fv`.`time` >= $time_start AND `fv`.`time` < $time_end) AS $field";
     }
 
-    $q = db::me()->query('SELECT '.implode(',', array_values($fields)));
+    $q = DB::me()->query('SELECT '.implode(',', array_values($fields)));
     $result = $q->fetch();
     foreach($fields AS $field => $sql){
         $series->data[] = (int)$result[$field];

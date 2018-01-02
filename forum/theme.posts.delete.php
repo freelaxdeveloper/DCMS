@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,files,listing,pages,user,misc,text,form,url};
+
 $doc = new document();
 $doc->title = __('Удаление сообщений');
 

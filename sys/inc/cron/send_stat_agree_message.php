@@ -1,4 +1,6 @@
 <?php
+use App\{groups,misc};
+
 if (!$dcms->send_stat_agree_message && !$dcms->send_stat_agree) {
     $dcms->send_stat_agree_message = true;
     $dcms->save_settings();

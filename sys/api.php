@@ -1,5 +1,6 @@
 <?php
 include 'inc/start.php';
+use App\{api_response,api_request,ReflectionClass,api_smiles};
 
 if ( empty( $_POST['requests'] ) || ! is_string( $_POST['requests'] ) ) {
 	header( 'Content-type: application/json', true, 500 );
@@ -14,27 +15,27 @@ foreach ( $requests AS $key => $request_param ) {
 	try {
 		$request = new api_request( $request_param );
 
-		$module = $request->module;
+		$module = 'App\\' . $request->module;
 		$method = $request->method;
 
 		// проверяем, что необходимый модуль (класс) существует
 		if ( ! class_exists( $module ) ) {
-			throw new Exception( 'api_controller "' . $module . '" not found' );
+			throw new \Exception( 'api_controller "' . $module . '" not found' );
 		}
 
 		// проверяем, что класс реализует интерфейс api_controller
-		if ( ! in_array( 'api_controller', class_implements( $module ) ) ) {
-			throw new Exception( 'Class "' . $module . '" does not implement interface "api_controller"' );
+		if ( ! in_array( 'App\api_controller', class_implements( $module ) ) ) {
+			throw new \Exception( 'Class "' . $module . '" does not implement interface "api_controller"' );
 		}
 
-		$reflection = new ReflectionClass( $module );
+		$reflection = new \ReflectionClass( $module );
 
 		// проверяем, что у класса имеется необходимый метод
 		$reflection->getMethod( $method );
 		$response->data = call_user_func( array( $module, $method ), $request->data );
 	} catch ( ApiException $e ) {
-		$response->error = $e;
-	} catch ( Exception $e ) {
+		$response->error = $module;
+	} catch ( \Exception $e ) {
 		$response->error = $e->getMessage();
 	}
 }

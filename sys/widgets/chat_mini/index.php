@@ -1,4 +1,5 @@
 <?php
+use App\{listing,DB,misc};
 
 defined('DCMS') or die;
 $db = DB::me();

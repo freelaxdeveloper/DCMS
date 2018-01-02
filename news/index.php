@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text,pages,listing,user,misc};
+
 $doc = new document();
 
 $doc->title = __('Наши новости');

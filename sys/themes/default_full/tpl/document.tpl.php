@@ -2,6 +2,8 @@
 /**
  * @var $this document
  */
+use App\{dcms,current_user,menu_ini};
+
 ?><!DOCTYPE html>
 <html ng-app="Dcms">
 <head>

@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,captcha,is_valid,text,misc,form,url};
+
 $doc = new document(1);
 $doc->title = __('Новое сообщение');
 

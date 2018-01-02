@@ -1,6 +1,7 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,document_json,user,text,antiflood,pages,form,misc,listing};
 
 if (AJAX)
     $doc = new document_json(1);

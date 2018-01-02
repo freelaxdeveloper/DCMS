@@ -1,4 +1,6 @@
 <?php
+use App\cache_events;
+
 if ($dcms->update_auto && $dcms->update_auto_time && !cache_events::get('system.update.auto')) {
     cache_events::set('system.update.auto', true, $dcms->update_auto_time);
     include H.'/sys/inc/update.php';

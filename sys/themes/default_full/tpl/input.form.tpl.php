@@ -10,6 +10,8 @@
     ?>
 
     <?php
+    use App\text;
+    
     foreach ($el AS $element) {
         if ($element['title'])
             echo '<div class="form_title">' . $element['title'] . ':</div>';

@@ -1,6 +1,7 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,themes,form,url,listing};
 
 if (!empty($_GET['theme']) && themes::exists($_GET['theme'])) {
     $probe_theme = $_GET['theme'];

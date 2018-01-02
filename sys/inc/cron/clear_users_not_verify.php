@@ -1,4 +1,6 @@
 <?php
+use App\cache_events;
+
 if ($dcms->clear_users_not_verify && !cache_events::get('clear_users_not_verify')) {
         cache_events::set('clear_users_not_verify', true, mt_rand(82800, 86400));
         $q = $db->prepare("SELECT `id` FROM `users` WHERE `a_code` <> '' AND `reg_date` < ?");

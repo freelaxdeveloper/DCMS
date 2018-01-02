@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,user};
+
 $doc = new document();
 $doc->title = __('Активация аккаунта');
 

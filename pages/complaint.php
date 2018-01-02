@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,user,menu_code,text,form,url};
+
 $doc = new document(1);
 $doc->title = __('Жалоба на пользователя');
 

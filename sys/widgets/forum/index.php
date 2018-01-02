@@ -1,4 +1,5 @@
 <?php
+use App\{listing,DB,cache_counters,misc};
 
 defined('DCMS') or die;
 global $user;

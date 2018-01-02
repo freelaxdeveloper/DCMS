@@ -1,4 +1,6 @@
 <?php
+use App\{cache,cache_events,misc,sprite};
+
 if (!cache_events::get('check_sprite')) {
     cache_events::set('check_sprite', true, mt_rand(60, 180));
     $icons_paths = (array) @glob(H.'/sys/images/icons/*.png');

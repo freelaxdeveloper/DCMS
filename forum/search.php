@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,stemmer,text,listing,pages,form};
+
 $doc = new document();
 
 // результаты

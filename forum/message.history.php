@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,pages,listing,user,text,misc};
+
 $doc = new document();
 $doc->title = __('История сообщений');
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {

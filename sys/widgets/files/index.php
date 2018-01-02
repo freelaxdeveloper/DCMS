@@ -1,4 +1,5 @@
 <?php
+use App\{listing,text,files,misc,user};
 
 defined('DCMS') or die;
 global $user;

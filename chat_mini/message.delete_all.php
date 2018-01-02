@@ -1,6 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,form,captcha};
+use App\Models\Chat_mini;
+
 $doc = new document(3);
 $doc->title = __('Удаление сообщений');
 
@@ -10,7 +13,7 @@ if (isset($_POST['delete'])) {
     } else {
         $dcms->log('Мини чат', 'Очистка от всех сообщений');
 
-        $db->query("TRUNCATE TABLE `chat_mini`");
+        Chat_mini::truncate();
         $doc->msg(__('Все сообщения успешно удалены'));
         $doc->toReturn('./');
         $doc->ret(__('Вернуться'), './');

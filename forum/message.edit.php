@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,user,groups,form,url,text};
+
 $doc = new document(1);
 $doc->title = __('Редактирование сообщения');
 

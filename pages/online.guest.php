@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,pages,listing};
+
 $doc = new document();
 $pages = new pages;
 

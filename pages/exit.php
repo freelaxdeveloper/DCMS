@@ -2,6 +2,8 @@
 
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
+use App\{document,form};
+
 $doc = new document(1);
 $doc->title = __('Выход');
 

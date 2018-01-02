@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,cache_counters,listing,pages,text};
+
 $doc = new document();
 $doc->title = __('Форум - Категории');
 

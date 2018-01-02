@@ -1,6 +1,7 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\captcha;
 
 $x = 100; // ширина капчи
 $y = 40; // высота

@@ -1,4 +1,5 @@
 <?php
+use App\{DB,user,listing,misc};
 
 defined('DCMS') or die;
 

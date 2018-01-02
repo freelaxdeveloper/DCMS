@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text};
+
 $doc = new document(2);
 $doc->title = __('Удаление комментария');
 

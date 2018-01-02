@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,user,text,pages,form,url,listing};
+
 $doc = new document(); // инициализация документа для браузера
 $doc->title = __('Отзывы');
 

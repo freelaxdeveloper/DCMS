@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,pages,listing,text};
+
 $doc = new document();
 $doc->title = __('Форум');
 $doc->ret(__('К категориям'), './');

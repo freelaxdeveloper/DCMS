@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,files,user,files_file,captcha,form,url,pages,misc,text,listing};
+
 $doc = new document ();
 $doc->title = __('Фотоальбомы');
 

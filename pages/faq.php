@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text,bb};
+
 $doc = new document();
 $doc->title = __('Справка');
 $faq = preg_replace('#[^a-z0-9_\-]+#ui', '', @$_GET['info']);

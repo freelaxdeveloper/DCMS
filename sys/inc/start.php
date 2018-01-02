@@ -1,13 +1,16 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', true);
 
 // Проверяем версию PHP
-version_compare(PHP_VERSION, '5.2', '>=') or die('Требуется PHP >= 5.2');
+version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0');
 
 /**
  * Константы и функции, необходимые для работы движка.
  * Выделены в отдельный файл чтобы избежать дублирования кода в инсталляторе
  */
 require_once dirname(__FILE__) . '/initialization.php';
+use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,current_user,user,misc};
 
 /**
  * во время автоматического обновления не должно быть запросов со стороны пользователя
@@ -87,13 +90,25 @@ if ($dcms->new_time_as_date) {
     // новые файлы, темы и т.д. будут отображаться за последние 24 часа
     define('NEW_TIME', TIME - 86400);
 }
-
+use Illuminate\Database\Capsule\Manager as Capsule;
 try {
     $db = DB::me($dcms->mysql_host, $dcms->mysql_base, $dcms->mysql_user, $dcms->mysql_pass);
+
+    $capsule = new Capsule;
+    $capsule->addConnection([
+        'driver'    => 'mysql',
+        'host'      => $dcms->mysql_host,
+        'database'  => $dcms->mysql_base,
+        'username'  => $dcms->mysql_user,
+        'password'  => $dcms->mysql_pass,
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+    ]);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
 } catch (ExceptionPdoNotExists $e) {
-    @mysql_connect($dcms->mysql_host, $dcms->mysql_user, $dcms->mysql_pass) or die('Нет соединения с MySQL сервером');
-    @mysql_select_db($dcms->mysql_base) or die('Нет доступа к выбранной базе данных');
-    mysql_query('SET NAMES "utf8"');
 
     if (false != ($backups = glob(TMP . '/backup.*.zip'))) {
         if (count($backups) == 1) {

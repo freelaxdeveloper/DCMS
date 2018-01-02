@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,text,listing,user,misc,pages,antiflood,is_valid,form,url};
+
 $doc = new document();
 $doc->title = __('Комментарии к новости');
 $doc->ret(__('Все новости'), './');

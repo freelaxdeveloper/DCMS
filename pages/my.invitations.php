@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,design,mail,misc,form,url,pages,is_valid};
+
 $doc = new document(1);
 $doc->title = __('Пригласительные');
 

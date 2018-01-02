@@ -6,6 +6,8 @@
  */
 
 include_once '../sys/inc/start.php';
+use App\{document,misc,pages,listing};
+
 $doc = new document ();
 $doc->title = __('Логины');
 

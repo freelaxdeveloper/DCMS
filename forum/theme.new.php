@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,text,captcha,is_valid,form,url};
+
 $doc = new document(1);
 
 $doc->title = __('Новая тема');
@@ -72,7 +74,7 @@ if ($can_write && isset($_POST ['message']) && isset($_POST ['name'])) {
         $_SESSION ['antiflood'] ['newtheme'] = TIME;
         $doc->msg(__('Тема успешно создана'));
 
-        header('Refresh: 1; url=theme.php?id=' . $theme ['id']);
+        //header('Refresh: 1; url=theme.php?id=' . $theme ['id']);
         $doc->ret(__('В тему'), 'theme.php?id=' . $theme ['id']);
         exit();
     } else {

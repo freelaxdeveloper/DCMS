@@ -1,6 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,pages,listing,user,text,misc};
+
 $doc = new document(1);
 $doc->title = __('Мои темы');
 

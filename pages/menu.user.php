@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,menu_ini};
+
 $doc = new document(1);
 $doc->title = __('Личное меню');
 

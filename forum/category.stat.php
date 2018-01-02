@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{document,DB,line_chart,line_chart_series,text};
+
 $doc = new document(5);
 $doc->title = __('Форум');
 $doc->ret(__('К категориям'), './');
@@ -22,7 +24,7 @@ $doc->title = __('Форум - Статистика') . ' - ' . $topic_this['nam
 
 $s_time = 86400; // кол-во секунд в сутках
 
-$p = db::me()->prepare('SELECT * FROM `forum_topics` WHERE `id_category` = :id_cat');
+$p = DB::me()->prepare('SELECT * FROM `forum_topics` WHERE `id_category` = :id_cat');
 $p->execute(array(':id_cat' => $id_cat));
 $topics = $p->fetchAll();
 
@@ -45,7 +47,7 @@ foreach ($topics AS $topic) {
  WHERE `ft`.`id_topic` = $topic[id] AND `fv`.`time` >= $time_start AND `fv`.`time` < $time_end) AS $field";
     }
 
-    $q = db::me()->query('SELECT ' . implode(',', array_values($fields)));
+    $q = DB::me()->query('SELECT ' . implode(',', array_values($fields)));
     $result = $q->fetch();
     foreach ($fields AS $field => $sql) {
         $series->data[] = (int)$result[$field];
