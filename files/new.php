@@ -1,6 +1,7 @@
 <?php
 
 include_once '../sys/inc/start.php';
+use App\{document,files,listing,pages,user,text,misc};
 
 $doc = new document();
 $doc->title = __('Новые файлы');

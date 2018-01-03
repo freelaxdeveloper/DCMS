@@ -1,4 +1,5 @@
 <?php
+use App\{text,user,groups};
 
 if (isset($_POST['edit_unlink']) && $file->name{0} !== '.') {
     $id_user = $file->id_user;

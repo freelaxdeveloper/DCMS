@@ -1,4 +1,5 @@
 <?php
+use App\{listing,form,url};
 
 $doc->title = __('Файл %s - скриншоты', $file->runame);
 

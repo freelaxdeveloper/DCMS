@@ -1,5 +1,6 @@
 <?php
 defined('DCMS') or die();
+use App\{misc,form};
 // файл отвечает за отображение возможных действий
 if ($access_write) {
     // выгрузка и импорт файлов

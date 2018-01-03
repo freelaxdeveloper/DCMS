@@ -1,5 +1,7 @@
 <?php
 defined('DCMS') or die();
+use App\{files,text,form,listing,pages,groups,user,design,misc};
+
 $dir = new files($abs_path);
 
 if ($dir->group_show > $user->group) {

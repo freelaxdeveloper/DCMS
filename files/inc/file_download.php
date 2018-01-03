@@ -1,5 +1,6 @@
 <?php
 defined('DCMS') or die;
+use App\{files,files_file,download};
 
 $pathinfo = pathinfo($abs_path);
 $dir = new files($pathinfo['dirname']);

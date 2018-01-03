@@ -1,6 +1,7 @@
 <?php
 
 defined('DCMS') or die();
+use App\{text,captcha,files,groups};
 
 /**
  * Преобразуем $_FILES в более удобный массив

@@ -1,5 +1,7 @@
 <?php
 defined('DCMS') or die;
+use App\{files,files_file,listing,user,misc,form,url,antiflood,pages,text,design};
+
 $pathinfo = pathinfo($abs_path);
 $dir = new files($pathinfo['dirname']);
 
