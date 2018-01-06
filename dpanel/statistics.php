@@ -1,5 +1,7 @@
 <?php
 include '../sys/inc/start.php';
+use App\{document,DB,line_chart,line_chart_series};
+
 $doc = new document(5);
 $doc->title = __('Статистика');
 
@@ -7,7 +9,7 @@ if (!$dcms->log_of_visits) {
     $doc->err(__('Служба ведения статистики отключена'));
 }
 
-$res = db::me()->query("SELECT * FROM `log_of_visits_for_days` ORDER BY `time_day` DESC LIMIT 30");
+$res = DB::me()->query("SELECT * FROM `log_of_visits_for_days` ORDER BY `time_day` DESC LIMIT 30");
 
 $chart_hosts = new line_chart(__("Посетители за последний месяц"));
 $chart_hosts->series[] = $s_hosts_full = new line_chart_series(__('С компьютера'));

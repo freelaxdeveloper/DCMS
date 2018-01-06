@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,groups,menus,menu,listing,text,url,form};
+
 dpanel::check_access();
 $doc = new document(6);
 $groups = groups::load_ini();
@@ -55,7 +57,7 @@ if (isset($_GET['act']) && $_GET['act'] === 'create') {
                 try {
                     $menu->save(text::input_text($_POST['menu_key']));
                     $doc->msg(__('Меню успешно создано'));
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $doc->err($e->getMessage());
                 }
             }

@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,groups,bb,listing};
+
 $doc = new document(groups::max());
 $doc->title = __('Лицензионное соглашение');
 $doc->ret(__('Админка'), './');

@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,text,listing,misc};
+
 $doc = new document(5);
 $doc->title = __('Статистика по рекламе');
 $browser_types = array('light', 'mobile', 'full');

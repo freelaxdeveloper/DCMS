@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,pages,user,listing,misc,text};
+
 $doc = new document(2);
 $doc->title = __('Лог действий');
 

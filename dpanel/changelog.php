@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,groups,bb,listing,text};
+
 $doc = new document(groups::max());
 $doc->title = __('Список изменений');
 

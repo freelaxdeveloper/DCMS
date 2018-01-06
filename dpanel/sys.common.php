@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,languages,themes,text,form};
+
 dpanel::check_access();
 $doc = new document(5);
 $doc->title = __('Общие настройки');

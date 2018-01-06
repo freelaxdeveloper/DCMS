@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,user,menu_code,form,url,text,listing,misc};
+
 dpanel::check_access();
 $doc = new document(2);
 $doc->title = __('Бан пользователя');

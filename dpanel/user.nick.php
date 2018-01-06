@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,is_valid,user,form,url};
+
 dpanel::check_access();
 $doc = new document(4);
 $doc->title = __('Изменение ника');

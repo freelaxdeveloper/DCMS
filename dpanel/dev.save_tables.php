@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,groups,tables,table_structure,listing,form};
+
 dpanel::check_access();
 $doc = new document(groups::max());
 $doc->title = __('Сохранение таблиц');

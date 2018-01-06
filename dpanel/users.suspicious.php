@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,user,listing,pages,text};
+
 dpanel::check_access();
 $doc = new document(4);
 $doc->title = __('Подозрительные пользователи');

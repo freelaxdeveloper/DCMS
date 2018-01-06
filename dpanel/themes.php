@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,dcms,themes,listing,widgets};
+
 dpanel::check_access();
 $doc = new document(6);
 $doc->ret(__('Админка'), '/dpanel/');

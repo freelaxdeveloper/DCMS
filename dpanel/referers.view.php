@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,listing,pages,misc,design};
+
 $doc = new document(5);
 $doc->title = __('Рефералы');
 

@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,bb,form};
+
 dpanel::check_access();
 $doc = new document(6);
 $doc->title = __('Отправка статистики');

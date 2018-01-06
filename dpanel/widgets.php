@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,smiles,document,ini,widget,misc,listing,text};
+
 dpanel::check_access();
 $smiles = smiles::get_ini();
 $doc = new document(5);

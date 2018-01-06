@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,groups,http_client,text,form};
+
 dpanel::check_access();
 $doc = new document(groups::max());
 $doc->title = __('Поддомены');

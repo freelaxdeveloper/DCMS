@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,themes};
+
 dpanel::check_access();
 
 if (!empty($_GET['theme']) && themes::exists($_GET['theme'])) {

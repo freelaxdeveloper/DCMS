@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,ini,listing,check_sys,form};
+
 $doc = new document(5);
 $doc->title = __('Проверка CHMOD');
 $nw = ini::read(H . '/sys/ini/chmod.ini');

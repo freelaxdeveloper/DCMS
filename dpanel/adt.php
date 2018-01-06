@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,adt,text,listing,pages,misc};
+
 dpanel::check_access();
 $advertisement = new adt();
 $doc = new document(5);

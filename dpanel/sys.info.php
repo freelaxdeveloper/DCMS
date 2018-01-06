@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{document,check_sys,listing};
+
 $doc = new document(5);
 $doc->title = __('Информация о системе');
 

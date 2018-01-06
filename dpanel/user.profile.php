@@ -1,5 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,groups,user,text,is_valid,themes,url};
+
 dpanel::check_access();
 $groups = groups::load_ini();
 $doc = new document(4);

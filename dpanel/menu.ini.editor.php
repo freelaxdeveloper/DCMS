@@ -1,6 +1,7 @@
 <?php
-
 include_once '../sys/inc/start.php';
+use App\{dpanel,document,groups,menu_ini,ini,text,arraypos,form,filesystem,misc,listing};
+
 dpanel::check_access();
 $doc = new document(6);
 $groups = groups::load_ini();
