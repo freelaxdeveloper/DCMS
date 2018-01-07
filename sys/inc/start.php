@@ -298,7 +298,10 @@ function view(string $template, array $params = [], bool $view = true)
     }
     
 }
-function ddd()
+function dd($array)
 {
-    return 45;
+    echo '<pre>';
+    print_r($array);
+    echo '</pre';
+    exit;
 }
