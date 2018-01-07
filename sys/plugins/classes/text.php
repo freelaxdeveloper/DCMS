@@ -158,7 +158,7 @@ abstract class text {
      * @return string[]
      */
     static function nickSearch(&$str, $replace = true) {
-        if (!db::isConnected()) {
+        if (!DB::isConnected()) {
             return false;
         }
         $pattern = '#@([a-zа-яё][a-zа-яё0-9\-\_\ ]{2,31}|\$vk\.[0-9]+)([\!\.\,\ \)\(]|$)#uim';
@@ -166,7 +166,7 @@ abstract class text {
         $m = array();
         preg_match_all($pattern, $str, $m, PREG_SET_ORDER);
         if ($replace)
-            $str = preg_replace_callback($pattern, array('text', 'nick'), $str);
+            $str = preg_replace_callback($pattern, array('App\text', 'nick'), $str);
 
         $logins = array();
         foreach ($m AS $sl) {

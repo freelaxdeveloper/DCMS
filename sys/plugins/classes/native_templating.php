@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\text;
+use App\{text,url};
 /**
  * Шаблонизатор с PHP синтаксисом
  */

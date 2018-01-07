@@ -11,7 +11,7 @@ class listing extends ui_contaner {
 
     public function __construct() {
         parent::__construct();
-        $this->_tpl_file = 'listing.tpl';
+        $this->_tpl_file = 'listing';
     }
 
     public function setForm($form) {
@@ -48,7 +48,6 @@ class listing extends ui_contaner {
             $post = $this->add(new listing_post($text_if_empty));
             $post->icon('empty');
         }
-
         return parent::fetch();
     }
 
@@ -57,6 +56,10 @@ class listing extends ui_contaner {
      * @param string $text_if_empty Текст, отображаемый при отсутствии пунктов
      */
     public function display($text_if_empty = '') {
+        // $content = $this->fetch($text_if_empty);
+        // echo $content;
+        // exit;
+        // view($this->_tpl_file, compact('content'));
         echo $this->fetch($text_if_empty);
     }
 

@@ -67,6 +67,10 @@ class widget
         echo $this->fetch();
         echo "<!-- End Widget ".$this->getName()." -->";
     }
+    function displayBlade()
+    {
+        return $this->fetch();
+    }
 
     /**
      * Возврат содержимого виджета

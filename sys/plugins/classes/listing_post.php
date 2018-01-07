@@ -37,7 +37,7 @@ class listing_post extends ui
     public function __construct($title = '', $content = [])
     {
         parent::__construct();
-        $this->_tpl_file = 'listing.post.tpl';
+        $this->_tpl_file = 'listing.post';
         $this->id = $this->_data['id'];
 
         $this->title = $title;
@@ -126,7 +126,8 @@ class listing_post extends ui
         $this->_data['highlight'] = $this->highlight;
         $this->_data['bottom'] = $this->bottom;
         $this->_data['actions'] = $this->actions;
-        return parent::fetch();
+        return view($this->_tpl_file, $this->_data, false);
+        //return parent::fetch();
     }
 
 }

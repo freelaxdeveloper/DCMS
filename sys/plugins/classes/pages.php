@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\url;
 /**
  * Формирование списка страниц для постраничной навигации.
  * @property string limit SQL значение для LIMIT

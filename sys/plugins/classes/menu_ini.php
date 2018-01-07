@@ -55,7 +55,7 @@ class menu_ini {
             $post->title = __($key);
 
             if ($this->icons && !empty($value['icon'])) {
-                //$post->icon($value['icon']);
+                $post->icon($value['icon']);
             }
         }
     }

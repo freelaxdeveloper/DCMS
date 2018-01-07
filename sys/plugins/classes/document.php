@@ -1,7 +1,8 @@
 <?php
 namespace App;
 
-use App\{design,widget,document_link,text,document_message,alignedxhtml,url};
+use App\{design,widget,document_link,text,document_message,alignedxhtml,url,current_user};
+use Jenssegers\Blade\Blade;
 
 /**
  * Класс для формирования HTML документа.
@@ -10,15 +11,16 @@ class document extends design
 {
     public $title = 'Заголовок';
     public $description = '';
-    public $keywords = array();
+    public $keywords = [];
     public $last_modified = null;
-    protected $err = array();
-    protected $msg = array();
+    protected $err = [];
+    protected $msg = [];
     protected $outputed = false;
-    protected $actions = array();
-    protected $returns = array();
-    protected $tabs = array();
+    protected $actions = [];
+    protected $returns = [];
+    protected $tabs = [];
     protected $_echo_content = '';
+    public $template = 'default';
 
     function __construct($group = 0)
     {
@@ -131,7 +133,7 @@ class document extends design
      */
     private function output()
     {
-        global $dcms;
+        global $dcms, $user_language_pack, $user;
         if ($this->outputed) {
             // повторная отправка html кода вызовет нарушение синтаксиса документа, да и вообще нам этого нафиг не надо
             return;
@@ -146,44 +148,55 @@ class document extends design
         header('X-UA-Compatible: IE=edge', true); // отключение режима совместимости в осле
         header('Content-Type: text/html; charset=utf-8', true);
 
-        $this->assign('description', $this->description ? $this->description : $this->title, 1); // описание страницы (meta)
-        $this->assign('keywords', $this->keywords ? implode(',', $this->keywords) : $this->title, 1); // ключевые слова (meta)
+        $description = $this->description ?? $this->title;
+        
+        $content = ob_get_clean();
+        $messages = $this->msg;
+        $errors = $this->err;
+        $document_generation_time = round(microtime(true) - TIME_START, 3); // время генерации страницы
+        $lang = $user_language_pack;
+        $title = $this->title;
+        $is_main = IS_MAIN;
+        $returns = $this->returns;
+        $actions = $this->actions;
+        $tabs = $this->tabs;
+        $url = URL;
+        $current_user = json_encode(current_user::getInstance()->getCustomData(array('id', 'group', 'mail_new_count', 'friend_new_count', 'nick')));
 
-        $this->assign('actions', $this->actions); // ссылки к действию
-        $this->assign('returns', $this->returns); // ссылки для возврата
-        $this->assign('tabs', $this->tabs); // вкладки
+        $left_column = $this->displaySectionBlade('left_column');
+        $header = $this->displaySectionBlade('header');
 
-        $this->assign('err', $this->err); // сообщения об ошибке
-        $this->assign('msg', $this->msg); // сообщения
-        $this->assign('title', $this->title, 1); // заголовок страницы
-
-        $this->_echo_content = ob_get_clean(); // то, что попало в буфер обмена при помощи echo (display())
-        $this->assign('document_generation_time', round(microtime(true) - TIME_START, 3)); // время генерации страницы
-
-        if ($dcms->align_html) {
-            // форматирование HTML кода
-            $document_content = $this->fetch('document.tpl');
-            $align = new alignedxhtml();
-            echo $align->parse($document_content);
-        } else {
-            $this->display('document.tpl');
-        }
+        view($this->template, compact(
+            'content','messages','errors','document_generation_time','lang','dcms','title',
+            'is_main','returns','tabs','actions','user','current_user','word','left_column',
+            'header','description'
+        ));
     }
 
     /**
      * отображение содержимого блока темы
      * @param string $section
      */
-    public function displaySection($section)
+    // public function displaySection($section)
+    // {
+    //     if ($section === $this->theme->getEchoSectionKey()) {
+    //         echo $this->_echo_content;
+    //     }
+    //     $widgets = $this->theme->getWidgets($section);
+    //     foreach ($widgets as $widget_name) {
+    //         $widget = new widget(H . '/sys/widgets/' . $widget_name); // открываем
+    //         $widget->display(); // отображаем
+    //     }
+    // }
+    public function displaySectionBlade($section)
     {
-        if ($section === $this->theme->getEchoSectionKey()) {
-            echo $this->_echo_content;
-        }
+        $content = '';
         $widgets = $this->theme->getWidgets($section);
         foreach ($widgets as $widget_name) {
             $widget = new widget(H . '/sys/widgets/' . $widget_name); // открываем
-            $widget->display(); // отображаем
+            $content .= $widget->displayBlade(); // отображаем
         }
+        return $content;
     }
 
     /**

@@ -29,7 +29,10 @@ class theme
         }
         $this->_parseConfig($config);
     }
-
+    public function getPath(): string
+    {
+        return $this->_abs_path;
+    }
     protected function _readConfig()
     {
         if (!is_file($this->_abs_path . '/config.ini')) {
@@ -43,16 +46,16 @@ class theme
         $required_keys = array('name', 'browsers', 'version', 'echo_section');
 
         if (empty($config)) {
-            throw new Exception(__('Конфиг отсутствует'));
+            throw new \Exception(__('Конфиг отсутствует'));
         }
         if (empty($config['CONFIG']) || !is_array($config['CONFIG'])) {
-            throw new Exception(__('Параметр %s отсутствует', 'CONFIG'));
+            throw new \Exception(__('Параметр %s отсутствует', 'CONFIG'));
         }
         if (empty($config['SECTIONS']) || !is_array($config['SECTIONS'])) {
-            throw new Exception(__('Параметр %s отсутствует', 'SECTIONS'));
+            throw new \Exception(__('Параметр %s отсутствует', 'SECTIONS'));
         }
         if (!isset($config['WIDGETS']) || !is_array($config['WIDGETS'])) {
-            throw new Exception(__('Параметр %s отсутствует', 'WIDGETS'));
+            throw new \Exception(__('Параметр %s отсутствует', 'WIDGETS'));
         }
 
         $this->_config = $config['CONFIG'];
@@ -61,7 +64,7 @@ class theme
 
         foreach ($required_keys AS $key) {
             if (!array_key_exists($key, $this->_config)) {
-                throw new Exception(__('Параметр %s отсутствует', $key));
+                throw new \Exception(__('Параметр %s отсутствует', $key));
             }
         }
 
@@ -111,7 +114,7 @@ class theme
     public function setParam($key, $value)
     {
         if (!array_key_exists($key, $this->_params_default)) {
-            throw new Exception(__('Параметр %s не существует у этой темы'));
+            throw new \Exception(__('Параметр %s не существует у этой темы'));
         }
         $this->_params[$key] = $value;
         $this->_saveConfig();

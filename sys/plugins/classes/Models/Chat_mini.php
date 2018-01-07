@@ -7,5 +7,8 @@ class Chat_mini extends Model{
     public $timestamps = false;
     protected $guarded = ['id'];
 
-    
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'id_user');
+    }
 }
