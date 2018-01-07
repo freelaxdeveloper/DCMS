@@ -11,7 +11,6 @@ $browser_types = array('light', 'mobile', 'full');
 
 if (isset($_POST ['save'])) {
     $dcms->debug = (int) !empty($_POST ['debug']);
-    $dcms->align_html = (int) !empty($_POST ['align_html']);
     $dcms->new_time_as_date = (int) !empty($_POST ['new_time_as_date']);
     $dcms->censure = (int) !empty($_POST ['censure']);
     $dcms->https_only = (int) !empty($_POST ['https_only']);
@@ -60,7 +59,6 @@ $form->select('language', __('Язык по-умолчанию'), $options);
 
 $form->checkbox('new_time_as_date', __('Новые файлы (темы и т.д.) за текущие сутки') . ' **', $dcms->new_time_as_date);
 $form->checkbox('debug', __('Режим разработчика') . ' ***', $dcms->debug);
-$form->checkbox('align_html', __('Выравнивание HTML кода'), $dcms->align_html);
 $form->checkbox('censure', __('Антимат') . ' ****', $dcms->censure);
 $form->checkbox('https_hsts', __('Использовать HSTS при заходе через https'), $dcms->https_hsts);
 $form->checkbox('https_only', __('Принудительное использование %s', 'https'), $dcms->https_only);
