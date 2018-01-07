@@ -1,12 +1,11 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document_json,document,pages,text,antiflood,user,listing,misc,listing_post,form};
-use App\Models\Chat_mini;
+use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url};
+use App\Models\{Chat_mini,User};
 
-if (AJAX)
-    $doc = new document_json();
-else
-    $doc = new document();
+$doc = new document;
+$doc->template = 'chat_mini.template';
+
 $doc->title = __('Мини чат');
 
 $pages = new pages(Chat_mini::count());
@@ -37,32 +36,23 @@ if ($can_write && $pages->this_page == 1) {
                 'time' => TIME,
             ]);
 
-            header('Refresh: 1; url=?' . passgen() . '&' . SID);
+            //header('Refresh: 1; url=?' . passgen() . '&' . SID);
             $doc->ret(__('Вернуться'), '?' . passgen());
             $doc->msg(__('Сообщение успешно отправлено'));
-
-            if ($doc instanceof document_json) {
-                $doc->form_value('message', '');
-                $doc->form_value('token', antiflood::getToken('chat_mini'));
-            }
-
             exit;
         } else {
             $doc->err(__('Сообщение пусто'));
         }
 
-        if ($doc instanceof document_json)
-            $doc->form_value('token', antiflood::getToken('chat_mini'));
     }
 
     if ($user->group) {
         $message_form = '';
         if (isset($_GET ['message']) && is_numeric($_GET ['message'])) {
             $id_message = (int)$_GET ['message'];
-            $q = $db->prepare("SELECT * FROM `chat_mini` WHERE `id` = ? LIMIT 1");
-            $q->execute(Array($id_message));
-            if ($message = $q->fetch()) {
-                $ank = new user($message['id_user']);
+            if ($message = Chat_mini::find($id_message)) {
+                $ank = User::find($message->id_user);
+                echo $ank->icon . ' -';
                 if (isset($_GET['reply'])) {
                     $message_form = '@' . $ank->login . ',';
                 } elseif (isset($_GET['quote'])) {
@@ -71,57 +61,18 @@ if ($can_write && $pages->this_page == 1) {
             }
         }
 
-        if (!AJAX) {
-            $form = new form('?' . passgen());
-            $form->refresh_url('?' . passgen());
-            $form->setAjaxUrl('?');
-            $form->hidden('token', antiflood::getToken('chat_mini'));
-            $form->textarea('message', __('Сообщение'), $message_form, true);
-            $form->button(__('Отправить'), 'send', false);
-            $form->display();
-        }
+        $form = new form('?' . passgen());
+        $form->hidden('token', antiflood::getToken('chat_mini'));
+        $form->textarea('message', __('Сообщение'), $message_form, true);
+        $form->button(__('Отправить'), 'send', false);
+        $form->display();
     }
 }
 
-$listing = new listing();
+$messages = Chat_mini::orderBy('id', 'DESC')->get()->forPage($pages->this_page, $user->items_per_page);
+view('chat_mini.messages', compact('messages'));
 
-// привязываем форму к листингу, чтобы листинг мог обновиться при отправке формы через AJAX
-if (!empty($form))
-    $listing->setForm($form);
-
-$messages = Chat_mini::orderBy('id', 'DESC')->paginate(15);
-$after_id = false;
-    foreach ($messages AS $message) {
-        $ank = new user($message->id_user);
-        $post = $listing->post();
-        $post->id = 'chat_post_' . $message->id;
-        $post->url = 'actions.php?id=' . $message->id;
-        $post->time = misc::when($message->time);
-        $post->title = $ank->nick();
-        $post->post = text::toOutput($message->message);
-        $post->icon($ank->icon());
-
-        if (!$doc->last_modified)
-            $doc->last_modified = $message->time;
-
-        if ($doc instanceof document_json)
-            $doc->add_post($post, $after_id);
-
-        $after_id = $post->id;
-    }
-
-if ($doc instanceof document_json && !$messages){
-    $post = new listing_post(__('Сообщения отсутствуют'));
-    $post->icon('empty');
-    $doc->add_post($post);
-}
-
-$listing->setAjaxUrl('?page=' . $pages->this_page);
-$listing->display(__('Сообщения отсутствуют'));
 $pages->display('?'); // вывод страниц
-
-if ($doc instanceof document_json)
-    $doc->set_pages($pages);
 
 if ($user->group >= 3)
     $doc->act(__('Удаление сообщений'), 'message.delete_all.php');
