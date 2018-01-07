@@ -57,8 +57,8 @@ if ($arr = $q->fetchAll()) {
         $post->counter = $themes['count'];
         $post->url = 'theme.php?id=' . $themes['id'] . '&amp;page=end';
         $last_msg = new user($themes['id_last']);
-        $post->content .= ($ank->id != $last_msg->id ? $ank->nick . '/' . $last_msg->nick : $ank->nick);
-        $post->content .= text::toOutput("\n[url=category.php?id=$themes[id_category]]" . $themes['category_name'] . "[/url] > [url=topic.php?id=$themes[id_topic]]" . $themes['topic_name'] . "[/url]");
+        $post->content[] = ($ank->id != $last_msg->id ? $ank->nick . '/' . $last_msg->nick : $ank->nick);
+        $post->content[] = text::toOutput("\n[url=category.php?id=$themes[id_category]]" . $themes['category_name'] . "[/url] > [url=topic.php?id=$themes[id_topic]]" . $themes['topic_name'] . "[/url]");
         $post->bottom = __('Просмотров: %s', $themes['views']);
     }
 }
