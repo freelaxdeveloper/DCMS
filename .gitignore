@@ -1,4 +1,5 @@
 vendor/
+garbage/
 composer.lock
 sys/logs/*
 sys/tmp/*
@@ -8,3 +9,4 @@ sys/ini/settings.ini
 sys/ini/iv.dat
 sys/files/*
 sys/themes/default/cache/*
+sys/files/*/.!config.dir.ini
