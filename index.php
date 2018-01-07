@@ -2,7 +2,7 @@
 include_once 'sys/inc/start.php';
 use App\{document,widget,ini};
 
-$doc = new document ();
+$doc = new document;
 $doc->title = __($dcms->title); // локализированое название сайта
 $widgets = (array)ini::read(H . '/sys/ini/widgets.ini'); // получаем список виджетов
 

@@ -1,7 +1,7 @@
 <?php
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
-use App\{document,cache,cache_aut_failture,captcha,misc,user,crypt};
+use App\{document,cache,cache_aut_failture,captcha,misc,user,crypt,text,form,url};
 
 $doc = new document();
 $doc->title = __('Авторизация');

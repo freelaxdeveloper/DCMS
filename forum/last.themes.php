@@ -113,6 +113,7 @@ for ($z = $start; $z < $end && $z < $pages->posts; $z++) {
     $post->title = text::toValue($theme['name']);
 
     $post->counter = $new_messages[$theme['id']] ? '+' . $new_messages[$theme['id']] : $all_messages[$theme['id']];
+    
     $post->url = 'theme.php?id=' . $theme['id'] . '&amp;page=end';
     $autor = new user($theme['id_autor']);
     $last_msg = new user($theme['id_last']);

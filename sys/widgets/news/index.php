@@ -1,5 +1,5 @@
 <?php
-use App\{listing,DB,text};
+use App\{listing,DB,text,misc};
 
 defined('DCMS') or die;
 

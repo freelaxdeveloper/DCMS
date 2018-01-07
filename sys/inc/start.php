@@ -10,7 +10,8 @@ version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0'
  * Выделены в отдельный файл чтобы избежать дублирования кода в инсталляторе
  */
 require_once dirname(__FILE__) . '/initialization.php';
-use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,current_user,user,misc};
+use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,current_user,user,misc,groups};
+use Jenssegers\Blade\Blade;
 
 /**
  * во время автоматического обновления не должно быть запросов со стороны пользователя
@@ -279,4 +280,25 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     if ($user->group && $user->language != $user_language_pack->code && languages::exists($user->language)) {
         $user_language_pack = new language_pack($user->language);
     }
+}
+
+function view(string $template, array $params = [], bool $view = true)
+{
+    $blade = new Blade(H . '/sys/themes/default/blade', H . '/sys/themes/default/cache');
+    $blade->compiler()->directive('__', function ($text) {
+        return "<?= __($text) ?>";
+    });
+    $blade->compiler()->directive('toOutput', function ($text) {
+        return "<?= App\\text::toOutput($text) ?>";
+    });
+    if ($view) {
+        echo $blade->make($template, $params);
+    } else {
+        return $blade->make($template, $params);
+    }
+    
+}
+function ddd()
+{
+    return 45;
 }
