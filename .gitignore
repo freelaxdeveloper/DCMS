@@ -1,4 +1,5 @@
 vendor/
+garbage/
 composer.lock
 sys/logs/*
 sys/tmp/*
