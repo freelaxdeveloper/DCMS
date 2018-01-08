@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/sys/themes/.common/icons.css" type="text/css"/>
     <link rel="stylesheet" href="/sys/themes/.common/theme_light.css" type="text/css"/>
     <link rel="stylesheet" href="/sys/themes/.common/animate.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/sys/themes/default_full/style.css?14"/>
+    <link rel="stylesheet" type="text/css" href="/sys/themes/default/style.css?14"/>
     <noscript>
         <meta http-equiv="refresh" content="0; URL=/pages/bad_browser.html"/>
     </noscript>
@@ -33,7 +33,7 @@
     <script charset="utf-8" src="/sys/themes/.common/angular-animate.min.js" type="text/javascript"></script>
     <script charset="utf-8" src="/sys/themes/.common/dcmsApi.js" type="text/javascript"></script>
     <script charset="utf-8" src="/sys/themes/.common/elastic.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/default_full/js.js?6" type="text/javascript"></script>
+    <script charset="utf-8" src="/sys/themes/default/js.js?6" type="text/javascript"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
