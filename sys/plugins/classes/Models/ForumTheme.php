@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\{User,ForumTopic,ForumCategory,ForumMessage,ForumView};
 use App\App;
 
 class ForumTheme extends Model{
@@ -13,42 +14,42 @@ class ForumTheme extends Model{
      */
     public function autor()
     {
-        return $this->hasOne('App\Models\User', 'id', 'id_autor');
+        return $this->hasOne(User::class, 'id', 'id_autor');
     }
     /**
      * пользователь оставивший последнее сообщение
      */
     public function lastUser()
     {
-        return $this->hasOne('App\Models\User', 'id', 'id_last');
+        return $this->hasOne(User::class, 'id', 'id_last');
     }
     /**
      * топик темы
      */
     public function topic()
     {
-        return $this->hasOne('App\Models\ForumTopic', 'id', 'id_topic');
+        return $this->hasOne(ForumTopic::class, 'id', 'id_topic');
     }
     /**
      * категория темы
      */
     public function category()
     {
-        return $this->hasOne('App\Models\ForumCategory', 'id', 'id_category');
+        return $this->hasOne(ForumCategory::class, 'id', 'id_category');
     }
     /**
      * сообщения темы
      */
     public function messages()
     {
-        return $this->hasMany('App\Models\ForumMessage', 'id_theme');
+        return $this->hasMany(ForumMessage::class, 'id_theme');
     }
     /**
      * просмотры
      */
     public function views()
     {
-        return $this->hasMany('App\Models\ForumView', 'id_theme');
+        return $this->hasMany(ForumView::class, 'id_theme');
     }
     /**
      * количество сообщений с учетом прав на просмотр

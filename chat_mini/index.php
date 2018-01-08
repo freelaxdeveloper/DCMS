@@ -1,14 +1,14 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url};
-use App\Models\{Chat_mini,User};
+use App\Models\{ChatMini,User};
 
 $doc = new document;
 $doc->template = 'chat_mini.template';
 
 $doc->title = __('Мини чат');
 
-$pages = new pages(Chat_mini::count());
+$pages = new pages(ChatMini::count());
 
 $can_write = true;
 /** @var $user \user */
@@ -30,13 +30,13 @@ if ($can_write && $pages->this_page == 1) {
         } elseif ($message) {
             $user->balls += $dcms->add_balls_chat ;
 
-            Chat_mini::create([
+            ChatMini::create([
                 'id_user' => $user->id,
                 'message' => $message,
                 'time' => TIME,
             ]);
 
-            //header('Refresh: 1; url=?' . passgen() . '&' . SID);
+            header('Refresh: 1; url=?' . passgen() . '&' . SID);
             $doc->ret(__('Вернуться'), '?' . passgen());
             $doc->msg(__('Сообщение успешно отправлено'));
             exit;
@@ -50,7 +50,7 @@ if ($can_write && $pages->this_page == 1) {
         $message_form = '';
         if (isset($_GET ['message']) && is_numeric($_GET ['message'])) {
             $id_message = (int)$_GET ['message'];
-            if ($message = Chat_mini::find($id_message)) {
+            if ($message = ChatMini::find($id_message)) {
                 $ank = User::find($message->id_user);
                 echo $ank->icon . ' -';
                 if (isset($_GET['reply'])) {
@@ -69,7 +69,7 @@ if ($can_write && $pages->this_page == 1) {
     }
 }
 
-$messages = Chat_mini::orderBy('id', 'DESC')->get()->forPage($pages->this_page, $user->items_per_page);
+$messages = ChatMini::orderBy('id', 'DESC')->get()->forPage($pages->this_page, $user->items_per_page);
 view('chat_mini.messages', compact('messages'));
 
 $pages->display('?'); // вывод страниц
