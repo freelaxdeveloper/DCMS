@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use App\Models\User;
+
 abstract class App{
 
     public static function icon(?string $icon): string
@@ -12,13 +14,13 @@ abstract class App{
         return $icon_path;
     }
 
-    public static function user()
+    public static function user(bool $model = false)
     {
         static $current_user;
         if (!$current_user) {
             global $user;
-            return $user;    
+            return $model ? User::find($user->id) : $user;
         }
-        return $current_user;
+        return $model ? User::find($current_user->id) : $current_user;
     }
 }

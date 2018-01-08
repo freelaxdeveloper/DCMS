@@ -1,6 +1,6 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url};
+use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url,App};
 use App\Models\{ChatMini,User};
 
 $doc = new document;
@@ -30,11 +30,8 @@ if ($can_write && $pages->this_page == 1) {
         } elseif ($message) {
             $user->balls += $dcms->add_balls_chat ;
 
-            ChatMini::create([
-                'id_user' => $user->id,
-                'message' => $message,
-                'time' => TIME,
-            ]);
+            $comment = new ChatMini(['message' => $message, 'time' => TIME]);
+            App::User(true)->chatMini()->save($comment);
 
             header('Refresh: 1; url=?' . passgen() . '&' . SID);
             $doc->ret(__('Вернуться'), '?' . passgen());
