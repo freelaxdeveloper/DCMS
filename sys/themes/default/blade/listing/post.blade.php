@@ -1,5 +1,5 @@
 <div id="{{$id}}"
-     class="post clearfix icon time @if ($counter)counter @endif @if ($content)content @endif"
+     class="post clearfix icon time @if ($bottom)bottom @endif @if ($counter)counter @endif @if ($content)content @endif"
      data-ng-controller="ListingPostCtrl"
      data-post-url="{{$url}}">
 
@@ -22,5 +22,5 @@
         <span class="post_time">{{$time}}</span>
     </div>
     <div class="post_content">{!! $content !!}</div>
-    <div class="post_bottom">{{$bottom}}</div>
+    <div class="post_bottom">{!! $bottom !!}</div>
 </div>

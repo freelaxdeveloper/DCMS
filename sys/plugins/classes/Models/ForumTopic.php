@@ -11,6 +11,11 @@ class ForumTopic extends Model{
         return $this->hasOne('App\Models\ForumCategory', 'id', 'id_category');
     }
 
+    public function themes()
+    {
+        return $this->hasMany('App\Models\ForumTheme', 'id_topic', 'id');
+    }
+
     public function scopeGroup($query, $user)
     {
         return $query->where([

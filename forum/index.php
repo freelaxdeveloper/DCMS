@@ -63,16 +63,10 @@ if ($user->id) {
 $pages = new pages();
 $pages->posts = ForumCategory::group($user)->count();
 
-$categories = ForumCategory::group($user)->get()->forPage($pages->this_page, $user->items_per_page);
-foreach ($categories as $category) {
-    $post = $listing->post();
-    $post->url = "category.php?id={$category->id}";
-    $post->title = text::toValue($category->name);
-    $post->icon('forum.category');
-    $post->post = text::for_opis($category->description);
-}
-
 $listing->display(__('Доступных Вам категорий нет'));
+
+$categories = ForumCategory::group($user)->get()->forPage($pages->this_page, $user->items_per_page);
+view('forum.category', compact('categories'));
 
 $pages->display('?'); // вывод страниц
 
