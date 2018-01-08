@@ -1,4 +1,5 @@
 <?php
+use App\{DB,crypt,is_valid,text};
 
 class install_reg_admin {
 

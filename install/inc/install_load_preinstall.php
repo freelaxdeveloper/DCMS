@@ -1,4 +1,6 @@
 <?php
+use App\ini;
+
 class install_load_preinstall {
     var $is_loaded = false;
     function __construct()

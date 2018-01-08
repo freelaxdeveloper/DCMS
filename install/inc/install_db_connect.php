@@ -1,4 +1,6 @@
 <?php
+use App\text;
+
 class install_db_connect {
     var $is_connected = false;
     var $err_connect = false;

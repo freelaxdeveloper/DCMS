@@ -1,4 +1,5 @@
 <?php
+use App\{ini,check_sys};
 
 class install_check_chmod {
 
@@ -39,5 +40,3 @@ class install_check_chmod {
     }
 
 }
-
-?>

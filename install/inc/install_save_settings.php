@@ -1,4 +1,5 @@
 <?php
+use App\ini;
 
 class install_save_settings {
 

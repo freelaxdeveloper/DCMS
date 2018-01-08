@@ -1,4 +1,5 @@
 <?php
+use App\{tables,DB,table_structure,sql_parser};
 
 class install_load_sql {
 
@@ -41,7 +42,6 @@ class install_load_sql {
         }
         // exit;
         foreach ($files_sql as $file) {
-            echo 8;
             $sqls = sql_parser::getQueriesFromFile($file);
             foreach ($sqls as $sql) {
                 if (!DB::me()->query($sql)){
