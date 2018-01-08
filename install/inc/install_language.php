@@ -1,4 +1,5 @@
 <?php
+use App\languages;
 
 class install_language {
 

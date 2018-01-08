@@ -1,4 +1,5 @@
 <?php
+use App\check_sys;
 
 class install_check_platform {
 

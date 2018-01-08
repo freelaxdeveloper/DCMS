@@ -2,13 +2,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-class Chat_mini extends Model{
+use App\Models\User;
+
+class ChatMini extends Model{
     protected $table = 'chat_mini';
     public $timestamps = false;
     protected $guarded = ['id'];
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'id_user');
+        return $this->hasOne(User::class, 'id', 'id_user');
     }
 }

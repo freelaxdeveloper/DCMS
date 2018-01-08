@@ -1,7 +1,8 @@
 <?php
-        ini_set('error_reporting', E_ALL);
-        ini_set('display_errors', true);
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', true);
 
+use App\{languages,language_pack,DB};
 require_once dirname(__FILE__) . '/../sys/inc/initialization.php';
 
  if ($_SESSION['language'] && languages::exists($_SESSION['language'])){
@@ -24,10 +25,10 @@ function db_connect() {
 
     try {
         $db = DB::me($settings['mysql_host'], $settings['mysql_base'], $settings['mysql_user'], $settings['mysql_pass']);
-        $db->setAttribute(PDO :: ATTR_DEFAULT_FETCH_MODE, PDO :: FETCH_ASSOC);
+        $db->setAttribute(\PDO :: ATTR_DEFAULT_FETCH_MODE, \PDO :: FETCH_ASSOC);
         $db->query("SET NAMES utf8;");
         $dcms->db = $db;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         die('Ошибка подключения к базе данных:' . $e->getMessage());
     }
 }

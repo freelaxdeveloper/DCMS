@@ -1,4 +1,5 @@
 <?php
+use App\bb;
 
 class install_license {
 

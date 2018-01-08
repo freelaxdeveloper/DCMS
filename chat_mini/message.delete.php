@@ -2,7 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,user,text};
-use App\Models\Chat_mini;
+use App\Models\ChatMini;
 
 $doc = new document(2);
 $doc->title = __('Удаление сообщения');
@@ -14,10 +14,7 @@ if (!isset($_GET ['id']) || !is_numeric($_GET ['id'])) {
 }
 $id_message = (int) $_GET ['id'];
 
-// $q = $db->prepare("SELECT * FROM `chat_mini` WHERE `id` = ? LIMIT 1");
-// $q->execute(Array($id_message));
-
-if (!$message = Chat_mini::find($id_message)) {
+if (!$message = ChatMini::find($id_message)) {
     $doc->toReturn('./');
     $doc->err(__('Сообщение не найдено'));
     exit();

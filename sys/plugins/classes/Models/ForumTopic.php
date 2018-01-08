@@ -2,13 +2,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\{ForumCategory,ForumTheme};
+
 class ForumTopic extends Model{
     public $timestamps = false;
     protected $guarded = ['id'];
 
     public function category()
     {
-        return $this->hasOne('App\Models\ForumCategory', 'id', 'id_category');
+        return $this->hasOne(ForumCategory::class, 'id', 'id_category');
+    }
+
+    public function themes()
+    {
+        return $this->hasMany(ForumTheme::class, 'id_topic', 'id');
     }
 
     public function scopeGroup($query, $user)

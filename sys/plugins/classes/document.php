@@ -158,6 +158,7 @@ class document extends design
         $title = $this->title;
         $is_main = IS_MAIN;
         $returns = $this->returns;
+        $returns = array_reverse($returns);
         $actions = $this->actions;
         $tabs = $this->tabs;
         $url = URL;

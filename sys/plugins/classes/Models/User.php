@@ -2,6 +2,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ChatMini;
+
 class User extends Model{
     public $timestamps = false;
     protected $guarded = ['id'];
@@ -27,5 +29,10 @@ class User extends Model{
         }
         // гость
         return 'guest';
+    }
+
+    public function chatMini()
+    {
+        return $this->hasMany(ChatMini::class, 'id_user');
     }
 }

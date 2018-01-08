@@ -1,7 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,listing,user,text,misc};
-use App\Models\Chat_mini;
+use App\Models\ChatMini;
 
 $doc = new document();
 $doc->title = __('Действия');
@@ -13,7 +13,7 @@ if (!isset($_GET ['id']) || !is_numeric($_GET ['id'])) {
 }
 $id_message = (int) $_GET ['id'];
 
-if (!$message = Chat_mini::find($id_message)) {
+if (!$message = ChatMini::find($id_message)) {
     $doc->toReturn('./');
     $doc->err(__('Сообщение не найдено'));
     exit();
