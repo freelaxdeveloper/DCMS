@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{User,ForumTopic,ForumCategory,ForumMessage,ForumView};
-use App\App;
+use App\App\App;
 
 class ForumTheme extends Model{
     public $timestamps = false;
@@ -50,22 +50,6 @@ class ForumTheme extends Model{
     public function views()
     {
         return $this->hasMany(ForumView::class, 'id_theme');
-    }
-    /**
-     * количество сообщений с учетом прав на просмотр
-     */
-    public function getCountMessagesAttribute(){
-        return $this->messages->where('group_show', '<=', App::user()->group)->count();
-
-        // return $this->whereHas('messages', function ($query) {
-        //     $query->group(\App\App::user());
-        // })->count();
-    }
-    /**
-     * количество просмотров
-     */
-    public function getCountViewsAttribute(){
-        return $this->views->count();
     }
 
     /**

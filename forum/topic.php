@@ -38,9 +38,12 @@ $themes = ForumTheme::whereDoesntHave('messages', function ($query) use ($user) 
 /**
  * если в теме нет сообщений доступных для чтения, такую тему не выводим
  */
-$themes = ForumTheme::whereHas('messages', function ($query) use ($user) {
+$themes = ForumTheme::with(['messages' => function ($query) use ($user) {
     $query->group($user);
-})->orderByRaw('top ASC', 'time_last ASC')->get();
+}])->withCount(['messages' => function ($query) use ($user) {
+    $query->group($user);
+}, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, $user->items_per_page);
+
 view('forum.themes', compact('themes'));
 
 $pages->display('./topic.php?id=' . $topic->id . '&amp;'); // вывод страниц
