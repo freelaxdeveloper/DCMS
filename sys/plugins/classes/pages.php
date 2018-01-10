@@ -114,14 +114,26 @@ class pages
     function display($link)
     {
         if ($this->pages > 1) {
-            $list = new design();
-            $list->assign('link', $link);
-            $list->assign('k_page', $this->pages);
-            $list->assign('page', $this->this_page);
-            $list->display('design.pages.tpl');
+            $k_page = $this->pages;
+            $page = $this->this_page;
+            $show_pages = $this->show_pages();
+            view('pagination.default', compact('link', 'k_page', 'page', 'show_pages'));
         }
     }
-
+    function show_pages()
+    {
+        $show_pages = [];
+        for ($i = max(2, $this->this_page - 8); $i < min($this->pages, $this->this_page + 10); $i++) {
+            $show_pages[] = $i;
+        }
+        return $show_pages;
+    }
+    static function pages_helper($page, $current, $link)
+    {
+        $class = 'page ' . ($page == $current ? 'active' : '');
+        return "<a href='{$link}page={$page}' class='{$class}'>{$page}</a>";
+    }
+    
     /**
      * Вывод списка страниц
      * @param string $link ссылка, к которой будет добавлено page={num}

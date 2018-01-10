@@ -1,7 +1,8 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url,App};
+use App\{document,pages,text,antiflood,listing,misc,listing_post,form,url};
 use App\Models\{ChatMini,User};
+use App\App\App;
 
 $doc = new document;
 $doc->template = 'chat_mini.template';

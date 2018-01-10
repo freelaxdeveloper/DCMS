@@ -3,7 +3,7 @@
     data-post-url="{{$url}}">
     <div class="post_head">
         <span class="post_icon">
-            <img src="{{ App\App::icon($icon) }}" alt="">
+            <img src="{{ App\App\App::icon($icon) }}" alt="">
         </span>
         <a class="post_title" href="{{$url}}">{{$title}}</a>
         @if (!empty($counter))
