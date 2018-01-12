@@ -2,11 +2,10 @@
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
 use App\{document,cache,cache_aut_failture,captcha,misc,user,crypt,text,form,url};
+use App\App\Authorize;
 
 $doc = new document();
 $doc->title = __('Авторизация');
-
-
 
 
 if (isset($_GET['redirected_from']) && in_array($_GET['redirected_from'], array('light', 'pda', 'mobile', 'full'))) {
@@ -26,9 +25,9 @@ if (isset($_GET['redirected_from']) && in_array($_GET['redirected_from'], array(
 
 
 if ($user->group) {
-    if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
+    /* if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
         cache::set($_GET['auth_key'], array('session' => $_SESSION, 'cookie' => $_COOKIE), 60);
-    }
+    } */
 
     $doc->clean();
     header('Location: ' . $return, true, 302);
@@ -71,6 +70,7 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
                     // если пользователь авторизовался, то ключ для восстановления ему больше не нужен
                     $user->recovery_password = '';
                 }
+                Authorize::authorized($user->id, crypt::encrypt($user->password, $dcms->salt_user));
                 $_SESSION[SESSION_ID_USER] = $user->id;
                 if (isset($_POST['save_to_cookie']) && $_POST['save_to_cookie']) {
                     setcookie(COOKIE_ID_USER, $user->id, TIME + 60 * 60 * 24 * 365);
@@ -101,9 +101,9 @@ if ($user->group) {
     $res = $db->prepare("DELETE FROM `guest_online` WHERE `ip_long` = ? AND `browser` = ?;");
     $res->execute(Array($dcms->ip_long, $dcms->browser_name));
 
-    if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
+    /* if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
         cache::set($_GET['auth_key'], array('session' => $_SESSION, 'cookie' => $_COOKIE), 60);
-    }
+    } */
 
     $doc->clean();
     header('Location: ' . $return, true, 302);

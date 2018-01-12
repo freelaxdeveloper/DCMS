@@ -284,7 +284,11 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
 
 function view(string $template, array $params = [], bool $view = true)
 {
-    $blade = new Blade(H . '/sys/themes/default/blade', H . '/sys/themes/default/cache');
+    static $blade;
+    if (!$blade) {
+        $blade = new Blade(H . '/sys/themes/default/blade', H . '/sys/themes/default/cache');
+
+    }
     $blade->compiler()->directive('__', function ($text) {
         return "<?= __($text) ?>";
     });
