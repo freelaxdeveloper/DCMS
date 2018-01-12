@@ -52,6 +52,11 @@ class ForumTheme extends Model{
         return $this->hasMany(ForumView::class, 'id_theme');
     }
 
+   /*  public function views()
+    {
+        return $this->belongsToMany(ForumView::class, 'forum_views', 'id_theme', 'id_user');
+    } */
+
     /**
      * данные пользователей написавших первое и последнее сообщение
      */

@@ -2,7 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{ForumTopic,ForumCategory,ForumTheme};
+use App\Models\{ForumTopic,ForumCategory,ForumTheme,ForumRating,User};
 
 class ForumMessage extends Model{
     public $timestamps = false;
@@ -19,6 +19,15 @@ class ForumMessage extends Model{
     public function theme()
     {
         return $this->hasOne(ForumTheme::class, 'id', 'id_theme');
+    }
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'id_user');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(ForumRating::class, 'id_message');
     }
 
     public function scopeGroup($query, $user)

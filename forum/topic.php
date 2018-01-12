@@ -38,9 +38,9 @@ $themes = ForumTheme::whereDoesntHave('messages', function ($query) use ($user) 
 /**
  * если в теме нет сообщений доступных для чтения, такую тему не выводим
  */
-$themes = ForumTheme::with(['messages' => function ($query) use ($user) {
+$themes = ForumTheme::whereHas('messages', function ($query) use ($user) {
     $query->group($user);
-}])->withCount(['messages' => function ($query) use ($user) {
+})->withCount(['messages' => function ($query) use ($user) {
     $query->group($user);
 }, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, $user->items_per_page);
 
