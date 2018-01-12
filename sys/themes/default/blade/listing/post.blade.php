@@ -1,8 +1,7 @@
 <div id="{{$id}}"
-     class="post clearfix icon time @if ($bottom)bottom @endif @if ($counter)counter @endif @if ($content)content @endif"
+     class="post clearfix icon time @if ($actions)actions @endif @if ($bottom)bottom @endif @if ($counter)counter @endif @if ($content)content @endif"
      data-ng-controller="ListingPostCtrl"
      data-post-url="{{$url}}">
-
     <div class="post_image"><img src="<?= $image ?>" alt=""></div>
     <div class="post_head">
         <span class="post_icon">
@@ -15,7 +14,7 @@
         <a class="post_title" @if ($url) href="{{$url}}" @endif>{!! $title !!}</a>
         <span class="post_actions">
             @foreach ($actions as $action)
-                <a href="{{$action->url}}"><img src="{{$action->icon}}" alt="" /></a>
+                <a href="{{$action['url']}}"><img src="{{$action['icon']}}" alt="" /></a>
             @endforeach
         </span>
         <span class="post_counter">{{$counter}}</span>
