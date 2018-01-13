@@ -15,7 +15,7 @@ $post->title = __('Поиск');
 $post->icon('forum.search');
 
 if (false === ($new_themes = cache_counters::get('forum.new_themes.' . $user->group))) {
-    $new_themes = ForumTheme::group($user)->where('time_create', '>', NEW_TIME)->count();
+    $new_themes = ForumTheme::group()->where('time_create', '>', NEW_TIME)->count();
     cache_counters::set('forum.new_themes.' . $user->group, $new_themes, 20);
 }
 $post = $listing->post();
@@ -27,7 +27,7 @@ if ($new_themes) {
 $post->icon('forum.lt');
 
 if (false === ($new_posts = cache_counters::get('forum.new_posts.' . $user->group))) {
-    $new_posts = ForumMessage::group($user)->where('time', '>', NEW_TIME)->count();
+    $new_posts = ForumMessage::group()->where('time', '>', NEW_TIME)->count();
     cache_counters::set('forum.new_posts.' . $user->group, $new_posts, 20);
 }
 
@@ -43,7 +43,7 @@ $post->icon('forum.lp');
 if ($user->id) {
     if (false === ($my_themes = cache_counters::get('forum.my_themes.' . $user->id))) {
         # количество тем у которых есть новые сообщения не от автора
-         $my_themes = ForumMessage::group($user)->where([
+         $my_themes = ForumMessage::group()->where([
             ['time', '>', NEW_TIME],
             ['id_user', '<>', $user->id],
         ])->count();
@@ -61,11 +61,11 @@ if ($user->id) {
 }
 
 $pages = new pages();
-$pages->posts = ForumCategory::group($user)->count();
+$pages->posts = ForumCategory::group()->count();
 
 $listing->display(__('Доступных Вам категорий нет'));
 
-$categories = ForumCategory::group($user)->get()->forPage($pages->this_page, $user->items_per_page);
+$categories = ForumCategory::group()->get()->forPage($pages->this_page, $user->items_per_page);
 view('forum.category', compact('categories'));
 
 $pages->display('?'); // вывод страниц

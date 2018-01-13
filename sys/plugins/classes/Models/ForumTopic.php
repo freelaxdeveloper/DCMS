@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ForumCategory,ForumTheme};
+use App\App\App;
 
 class ForumTopic extends Model{
     public $timestamps = false;
@@ -18,13 +19,13 @@ class ForumTopic extends Model{
         return $this->hasMany(ForumTheme::class, 'id_topic', 'id');
     }
 
-    public function scopeGroup($query, $user)
+    public function scopeGroup($query)
     {
         return $query->where([
             ['theme_view', '1'],
-            ['group_show', '<=', $user->group],
-        ])->whereHas('category', function ($query) use ($user) {
-            $query->group($user);
+            ['group_show', '<=', App::user()->group],
+        ])->whereHas('category', function ($query) {
+            $query->group();
         });
     }
 }

@@ -70,12 +70,34 @@ class ForumTheme extends Model{
         $is_open = (int)($this->attributes['group_write'] <= $this->topic->group_write);
         return "forum.theme.{$this->attributes['top']}.{$is_open}";
     }
-
-    public function scopeGroup($query, $user)
+    /**
+     * доступность темы ползователю
+     */
+    public function scopeGroup($query)
     {
-        return $query->where('group_show', '<=', $user->group)
-            ->whereHas('topic', function ($query) use ($user) {
-                $query->group($user);
-        });
+        return $query->where('group_show', '<=', App::user()->group)
+            ->whereHas('topic', function ($query) {
+                $query->group();
+            });
+    }
+    /**
+     * темы с новыми сообщениями, с проверкой на доступность группы чтения
+     */
+    public function scopeLastPosts($query)
+    {
+        return $query->group()->where('time_last', '>', TIME - 3600 * 24 * 7)
+            ->whereHas('topic', function ($query) {
+                $query->where('theme_view', '1');
+            });
+    }
+    /**
+     * обновенные темы
+     */
+    public function scopeLastThemes($query)
+    {
+        return $query->group()->where('time_create', '>', TIME - 3600 * 24 * 7)
+            ->whereHas('topic', function ($query) {
+                $query->where('theme_view', '1');
+            });
     }
 }

@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,captcha,is_valid,text,misc,form,url};
+use App\Models\ForumMessage;
 
 $doc = new document(1);
 $doc->title = __('Новое сообщение');
@@ -70,12 +71,24 @@ if ($can_write) {
                 $res = $db->prepare("UPDATE `forum_messages` SET `message` = ? WHERE `id_theme` = ? AND `id_user` = ? ORDER BY `id` DESC LIMIT 1");
                 $res->execute(Array($message, $theme['id'], $user->id));
             } else {
-                $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`)
+                /* $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`)
  VALUES (?,?,?,?,?,?,?,?)");
                 $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], $user->id, TIME, $message, $theme['group_show'],
                     $theme['group_edit']));
 
-                $id_message = $db->lastInsertId();
+                $id_message = $db->lastInsertId(); */
+                $message = new ForumMessage;
+                $message->message = $message;
+                $message->id_category = $theme['id_category'];
+                $message->id_topic = $theme['id_topic'];
+                $message->id_theme = $theme['id'];
+                $message->id_user = $user->id;
+                $message->time = TIME;
+                $message->group_show = $theme['group_show'];
+                $message->group_edit = $theme['group_edit'];
+                $message->save();
+                $id_message = $message->id;
+
             }
             if (isset($_POST['add_file'])) {
                 $doc->toReturn(new url('message.files.php',

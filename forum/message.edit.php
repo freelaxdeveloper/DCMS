@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,user,groups,form,url,text};
+use App\Models\ForumMessage;
 
 $doc = new document(1);
 $doc->title = __('Редактирование сообщения');
@@ -75,6 +76,10 @@ if (isset($_POST['message'])) {
             ($message['edit_time'] ? $message['edit_time'] : $message['time']),
             $message['message']
         ));
+        $test = ForumMessage::find($message['id']);
+        $test->message = $message_new;
+        $test->save();
+
         $res = $db->prepare("UPDATE `forum_messages` SET `message` = ?, `edit_count` = `edit_count` + 1, `edit_id_user` = ?, `edit_time` = ? WHERE `id` = ? LIMIT 1");
         $res->execute(Array($message_new, $user->id, TIME, $message['id']));
         $doc->msg(__('Сообщение успешно изменено'));
