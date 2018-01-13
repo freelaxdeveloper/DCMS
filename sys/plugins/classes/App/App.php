@@ -42,6 +42,11 @@ abstract class App{
                 die('Ошибка авторизации');
                 //self::access_denied(__('Ошибка авторизации'), true);
             }
+        } else {
+            $current_user = new User;
+            $current_user->login = '[Гость]';
+            $current_user->group = 0;
+            $current_user->id = 0;
         }
         return $current_user;
     }

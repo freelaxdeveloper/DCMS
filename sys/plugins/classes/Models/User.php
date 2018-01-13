@@ -35,4 +35,9 @@ class User extends Model{
     {
         return $this->hasMany(ChatMini::class, 'id_user');
     }
+
+    public function getItemsPerPageAttribute()
+    {
+        return 5;
+    }
 }
