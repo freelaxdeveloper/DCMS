@@ -42,7 +42,7 @@ abstract class App{
                 die('Ошибка авторизации');
                 //self::access_denied(__('Ошибка авторизации'), true);
             }
-        } else {
+        } elseif (!$current_user) {
             $current_user = new User;
             $current_user->login = '[Гость]';
             $current_user->group = 0;
