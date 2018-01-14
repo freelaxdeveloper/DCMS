@@ -34,7 +34,7 @@ $doc->keywords[] = $theme->topic->name;
 $doc->keywords[] = $theme->category->name;
 
 $pages = new pages();
-$pages->posts = $theme->messages()->group(App::user())->count();
+$pages->posts = $theme->messages()->group()->count();
 $doc->description = __('Форум') . ' - ' . $theme->name . ' - ' . __('Страница %s из %s', $pages->this_page, $pages->pages);
 
 include 'inc/theme.votes.php';
@@ -43,7 +43,7 @@ $img_thumb_down = '<a href="{url}" class="DCMS_thumb_down ' . implode(' ', sprit
 $img_thumb_up = '<a href="{url}" href="" class="DCMS_thumb_up ' . implode(' ', sprite::getClassName('thumb_up', SPRITE_CLASS_PREFIX)) . '"></a>';
 
 $messages = $theme->messages()
-    ->group(App::user())->get()
+    ->group()->get()
     ->forPage($pages->this_page, App::user()->items_per_page);
 
 $listing = new listing();
