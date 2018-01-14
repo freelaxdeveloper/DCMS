@@ -2,16 +2,18 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,captcha,text,form};
+use App\Models\News;
+use App\App\App;
 
 $doc = new document(4);
 $doc->title = __('Создание новости');
 $doc->ret(__('К новостям'), './');
 $news = & $_SESSION['news_create'];
 
-if (isset($_POST['clear'])) $news = array();
+if (isset($_POST['clear'])) $news = [];
 
 if (empty($news)) {
-    $news = array();
+    $news = [];
     $news['title'] = '';
     $news['text'] = '';
     $news['checked'] = false;
@@ -21,10 +23,14 @@ if ($news['checked'] && isset($_POST['send'])) {
     if (empty($_POST['captcha']) || empty($_POST['captcha_session']) || !captcha::check($_POST['captcha'], $_POST['captcha_session']))
         $doc->err(__('Ошибка при вводе чисел с картинки'));
     else {
-        $res = $db->prepare("INSERT INTO `news` (`title`, `time`, `text`, `id_user`) VALUES (?,?,?,?)");
-        $res->execute(Array($news['title'], TIME, $news['text'], $user->id));
+        News::create([
+            'title' => $news['title'],
+            'time' => TIME,
+            'text' => $news['text'],
+            'id_user' => App::user()->id,
+        ]);
         $doc->msg(__('Новость успешно опубликована'));
-        $news = array();
+        $news = [];
         header('Refresh: 1; ./');
         exit;
     }
