@@ -1,6 +1,8 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,user,groups,form,url,text};
+use App\Models\{ForumMessage,ForumHistory};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Редактирование сообщения');
@@ -12,23 +14,20 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $id_message = (int) $_GET['id'];
-$q = $db->prepare("SELECT `forum_messages`.*, `forum_themes`.`id_moderator` AS `id_moderator` FROM `forum_messages` INNER JOIN `forum_themes` ON `forum_themes`.`id` = `forum_messages`.`id_theme` WHERE `forum_messages`.`id` = ? LIMIT 1");
-$q->execute(Array($id_message));
 
-if (!$message = $q->fetch()) {
+if (!$message = ForumMessage::find($id_message)) {
     $doc->toReturn();
     $doc->err(__('Сообщение не найдено'));
 
     exit;
 }
-$autor = new user((int) $message['id_user']);
 
 $access_edit = false;
 $edit_time = $message['time'] - TIME + 600;
 
-if ($user->group > $autor->group || $user->group == groups::max() || $user->id == $message['id_moderator']) {
+if (App::user()->group > $message->user->group || App::user()->group == groups::max() || App::user()->id == $message->theme->id_moderator) {
     $access_edit = true;
-} elseif ($user->id == $autor->id && $edit_time > 0) {
+} elseif (App::user()->id == $message->user->id && $edit_time > 0) {
     $access_edit = true;
     $doc->msg(__('Для изменения сообщения осталось %d сек', $edit_time));
 }
@@ -39,21 +38,24 @@ if (!$access_edit) {
     exit;
 }
 
-
-$doc->title = __('Сообщение от "%s" - редактирование', $autor->login);
+$doc->title = __('Сообщение от "%s" - редактирование', $message->user->login);
 
 if (isset($_GET['act']) && $_GET['act'] == 'hide') {
-    $doc->toReturn(new url('theme.php', array('id' => $message['id_theme'])));
-    $res = $db->prepare("UPDATE `forum_messages` SET `group_show` = '2' WHERE `id` = ? LIMIT 1");
-    $res->execute(Array($message['id']));
+    $doc->toReturn(new url('theme.php', ['id' => $message->id_theme]));
+
+    $message->group_show = 2;
+    $message->save();
+
     $doc->msg(__('Сообщение успешно скрыто'));
     exit;
 }
 
 if (isset($_GET['act']) && $_GET['act'] == 'show') {
-    $doc->toReturn(new url('theme.php', array('id' => $message['id_theme'])));
-    $res = $db->prepare("UPDATE `forum_messages` SET `group_show` = '0' WHERE `id` = ? LIMIT 1");
-    $res->execute(Array($message['id']));
+    $doc->toReturn(new url('theme.php', ['id' => $message->id_theme]));
+
+    $message->group_show = 0;
+    $message->save();
+
     $doc->msg(__('Сообщение будет отображаться'));
     exit;
 }
@@ -61,22 +63,25 @@ if (isset($_GET['act']) && $_GET['act'] == 'show') {
 if (isset($_POST['message'])) {
     $message_new = text::input_text($_POST['message']);
 
-    if ($message_new == $message['message']) {
+    if ($message_new == $message->message) {
         $doc->err(__('Изменения не обнаружены'));
     } elseif ($dcms->censure && $mat = is_valid::mat($message_new)) {
         $doc->err(__('Обнаружен мат: %', $mat));
     } elseif ($message_new) {
-        $doc->toReturn(new url('theme.php', array('id' => $message['id_theme'])));
+        $doc->toReturn(new url('theme.php', ['id' => $message['id_theme']]));
+        ForumHistory::create([
+            'id_message' => $message->id,
+            'id_user' => $message->edit_id_user ?? $message->id_user,
+            'time' => $message->time,
+            'message' => $message->message,
+        ]);
 
-        $res = $db->prepare("INSERT INTO `forum_history` (`id_message`, `id_user`, `time`, `message`) VALUES (?,?,?,?)");
-        $res->execute(Array(
-            $message['id'],
-            ($message['edit_id_user'] ? $message['edit_id_user'] : $message['id_user']),
-            ($message['edit_time'] ? $message['edit_time'] : $message['time']),
-            $message['message']
-        ));
-        $res = $db->prepare("UPDATE `forum_messages` SET `message` = ?, `edit_count` = `edit_count` + 1, `edit_id_user` = ?, `edit_time` = ? WHERE `id` = ? LIMIT 1");
-        $res->execute(Array($message_new, $user->id, TIME, $message['id']));
+        $message->message = $message_new;
+        $message->edit_time = TIME;
+        $message->edit_id_user = App::user()->id;
+        $message->increment('edit_count', 1);
+        $message->save();
+
         $doc->msg(__('Сообщение успешно изменено'));
         exit;
     } else {
@@ -85,12 +90,12 @@ if (isset($_POST['message'])) {
 }
 
 $form = new form(new url());
-$form->textarea('message', __('Редактирование сообщения'), $message['message']);
+$form->textarea('message', __('Редактирование сообщения'), $message->message);
 $form->button(__('Применить'));
 $form->display();
 
 $doc->act(__('Вложения'),
-    'message.files.php?id=' . $message['id'] . (isset($_GET['return']) ? '&amp;return=' . urlencode($_GET['return']) : null));
+    'message.files.php?id=' . $message->id . (isset($_GET['return']) ? '&amp;return=' . urlencode($_GET['return']) : null));
 
 if (isset($_GET['return'])) {
     $doc->ret(__('В тему'), text::toValue($_GET['return']));

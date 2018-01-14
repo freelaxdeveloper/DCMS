@@ -1,5 +1,4 @@
 <?php
-
 include_once '../sys/inc/start.php';
 use App\{document,current_user,sprite,user,listing,misc,text,pages,groups};
 use App\Models\{ForumView,ForumTheme,ForumMessage};
@@ -15,12 +14,12 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 $id_theme = (int)$_GET['id'];
 
-
 if (!$theme = ForumTheme::group(App::user())->find($id_theme)) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна'));
     exit;
 }
+
 if (App::user()->group) {
     $theme->views()->updateOrCreate([
         'id_user' => App::user()->id
@@ -35,7 +34,7 @@ $doc->keywords[] = $theme->topic->name;
 $doc->keywords[] = $theme->category->name;
 
 $pages = new pages();
-$pages->posts = ForumMessage::where('id_theme', $theme->id)->group(App::user())->count();
+$pages->posts = $theme->messages()->group()->count();
 $doc->description = __('Форум') . ' - ' . $theme->name . ' - ' . __('Страница %s из %s', $pages->this_page, $pages->pages);
 
 include 'inc/theme.votes.php';
@@ -43,11 +42,9 @@ include 'inc/theme.votes.php';
 $img_thumb_down = '<a href="{url}" class="DCMS_thumb_down ' . implode(' ', sprite::getClassName('thumb_down', SPRITE_CLASS_PREFIX)) . '"></a>';
 $img_thumb_up = '<a href="{url}" href="" class="DCMS_thumb_up ' . implode(' ', sprite::getClassName('thumb_up', SPRITE_CLASS_PREFIX)) . '"></a>';
 
-$messages = ForumMessage::group(App::user())
-    ->where('id_theme', $theme->id)
-    ->with(['ratings' => function ($query) {
-        $query->where('id_user', App::user()->id);
-    }])->get()->forPage($pages->this_page, $user->items_per_page);
+$messages = $theme->messages()
+    ->group()->get()
+    ->forPage($pages->this_page, App::user()->items_per_page);
 
 $listing = new listing();
 foreach ($messages AS $message) {

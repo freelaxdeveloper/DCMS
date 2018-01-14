@@ -3,10 +3,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ForumTopic,ForumCategory,ForumTheme,ForumRating,User};
+use App\App\App;
 
 class ForumMessage extends Model{
     public $timestamps = false;
     protected $guarded = ['id'];
+    // привязываем тему, теперь при (изменении/добавлении) сообщения update_at обновится и в теме
+    //protected $touches = ['theme']; 
 
     public function topic()
     {
@@ -30,11 +33,11 @@ class ForumMessage extends Model{
         return $this->hasMany(ForumRating::class, 'id_message');
     }
 
-    public function scopeGroup($query, $user)
+    public function scopeGroup($query)
     {
-        return $query->where('group_show', '<=', $user->group)
-            ->whereHas('theme', function ($query) use ($user) {
-                $query->group($user);
+        return $query->where('group_show', '<=', App::user()->group)
+            ->whereHas('theme', function ($query) {
+                $query->group();
             });
     }
     

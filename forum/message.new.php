@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,captcha,is_valid,text,misc,form,url};
+use App\Models\ForumMessage;
 
 $doc = new document(1);
 $doc->title = __('Новое сообщение');
@@ -54,7 +55,7 @@ if ($can_write) {
             $user->balls += $dcms->add_balls_message_forum ;
             $af = TIME;
 
-            $post_update = false;
+            /* $post_update = false;
             $q = $db->prepare("SELECT * FROM `forum_messages` WHERE `id_theme` = ? ORDER BY `id` DESC LIMIT 1");
             $q->execute(Array($theme['id']));
             if ($last_post = $q->fetch()) {
@@ -62,21 +63,28 @@ if ($can_write) {
                     $post_update = true;
                     $id_message = $last_post['id'];
                 }
-            }
+            } */
 
-            if ($post_update && !isset($_POST['add_file'])) {
+            /* if ($post_update && !isset($_POST['add_file'])) {
 
                 $message = $last_post['message'] . "\n\n[small]Через " . misc::when(TIME - $theme['time_last'] + TIME) . ":[/small]\n" . $message;
                 $res = $db->prepare("UPDATE `forum_messages` SET `message` = ? WHERE `id_theme` = ? AND `id_user` = ? ORDER BY `id` DESC LIMIT 1");
                 $res->execute(Array($message, $theme['id'], $user->id));
-            } else {
-                $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`)
- VALUES (?,?,?,?,?,?,?,?)");
-                $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], $user->id, TIME, $message, $theme['group_show'],
-                    $theme['group_edit']));
+            } else { */
 
-                $id_message = $db->lastInsertId();
-            }
+                $newMessage = new ForumMessage;
+                $newMessage->message = $message;
+                $newMessage->id_category = $theme['id_category'];
+                $newMessage->id_topic = $theme['id_topic'];
+                $newMessage->id_theme = $theme['id'];
+                $newMessage->id_user = $user->id;
+                $newMessage->time = TIME;
+                $newMessage->group_show = $theme['group_show'];
+                $newMessage->group_edit = $theme['group_edit'];
+                $newMessage->save();
+                $id_message = $newMessage->id;
+
+            //}
             if (isset($_POST['add_file'])) {
                 $doc->toReturn(new url('message.files.php',
                     array('id' => $id_message,

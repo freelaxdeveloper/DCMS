@@ -2,6 +2,8 @@
 namespace App;
 
 use App\url;
+Use App\App\App;
+
 /**
  * Формирование списка страниц для постраничной навигации.
  * @property string limit SQL значение для LIMIT
@@ -18,15 +20,14 @@ class pages
     public $this_page = 1; // текущая страница
 
     protected $_items_count = 0; // количество пунктов всего
-    protected $_items_per_page = 10; // количество пунктов на одну страницу
+    protected $_items_per_page = 5; // количество пунктов на одну страницу
 
     /**
      * @param int $items_count Кол-во пунктов
      */
     function __construct($items_count = 0)
     {
-        global $user;
-        $this->items_per_page = $user->items_per_page;
+        $this->items_per_page = App::user()->items_per_page;
         $this->posts = $items_count;
     }
 

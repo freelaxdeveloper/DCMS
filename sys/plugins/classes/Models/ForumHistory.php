@@ -2,11 +2,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\{ForumTheme,User};
 
-class News extends Model{
+class ForumHistory extends Model{
     public $timestamps = false;
-    protected $fillable = ['title','time','text','id_user'];
+    protected $fillable = ['id_message','id_user','time','message'];
 
     public function user()
     {

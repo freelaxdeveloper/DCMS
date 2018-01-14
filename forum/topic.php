@@ -2,7 +2,7 @@
 include_once '../sys/inc/start.php';
 
 use App\{document,pages,listing,text,misc,current_user,user};
-use \App\Models\{ForumTopic,ForumMessage,ForumTheme};
+use App\Models\{ForumTopic,ForumMessage,ForumTheme};
 
 $doc = new document();
 
@@ -15,7 +15,7 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 $id_top = (int)$_GET['id'];
 
-if (!$topic = ForumTopic::group($user)->find($id_top)){
+if (!$topic = ForumTopic::group()->find($id_top)){
     header('Refresh: 1; url=./');
     $doc->err(__('Раздел не доступен'));
     exit;
@@ -24,7 +24,7 @@ if (!$topic = ForumTopic::group($user)->find($id_top)){
 $doc->title = $topic->name;
 
 $pages = new pages;
-$pages->posts = ForumTheme::group($user)->where('id_topic', $topic->id)->count();
+$pages->posts = ForumTheme::group()->where('id_topic', $topic->id)->count();
 
 /**
  * если в теме есть сообщения группа чтения которого выше чем у пользователя, такую тему не выводим
@@ -38,10 +38,10 @@ $themes = ForumTheme::whereDoesntHave('messages', function ($query) use ($user) 
 /**
  * если в теме нет сообщений доступных для чтения, такую тему не выводим
  */
-$themes = ForumTheme::whereHas('messages', function ($query) use ($user) {
-    $query->group($user);
-})->withCount(['messages' => function ($query) use ($user) {
-    $query->group($user);
+$themes = ForumTheme::whereHas('messages', function ($query) {
+    $query->group();
+})->withCount(['messages' => function ($query) {
+    $query->group();
 }, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, $user->items_per_page);
 
 view('forum.themes', compact('themes'));
