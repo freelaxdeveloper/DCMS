@@ -8,8 +8,8 @@ use App\App\App;
 class ForumMessage extends Model{
     public $timestamps = false;
     protected $guarded = ['id'];
-    // привязываем тему, теперь при изменении сообщения update_at обновится и в теме
-    protected $touches = ['theme']; 
+    // привязываем тему, теперь при (изменении/добавлении) сообщения update_at обновится и в теме
+    //protected $touches = ['theme']; 
 
     public function topic()
     {
