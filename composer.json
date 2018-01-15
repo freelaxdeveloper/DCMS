@@ -15,7 +15,9 @@
         "php": ">=7.1",
         "illuminate/database": "~5.5",
         "jenssegers/blade": "^1.1",
-        "illuminate/pagination": "^5.5"
+        "illuminate/pagination": "^5.5",
+        "slim/slim": "3.*",
+        "robmorgan/phinx": "0.5.*"
     },
     "autoload": {
         "psr-4": {

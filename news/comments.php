@@ -55,8 +55,6 @@ if ($can_write) {
                     }
                 }
             }
-
-
             exit;
         } else {
             $doc->err(__('Комментарий пуст'));
