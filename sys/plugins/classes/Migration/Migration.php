@@ -16,7 +16,7 @@ class Migration extends AbstractMigration {
         $this->capsule->addConnection([
           'driver'    => 'mysql',
           'host'      => DB_HOST,
-          'port'      => DB_PORT,
+        //   'port'      => DB_PORT,
           'database'  => DB_NAME,
           'username'  => DB_USER,
           'password'  => DB_PASSWORD,
