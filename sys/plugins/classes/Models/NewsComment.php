@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{News,User};
+use App\App\App;
 
 class NewsComment extends Model{
     public $timestamps = false;
@@ -15,5 +16,13 @@ class NewsComment extends Model{
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'id_user');
+    }
+    public function getActionsAttribute(): array
+    {
+        $actions = [];
+        if (2 <= App::user()->group) {
+            $actions[] = ['url' => './news.delete.php?id=' . $this->id, 'icon' => 'delete'];
+        }
+        return $actions;
     }
 }

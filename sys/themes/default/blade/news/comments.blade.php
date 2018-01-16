@@ -7,7 +7,7 @@
         'icon' => 'news',
         'time' => $news->time,
         'content' => $news->text,
-        'actions' => $actions,
+        'actions' => $news->actions,
         'bottom' => "[url=/profile.view.php?id={$news->id_user}]{$news->user->login}[/url]",
     ])
 

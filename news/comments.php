@@ -71,18 +71,9 @@ if ($can_write) {
     }
 }
 
-$actions = [];
-if ($user->group >= max($news->user->group, 4)) {
-    if (!$news->sended) {
-        $actions[] = ['url' => './news.send.php?id=' . $news->id, 'icon' => 'send'];
-    }
-    $actions[] = ['url' => './news.edit.php?id=' . $news->id, 'icon' => 'edit'];
-    $actions[] = ['url' => './news.delete.php?id=' . $news->id, 'icon' => 'delete'];
-}
-
 $comments = NewsComment::where('id_news', $news->id)->orderBy('id', 'desc')
     ->get()->forPage($pages->this_page, App::user()->items_per_page);
 
-view('news.comments', compact('comments', 'news', 'actions', 'form'));
+view('news.comments', compact('comments', 'news', 'form'));
 
 $pages->display("?id={$news->id}&amp;"); // вывод страниц
