@@ -1,7 +1,7 @@
 <?php
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
-use App\{document,is_valid,crypt,design,mail,form,url,vk};
+use App\{document,is_valid,crypt,design,mail,form,url,vk,captcha};
 
 $doc = new document();
 $doc->title = __('Регистрация');
