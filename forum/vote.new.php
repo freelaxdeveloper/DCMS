@@ -44,13 +44,13 @@ if (!empty($_POST['vote'])) {
 
         if (count($v) < 2) $doc->err(__('Должно быть не менее 2-х вариантов ответа'));
         else {
-            $res = $db->prepare("INSERT INTO `forum_vote` (`id_autor`, `id_theme`, `name`, " . implode(', ', $k) . ")
-VALUES (?,?,?, " . implode(', ', $v) . ")");
-            $res->execute(Array($user->id, $theme['id'], $vote));
+            $res = $db->prepare("INSERT INTO `forum_vote` (`id_autor`, `name`, " . implode(', ', $k) . ")
+VALUES (?,?, " . implode(', ', $v) . ")");
+            $res->execute(Array($user->id, $vote));
 
             if (!$id_vote = $db->lastInsertId()) $doc->err(__('При создании голосования возникла ошибка'));
             else {
-                $doc->toReturn(new url('theme.php', array('id', $id_theme)));
+                $doc->toReturn(new url('theme.php', array('id' => $id_theme)));
                 $res = $db->prepare("UPDATE `forum_themes` SET `id_vote` = ? WHERE `id` = ? LIMIT 1");
                 $res->execute(Array($id_vote, $theme['id']));
                 $doc->msg('Голосование успешно создано');

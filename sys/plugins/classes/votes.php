@@ -47,11 +47,12 @@ class votes
         $vote_tpl->assign('name', $this->description, 1);
         $votes = array();
         foreach ($this->_list as $item) {
+            $pc = !$item['count'] ? 0 : round($item['count'] / $this->_count_max * 100);
             $votes[] = array(
                 'name' => text::filter($item['name'], 1),
                 'url' => $item['url'],
                 'count' => $item['count'],
-                'pc' => @round($item['count'] / $this->_count_max * 100)
+                'pc' => $pc,
             );
         }
         $vote_tpl->assign('votes', $votes);

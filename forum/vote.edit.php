@@ -15,14 +15,14 @@ $id_theme = (int) $_GET['id_theme'];
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
 $q->execute(Array($id_theme, $user->group));
 if (!$theme = $q->fetch()) {
-    $doc->toReturn(new url('theme.php', array('id', $theme['id'])));
+    $doc->toReturn(new url('theme.php', array('id' => $theme['id'])));
     $doc->err(__('Тема не доступна'));
     exit;
 }
 
 
 if (empty($theme['id_vote'])) {
-    $doc->toReturn(new url('theme.php', array('id', $theme['id'])));
+    $doc->toReturn(new url('theme.php', array('id' => $theme['id'])));
     $doc->err(__('Голосование отсутствует'));
     exit;
 }
@@ -31,7 +31,7 @@ $q = $db->prepare("SELECT * FROM `forum_vote` WHERE `id` = ?");
 $q->execute(Array($theme['id_vote']));
 
 if (!$vote_a = $q->fetch()) {
-    $doc->toReturn(new url('theme.php', array('id', $theme['id'])));
+    $doc->toReturn(new url('theme.php', array('id' => $theme['id'])));
     $doc->err(__('Голосование отсутствует'));
     exit;
 }
@@ -54,7 +54,7 @@ if (!empty($_POST['vote'])) {
         if (count($set) < 2) $doc->err(__('Должно быть не менее 2-х вариантов ответа'));
         else {
             // echo mysql_error();
-            $doc->toReturn(new url('theme.php', array('id', $theme['id'])));
+            $doc->toReturn(new url('theme.php', array('id' => $theme['id'])));
 
             if (!empty($_POST['finish'])) {
                 $res = $db->prepare("UPDATE `forum_vote` SET `active` = '0' WHERE `id` = ? LIMIT 1");
@@ -95,7 +95,7 @@ if (!empty($_POST['vote'])) {
     }
 }
 
-$form = new form();
+$form = new form("?id_theme={$theme['id']}&amp;");
 $form->textarea('vote', __('Вопрос'), $vote_a['name']);
 for ($i = 1; $i <= 10; $i++)
     $form->text("v$i", __('Ответ №') . $i, $vote_a['v' . $i]);
