@@ -38,6 +38,13 @@ class ForumTheme extends Model{
         return $this->hasOne(ForumCategory::class, 'id', 'id_category');
     }
     /**
+     * голосование
+     */
+    public function vote()
+    {
+        return $this->hasOne(ForumVote::class, 'id', 'id_vote');
+    }
+    /**
      * сообщения темы
      */
     public function messages()
