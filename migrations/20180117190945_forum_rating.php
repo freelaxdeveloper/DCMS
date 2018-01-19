@@ -16,6 +16,8 @@ class ForumRating extends Migration
 
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_message')->references('id')->on('forum_messages');
+
+            $table->unique(['id_message', 'id_user']);
         });
     }
     public function down()  {

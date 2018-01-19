@@ -19,7 +19,7 @@ class ForumMessages extends Migration
             $table->integer('rating_down')->default(0)->unsigned();
             $table->unsignedSmallInteger('group_show')->default(0)->comment('Права для просмотра');
             $table->unsignedSmallInteger('group_edit')->default(0)->comment('Права для редактирования');
-            $table->integer('edit_id_user')->nullable();
+            $table->integer('edit_id_user')->unsigned()->nullable();
             $table->integer('edit_time')->nullable();
             $table->integer('edit_count')->default(0);
             $table->timestamps();
@@ -27,7 +27,7 @@ class ForumMessages extends Migration
             $table->foreign('id_category')->references('id')->on('forum_categories');
             $table->foreign('id_topic')->references('id')->on('forum_topics');
             $table->foreign('id_user')->references('id')->on('users');
-            //$table->foreign('edit_id_user')->references('id')->on('users');
+            $table->foreign('edit_id_user')->references('id')->on('users');
             $table->foreign('id_theme')->references('id')->on('forum_themes');
         });
     }
