@@ -15,6 +15,8 @@ class ForumViews extends Migration
 
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_theme')->references('id')->on('forum_themes');
+
+            $table->unique(['id_theme', 'id_user']);
         });
     }
     public function down()  {
