@@ -13,7 +13,7 @@ class ForumMessages extends Migration
             $table->integer('id_theme')->unsigned();
             $table->integer('id_user')->unsigned();
             $table->text('message');
-            $table->integer('time');
+            $table->integer('time')->unsigned();
             $table->integer('rating')->default(0);
             $table->integer('rating_up')->default(0)->unsigned();
             $table->integer('rating_down')->default(0)->unsigned();

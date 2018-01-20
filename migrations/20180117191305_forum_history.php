@@ -10,7 +10,7 @@ class ForumHistory extends Migration
             $table->increments('id');
             $table->integer('id_message')->unsigned();
             $table->integer('id_user')->unsigned();
-            $table->integer('time');
+            $table->integer('time')->unsigned();
             $table->text('message');
             $table->timestamps();
 

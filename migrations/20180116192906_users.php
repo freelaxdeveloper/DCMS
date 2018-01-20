@@ -20,7 +20,7 @@ class Users extends Migration
             $table->integer('reg_date')->comment('Дата регистрации');
             // $table->timestamp('reg_date')->useCurrent()->comment('Дата регистрации');
             $table->string('reg_mail')->nullable()->comment('E-mail, указанный при регистрации');
-            $table->integer('last_visit')->nullable()->comment('Последнее посещение');
+            $table->integer('last_visit')->unsigned()->nullable()->comment('Последнее посещение');
             // $table->timestamp('last_visit')->useCurrent()->comment('Последнее посещение');
             $table->integer('count_visit')->default(1)->comment('Количество посещений');
             $table->integer('conversions')->default(1)->comment('Количество переходов');
