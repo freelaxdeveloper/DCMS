@@ -8,8 +8,8 @@ class ForumTopics extends Migration
     public function up()  {
         $this->schema->create('forum_topics', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('time_create');
-            $table->integer('time_last')->comment('Время обновления (для сортировки)');
+            $table->integer('time_create')->unsigned();
+            $table->integer('time_last')->unsigned()->comment('Время обновления (для сортировки)');
             $table->integer('id_category')->unsigned();
             $table->string('name');
             $table->mediumText('description')->nullable();

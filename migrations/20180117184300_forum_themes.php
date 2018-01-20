@@ -17,9 +17,9 @@ class ForumThemes extends Migration
             $table->unsignedSmallInteger('group_write')->default(0)->comment('Права для создания тем в разделе	');
             $table->unsignedSmallInteger('group_edit')->default(0)->comment('Права для редактирования');
             $table->integer('id_autor')->unsigned()->comment('ID автора');
-            $table->integer('time_create')->comment('Время создания');
+            $table->integer('time_create')->unsigned()->comment('Время создания');
             $table->integer('id_last')->unsigned()->comment('ID последнего написавшего');
-            $table->integer('time_last')->comment('Время последнего сообщения');
+            $table->integer('time_last')->unsigned()->comment('Время последнего сообщения');
             $table->integer('id_moderator')->nullable()->comment('ID модератора темы');
             $table->timestamps();
 

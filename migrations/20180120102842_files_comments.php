@@ -3,24 +3,22 @@
 use \App\Migration\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class ForumRating extends Migration
+class FilesComments extends Migration
 {
     public function up()  {
-        $this->schema->create('forum_rating', function(Blueprint $table){
+        $this->schema->create('files_comments', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('id_message')->unsigned();
+            $table->integer('id_file')->unsigned();
             $table->integer('id_user')->unsigned();
+            $table->text('text');
             $table->integer('time')->unsigned();
-            $table->integer('rating');
             $table->timestamps();
 
+            $table->foreign('id_file')->references('id')->on('files_cache');
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_message')->references('id')->on('forum_messages');
-
-            $table->unique(['id_message', 'id_user']);
         });
     }
     public function down()  {
-        $this->schema->drop('forum_rating');
+        $this->schema->drop('files_comments');
     }
 }
