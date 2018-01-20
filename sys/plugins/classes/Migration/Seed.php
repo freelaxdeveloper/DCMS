@@ -2,10 +2,10 @@
 namespace App\Migration;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Phinx\Migration\AbstractMigration;
+use Phinx\Seed\AbstractSeed;
 use App\Migration\Connect; // Trait
 
-class Migration extends AbstractMigration {
+class Seed extends AbstractSeed {
   use Connect;
 
 }
