@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{dpanel,document,user,menu_code,form,url,text,listing,misc};
+use App\App\App;
 
 dpanel::check_access();
 $doc = new document(2);
@@ -14,7 +15,7 @@ if (!$ank->group) {
     exit;
 }
 
-if ($ank->group >= $user->group) {
+if ($ank->group >= App::user()->group) {
     $doc->toReturn();
     $doc->err(__('Недостаточно привилегий'));
     exit;
@@ -86,7 +87,7 @@ if (isset($_POST ['ban'])) {
         // ставим запись о бане
         $res = $db->prepare("INSERT INTO `ban` (`id_user`, `id_adm`, `link`, `code`, `comment`, `time_start`, `time_end`, `access_view`)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?) ");
-        $res->execute(Array($ank->id, $user->id, $link, $code, $comm, TIME, $time_ban_end, $access_view));
+        $res->execute(Array($ank->id, App::user()->id, $link, $code, $comm, TIME, $time_ban_end, $access_view));
         $res = $db->prepare("UPDATE `users` SET `is_ban` = '1' WHERE `id` = ?");
         $res->execute(Array($ank->id));
 
@@ -109,7 +110,7 @@ if (!empty($_GET['ban_delete'])) {
         $doc->err(__('Ошибка снятия бана'));
     } else {
         $adm = new user($ban['id_adm']);
-        if ($adm->group < $user->group || $adm->id == $user->id) {
+        if ($adm->group < App::user()->group || $adm->id == App::user()->id) {
 
             $res = $db->prepare("DELETE FROM `ban` WHERE `id` = ? LIMIT 1");
             $res->execute(Array($id_ban_delete));

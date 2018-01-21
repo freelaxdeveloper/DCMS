@@ -2,6 +2,8 @@
 namespace App;
 
 use App\{api_controller,current_user,ApiAuthRequiredException,ApiException,DB,text};
+use App\App\App;
+
 /**
  * Класс для работы с сообщеними пользователя
  * Class api_mail
@@ -10,8 +12,7 @@ class api_mail implements api_controller
 {
     public static function get($request_data)
     {
-        $user = current_user::getInstance();
-        if (!$user->id)
+        if (!App::user()->id)
             throw new ApiAuthRequiredException($request_data);
 
         $ank = new user((int)@$request_data['id_user']);
@@ -33,14 +34,14 @@ class api_mail implements api_controller
         if ($set_readed) {
             // отмечаем письма от этого человека как прочитанные
             $res = DB::me()->prepare("UPDATE `mail` SET `is_read` = '1' WHERE `id_user` = ? AND `id_sender` = ?");
-            $res->execute(Array($user->id, $ank->id));
+            $res->execute(Array(App::user()->id, $ank->id));
         }
 
         $mail = array();
         $q = DB::me()->prepare("SELECT * FROM `mail` WHERE `time` > :time_from " . ($only_unreaded ? ' AND `is_read` = 0' : '') . " AND ((`id_user` = :id_user AND `id_sender` = :id_ank) OR (`id_user` = :id_ank AND `id_sender` = :id_user)) ORDER BY `id` DESC LIMIT $offset, $count");
         $q->execute(Array(
             ':time_from' => $time_from,
-            ':id_user' => $user->id,
+            ':id_user' => App::user()->id,
             ':id_ank' => $ank->id
         ));
         while ($m = $q->fetch()) {

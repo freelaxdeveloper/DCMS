@@ -1,5 +1,6 @@
 <?php
 use App\{groups,form,url,files};
+use App\App\App;
 
 switch (@$_GET['act']) {
     case 'edit_prop':
@@ -11,7 +12,7 @@ switch (@$_GET['act']) {
         $form->textarea('description', __('Описание'), $file->description);
         $form->textarea('description_small', __('Краткое описание'), $file->description_small);
 
-        if ($file->group_edit <= $user->group) {
+        if ($file->group_edit <= App::user()->group) {
             $options = array();
             foreach ($groups as $type => $value) {
                 $options[] = array($type, $value['name'], $type == $file->group_show);
@@ -42,7 +43,7 @@ switch (@$_GET['act']) {
         $dirs = $root_dir->getPathesRecurse($dir);
         foreach ($dirs as $dir2) {
 
-            if ($dir2->group_show > $user->group || $dir2->group_write > $user->group) {
+            if ($dir2->group_show > App::user()->group || $dir2->group_write > App::user()->group) {
                 // если нет прав на чтение папки или на запись в папку, то пропускаем
                 continue;
             }
@@ -58,7 +59,7 @@ switch (@$_GET['act']) {
         $dirs = $root_dir->getPathesRecurse($dir);
         foreach ($dirs as $dir2) {
 
-            if ($dir2->group_show > $user->group || $dir2->group_write > $user->group) {
+            if ($dir2->group_show > App::user()->group || $dir2->group_write > App::user()->group) {
                 // если нет прав на чтение папки или на запись в папку, то пропускаем
                 continue;
             }
@@ -79,7 +80,7 @@ switch (@$_GET['act']) {
     case 'edit_unlink':
     {
         $form = new form(new url());
-        if ($file->id_user && $file->id_user != $user->id)
+        if ($file->id_user && $file->id_user != App::user()->id)
             $form->textarea('reason', __('Причина удаления'));
         $form->bbcode(__('Подтвердите удаление файла'));
         $form->button(__('Удалить'), 'edit_unlink');

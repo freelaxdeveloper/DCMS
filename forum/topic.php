@@ -3,6 +3,7 @@ include_once '../sys/inc/start.php';
 
 use App\{document,pages,listing,text,misc,current_user,user};
 use App\Models\{ForumTopic,ForumMessage,ForumTheme};
+use App\App\App;
 
 $doc = new document();
 
@@ -31,7 +32,7 @@ $pages->posts = ForumTheme::group()->where('id_topic', $topic->id)->count();
  */
 /*
 $themes = ForumTheme::whereDoesntHave('messages', function ($query) use ($user) {
-    $query->where('group_show', '>', $user->group);
+    $query->where('group_show', '>', App::user()->group);
 })->orderByRaw('top ASC', 'time_last ASC')->get();
 */
 
@@ -42,17 +43,17 @@ $themes = ForumTheme::whereHas('messages', function ($query) {
     $query->group();
 })->withCount(['messages' => function ($query) {
     $query->group();
-}, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, $user->items_per_page);
+}, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, App::user()->items_per_page);
 
 view('forum.themes', compact('themes'));
 
 $pages->display('./topic.php?id=' . $topic->id . '&amp;'); // вывод страниц
 
-if ($topic['group_write'] <= $user->group) {
+if ($topic['group_write'] <= App::user()->group) {
     $doc->act(__('Начать новую тему'), './theme.new.php?id_topic=' . $topic->id . "&amp;return=" . URL);
 }
 
-if ($topic['group_edit'] <= $user->group) {
+if ($topic['group_edit'] <= App::user()->group) {
     $doc->act(__('Параметры раздела'), './topic.edit.php?id=' . $topic->id . "&amp;return=" . URL);
 }
 

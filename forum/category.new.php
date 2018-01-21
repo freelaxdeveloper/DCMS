@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,form,url};
+use App\App\App;
 
 $doc = new document(5);
 $doc->title = __('Новая категория');
@@ -15,7 +16,7 @@ if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['posit
     } else {
         $res = $db->prepare("INSERT INTO `forum_categories` (`name`, `description`, `position`, `group_edit`)
  VALUES (?, ?, ?, ?)");
-        $res->execute(Array($name, $description, $position, max($user->group, 5)));
+        $res->execute(Array($name, $description, $position, max(App::user()->group, 5)));
         $id_category = $db->lastInsertId();
         $dcms->log('Форум', 'Создание категории "' . $name . '"');
         $doc->msg(__('Категория успешно создана'));

@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,user,captcha,form,url};
+use App\App\App;
 
 $doc = new document(4);
 $doc->title = __('Удаление новости');
@@ -17,7 +18,7 @@ if (!$news = $q->fetch())
 
 $ank = new user($news['id_user']);
 
-if ($ank->group > $user->group)
+if ($ank->group > App::user()->group)
     $doc->access_denied(__('У Вас нет прав для удаления данной новости'));
 
 if (isset($_POST['delete'])) {

@@ -2,11 +2,12 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,files,files_file,captcha,form};
+use App\App\App;
 
 $doc = new document(1); // инициализация документа для браузера
 $doc->title = __('Мой аватар');
 
-$avatar_file_name = $user->id . '.jpg';
+$avatar_file_name = App::user()->id . '.jpg';
 $avatars_path = FILES . '/.avatars'; // папка с аватарами
 $avatars_dir = new files($avatars_path);
 
@@ -34,8 +35,8 @@ if (!empty($_FILES ['file'])) {
         if ($files_ok = $avatars_dir->filesAdd(array($_FILES ['file'] ['tmp_name'] => $avatar_file_name))) {
             $avatars_dir->group_show = 0;
             $files_ok [$_FILES ['file'] ['tmp_name']]->group_show = 0;
-            $files_ok [$_FILES ['file'] ['tmp_name']]->id_user = $user->id;
-            $files_ok [$_FILES ['file'] ['tmp_name']]->group_edit = max($user->group, 2);
+            $files_ok [$_FILES ['file'] ['tmp_name']]->id_user = App::user()->id;
+            $files_ok [$_FILES ['file'] ['tmp_name']]->group_edit = max(App::user()->group, 2);
 
             unset($files_ok);
             $doc->msg(__('Аватар успешно установлен'));
@@ -46,7 +47,7 @@ if (!empty($_FILES ['file'])) {
 }
 
 // Аватар 
-if ($path = $user->getAvatar($doc->img_max_width())) {
+if ($path = App::user()->getAvatar($doc->img_max_width())) {
 
     if (!empty($_POST ['delete'])) {
         $avatar = new files_file($avatars_path, $avatar_file_name);

@@ -2,11 +2,12 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,is_valid,crypt,user,form,url,design,mail};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Восстановление пароля');
 
-if ($user->group) {
+if (App::user()->group) {
     $doc->err(__('Вы уже авторизованы'));
     exit;
 }

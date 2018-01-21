@@ -15,16 +15,6 @@ abstract class App{
         }
         return $icon_path;
     }
-
-    /* public static function user(bool $model = false)
-    {
-        static $current_user;
-        if (!$current_user) {
-            global $user;
-            return $model ? User::find($user->id) : $user;
-        }
-        return $model ? User::find($current_user->id) : $current_user;
-    } */
     # авторизация пользователя
     public static function user()
     {

@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{dpanel,document,groups,user,form,url};
+use App\App\App;
 
 dpanel::check_access();
 $groups = groups::load_ini();
@@ -18,7 +19,7 @@ if (!$ank->group) {
 
 $doc->title .= ' "' . $ank->login . '"';
 
-if ($ank->group >= $user->group) {
+if ($ank->group >= App::user()->group) {
     $doc->toReturn();
     $doc->err(__('Ваш статус не позволяет производить действия с данным пользователем'));
     exit;
@@ -26,13 +27,13 @@ if ($ank->group >= $user->group) {
 
 if (isset($_POST['save']) && !empty($_POST['group'])) {
     $group_now = (int) $_POST['group'];
-    if ($group_now >= $user->group)
+    if ($group_now >= App::user()->group)
             $doc->err(__('Вы не можете дать пользователю статус эквивалентный своему или выше'));
     else {
         $group_last = $ank->group;
         if ($group_last != $group_now) {
             $res = $db->prepare("INSERT INTO `log_of_user_status` (`id_user`, `id_adm`, `time`, `type_last`, `type_now`) VALUES (?, ?, ?, ?, ?)");
-            $res->execute(Array($ank->id, $user->id, TIME, $group_last, $group_now));
+            $res->execute(Array($ank->id, App::user()->id, TIME, $group_last, $group_now));
             $ank->group = $group_now;
 
             $dcms->log('Пользователи',
@@ -46,7 +47,7 @@ if (isset($_POST['save']) && !empty($_POST['group'])) {
 $form = new form(new url());
 $options = array();
 foreach ($groups as $group => $value) {
-    if ($group && $user->group > $group) $options[] = array($group, __($value['name']), $group == $ank->group);
+    if ($group && App::user()->group > $group) $options[] = array($group, __($value['name']), $group == $ank->group);
 }
 $form->select('group', __('Статус'), $options);
 $form->button(__('Применить'), 'save');

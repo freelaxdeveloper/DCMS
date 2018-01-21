@@ -2,6 +2,8 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,form,url,files};
+use App\App\App;
+
 $doc = new document(2);
 $doc->title = __('Форум');
 
@@ -19,7 +21,7 @@ FROM `forum_themes`
 LEFT JOIN `forum_categories` ON `forum_categories`.`id` = `forum_themes`.`id_category`
 LEFT JOIN `forum_topics` ON `forum_topics`.`id` = `forum_themes`.`id_topic`
 WHERE `forum_themes`.`id` = ? AND `forum_themes`.`group_show` <= ? AND `forum_topics`.`group_show` <= ? AND `forum_categories`.`group_show` <= ?");
-$q->execute(Array($id_theme, $user->group, $user->group, $user->group));
+$q->execute(Array($id_theme, App::user()->group, App::user()->group, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна'));
@@ -35,7 +37,7 @@ if (isset($_POST['save'])) {
                 LEFT JOIN `forum_categories` AS `fc` ON `ft`.`id_category` = `fc`.`id`
                 WHERE `ft`.`id` = ? AND `ft`.`group_show` <= ? AND `ft`.`group_write` <= ?
                 LIMIT 1");
-        $q->execute(Array($topic, $user->group, $user->group));
+        $q->execute(Array($topic, App::user()->group, App::user()->group));
 
         if ($topic != $theme['id_topic'] AND $topic = $q->fetch()) {
 
@@ -68,7 +70,7 @@ if (isset($_POST['save'])) {
             $theme_dir = new files(FILES . '/.forum/' . $theme['id']);
             $theme_dir->setGroupShowRecurse($topic['group_show']); // данный параметр необходимо применять рекурсивно
 
-            $message = __('%s переместил' . ($user->sex ? '' : 'а') . ' тему из раздела %s в раздел %s', '[user]' . $user->id . '[/user]', '[url=/forum/category.php?id=' . $theme['id_category_old'] . ']' . $theme['category_name_old'] . '[/url]/[url=/forum/topic.php?id=' . $theme['id_topic_old'] . ']' . $theme['topic_name_old'] . '[/url]', '[url=/forum/category.php?id=' . $theme['id_category'] . ']' . $theme['category_name'] . '[/url]/[url=/forum/topic.php?id=' . $theme['id_topic'] . ']' . $theme['topic_name'] . '[/url]');
+            $message = __('%s переместил' . (App::user()->sex ? '' : 'а') . ' тему из раздела %s в раздел %s', '[user]' . App::user()->id . '[/user]', '[url=/forum/category.php?id=' . $theme['id_category_old'] . ']' . $theme['category_name_old'] . '[/url]/[url=/forum/topic.php?id=' . $theme['id_topic_old'] . ']' . $theme['topic_name_old'] . '[/url]', '[url=/forum/category.php?id=' . $theme['id_category'] . ']' . $theme['category_name'] . '[/url]/[url=/forum/topic.php?id=' . $theme['id_topic'] . ']' . $theme['topic_name'] . '[/url]');
             if ($reason = text::input_text($_POST['reason'])) {
                 $message .= "\n" . __('Причина: %s', $reason);
             }
@@ -88,11 +90,11 @@ $doc->title = __('Перемещение темы %s', $theme['name']);
 $form = new form(new url());
 $options = array();
 $q = $db->prepare("SELECT `id`,`name` FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-$q->execute(Array($user->group));
+$q->execute(Array(App::user()->group));
 $q2 = $db->prepare("SELECT `id`,`name` FROM `forum_topics` WHERE `id_category` = ? AND `group_show` <= ? AND `group_write` <= ? ORDER BY `time_last` DESC");
 while ($category = $q->fetch()) {
     $options[] = array($category['name'], 'groupstart' => 1);
-    $q2->execute(Array($category['id'], $user->group, $user->group));
+    $q2->execute(Array($category['id'], App::user()->group, App::user()->group));
     while ($topic = $q2->fetch())
         $options[] = array($topic['id'], $topic['name'], $topic['id'] == $theme['id_topic']);
     $options[] = array('groupend' => 1);

@@ -53,11 +53,11 @@ foreach ($messages AS $message) {
     $post = $listing->post();
     $post->id = 'message' . $message->id;
 
-    if ($user->group) {
+    if (App::user()->group) {
         $post->action('quote', "message.php?id_message={$message->id}&amp;quote"); // цитирование
     }
 
-    if ($user->group > $message->user->group || ($user->id && $user->id == $theme->id_moderator) || $user->group == groups::max()) {
+    if (App::user()->group > $message->user->group || (App::user()->id && App::user()->id == $theme->id_moderator) || App::user()->group == groups::max()) {
         if ($theme->group_show <= 1) {
             if ($message->group_show <= 1) {
                 $post->action('hide', "message.edit.php?id={$message->id}&amp;return=" . URL . "&amp;act=hide&amp;" . passgen()); // скрытие
@@ -68,13 +68,13 @@ foreach ($messages AS $message) {
             }
         }
         $post->action('edit', "message.edit.php?id={$message->id}&amp;return=" . URL); // редактирование
-    } elseif ($user->id == $message->id_user && TIME < $message->time + 600) {
+    } elseif (App::user()->id == $message->id_user && TIME < $message->time + 600) {
         // автору сообщения разрешается его редактировать в течении 10 минут
         $post->action('edit', "message.edit.php?id={$message->id}&amp;return=" . URL); // редактирование
     }
 
-    if ($message->user->group <= $user->group && $user->id != $message->user->id) {
-        if ($user->group >= 2)
+    if ($message->user->group <= App::user()->group && App::user()->id != $message->user->id) {
+        if (App::user()->group >= 2)
             // бан
             $post->action('complaint', "/dpanel/user.ban.php?id_ank={$message->id_user}&amp;return=" . URL . "&amp;link=" . urlencode("/forum/message.php?id_message={$message->id}"));
         else
@@ -90,13 +90,13 @@ foreach ($messages AS $message) {
     $post->url = 'message.php?id_message=' . $message->id;
     $post->content = text::for_opis($message->message);
 
-    if ($message->edit_id_user && ($message->user->group < $user->group || $message->user->id == $user->id)) {
+    if ($message->edit_id_user && ($message->user->group < App::user()->group || $message->user->id == App::user()->id)) {
         $ank_edit = new user($message->edit_id_user);
         $post->bottom .= ' <a href="message.history.php?id=' . $message->id . '&amp;return=' . URL . '">' . __('Изменено') . '(' . $message->edit_count . ')</a> ' . $ank_edit->login . ' (' . misc::when($message->edit_time) . ')<br />';
     }
 
-    if ($user->group && $user->id != $message->user->id) {
-        if ($my_rating === 0 && $user->balls - $dcms->forum_rating_down_balls >= 0) {
+    if (App::user()->group && App::user()->id != $message->user->id) {
+        if ($my_rating === 0 && App::user()->balls - $dcms->forum_rating_down_balls >= 0) {
             $post->bottom .= str_replace('{url}', 'message.rating.php?id=' . $message->id . '&amp;change=down&amp;return=' . URL . urlencode('#' . $post->id), $img_thumb_down);
         }
 
@@ -136,10 +136,10 @@ foreach ($messages AS $message) {
 $listing->display(__('Сообщения отсутствуют'));
 $pages->display('theme.php?id=' . $theme->id . '&amp;'); // вывод страниц
 
-if ($theme->group_write <= $user->group) {
+if ($theme->group_write <= App::user()->group) {
     $doc->act(__('Написать сообщение'), 'message.new.php?id_theme=' . $theme->id . "&amp;return=" . URL);
 }
-if ($user->group >= 2 || $theme->group_edit <= $user->group || ($user->id && $user->id == $theme->id_moderator)) {
+if (App::user()->group >= 2 || $theme->group_edit <= App::user()->group || (App::user()->id && App::user()->id == $theme->id_moderator)) {
     $doc->act(__('Действия'), 'theme.actions.php?id=' . $theme->id);
 }
 

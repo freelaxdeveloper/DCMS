@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,form,url};
+use App\App\App;
 
 $doc = new document(2);
 $doc->title = __('Форум');
@@ -20,7 +21,7 @@ FROM `forum_themes`
 LEFT JOIN `forum_categories` ON `forum_categories`.`id` = `forum_themes`.`id_category`
 LEFT JOIN `forum_topics` ON `forum_topics`.`id` = `forum_themes`.`id_topic`
 WHERE `forum_themes`.`id` = ? AND `forum_themes`.`group_show` <= ? AND `forum_topics`.`group_show` <= ? AND `forum_categories`.`group_show` <= ?");
-$q->execute(Array($id_theme, $user->group, $user->group, $user->group));
+$q->execute(Array($id_theme, App::user()->group, App::user()->group, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна'));
@@ -48,7 +49,7 @@ if (!empty($_POST['open'])) {
         $theme['group_write'] = $group_write_open;
         $res = $db->prepare("UPDATE `forum_themes` SET `group_write` = ? WHERE `id` = ? LIMIT 1");
         $res->execute(Array($theme['group_write'], $theme['id']));
-        $message = __('%s открыл' . ($user->sex ? '' : 'а') . ' тему для обсуждения', '[user]' . $user->id . '[/user]');
+        $message = __('%s открыл' . (App::user()->sex ? '' : 'а') . ' тему для обсуждения', '[user]' . App::user()->id . '[/user]');
         if ($reason = text::input_text($_POST['reason'])) {
             $message .= "\n" . __('Причина: %s', $reason);
         }
@@ -69,7 +70,7 @@ if (!empty($_POST['close'])) {
         $theme['group_write'] = $group_write_close;
         $res = $db->prepare("UPDATE `forum_themes` SET `group_write` = ? WHERE `id` = ? LIMIT 1");
         $res->execute(Array($theme['group_write'], $theme['id']));
-        $message = __('%s закрыл' . ($user->sex ? '' : 'а') . ' тему для обсуждения', '[user]' . $user->id . '[/user]');
+        $message = __('%s закрыл' . (App::user()->sex ? '' : 'а') . ' тему для обсуждения', '[user]' . App::user()->id . '[/user]');
         if ($reason = text::input_text($_POST['reason'])) {
             $message .= "\n" . __('Причина: %s', $reason);
         }

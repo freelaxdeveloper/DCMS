@@ -1,14 +1,15 @@
 <?php
 defined('DCMS') or die;
 use App\{files,files_file,listing,user,misc,form,url,antiflood,pages,text,design};
+use App\App\App;
 
 $pathinfo = pathinfo($abs_path);
 $dir = new files($pathinfo['dirname']);
 
-if ($dir->group_show > $user->group) {
+if ($dir->group_show > App::user()->group) {
     $doc->access_denied(__('У Вас нет прав для просмотра файлов в данной папке'));
 }
-$access_write_dir = $dir->group_write <= $user->group || ($dir->id_user && $user->id == $dir->id_user);
+$access_write_dir = $dir->group_write <= App::user()->group || ($dir->id_user && App::user()->id == $dir->id_user);
 
 $order_keys = $dir->getKeys();
 if (!empty($_GET['order']) && isset($order_keys[$_GET['order']])) $order = $_GET['order'];
@@ -16,9 +17,9 @@ else $order = 'runame:asc';
 
 $file = new files_file($pathinfo['dirname'], $pathinfo['basename']);
 
-if ($file->group_show > $user->group) $doc->access_denied(__('У Вас нет прав для просмотра данного файла'));
+if ($file->group_show > App::user()->group) $doc->access_denied(__('У Вас нет прав для просмотра данного файла'));
 
-$access_edit = $file->group_edit <= $user->group || ($file->id_user && $file->id_user == $user->id);
+$access_edit = $file->group_edit <= App::user()->group || ($file->id_user && $file->id_user == App::user()->id);
 
 if ($access_edit && isset($_GET['act']) && $_GET['act'] == 'edit_screens') include 'inc/screens_edit.php';
 
@@ -30,7 +31,7 @@ $doc->keywords = $file->meta_keywords ? explode(',', $file->meta_keywords) : ($d
 
 if ($access_edit) include 'inc/file_act.php';
 
-if ($user->group && $file->id_user != $user->id && isset($_POST['rating'])) {
+if (App::user()->group && $file->id_user != App::user()->id && isset($_POST['rating'])) {
     $my_rating = (int)$_POST['rating'];
     if (isset($file->ratings[$my_rating])) {
         $file->rating_my($my_rating);
@@ -225,7 +226,7 @@ if (empty($_GET['act'])) {
     $listing->display();
 
 
-    if ($user->group && $file->id_user != $user->id) {
+    if (App::user()->group && $file->id_user != App::user()->id) {
         $my_rating = $file->rating_my(); // мой рейтинг
         $form = new design();
         $form->assign('method', 'post');
@@ -253,13 +254,13 @@ if (empty($_GET['act'])) {
 }
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Писать запрещено'), 'write_denied');
     $can_write = false;
 }
 
 //region комменты к файлу
-if ($can_write && isset($_POST['send']) && isset($_POST['message']) && isset($_POST['token']) && $user->group) {
+if ($can_write && isset($_POST['send']) && isset($_POST['message']) && isset($_POST['token']) && App::user()->group) {
     $message = (string)$_POST['message'];
     $users_in_message = text::nickSearch($message);
     $message = text::input_text($message);
@@ -267,37 +268,37 @@ if ($can_write && isset($_POST['send']) && isset($_POST['message']) && isset($_P
     if (!antiflood::useToken($_POST['token'], 'files')) {
         // повторная отправка формы
         // вывод сообщений, возможно, будет лишним
-    } else if ($file->id_user && $file->id_user != $user->id && (empty($_POST['captcha']) || empty($_POST['captcha_session'])
+    } else if ($file->id_user && $file->id_user != App::user()->id && (empty($_POST['captcha']) || empty($_POST['captcha_session'])
             || !captcha::check($_POST['captcha'], $_POST['captcha_session']))
     ) {
         $doc->err(__('Проверочное число введено неверно'));
     } elseif ($dcms->censure && $mat = is_valid::mat($message)) {
         $doc->err(__('Обнаружен мат: %s', $mat));
     } elseif ($message) {
-        $user->balls += $dcms->add_balls_comment_file;
+        App::user()->balls += $dcms->add_balls_comment_file;
         $res = $db->prepare("INSERT INTO `files_comments` (`id_file`, `id_user`, `time`, `text`) VALUES (?,?,?,?)");
-        $res->execute(Array($file->id, $user->id, TIME, $message));
+        $res->execute(Array($file->id, App::user()->id, TIME, $message));
         $doc->msg(__('Комментарий успешно оставлен'));
 
         $id_message = $db->lastInsertId();
         if ($users_in_message) {
             for ($i = 0; $i < count($users_in_message) && $i < 20; $i++) {
                 $user_id_in_message = $users_in_message[$i];
-                if ($user_id_in_message == $user->id || ($file->id_user && $file->id_user == $user_id_in_message)) {
+                if ($user_id_in_message == App::user()->id || ($file->id_user && $file->id_user == $user_id_in_message)) {
                     continue;
                 }
                 $ank_in_message = new user($user_id_in_message);
                 if ($ank_in_message->notice_mention) {
-                    $ank_in_message->mess("[user]{$user->id}[/user] упомянул" . ($user->sex ? '' : 'а') . " о Вас в комментарии к файлу [url=/files{$file->getPath()}.htm#comment{$id_message}]$file->runame[/url]");
+                    $ank_in_message->mess("[user]{App::user()->id}[/user] упомянул" . (App::user()->sex ? '' : 'а') . " о Вас в комментарии к файлу [url=/files{$file->getPath()}.htm#comment{$id_message}]$file->runame[/url]");
                 }
             }
         }
 
         $file->comments++;
 
-        if ($file->id_user && $file->id_user != $user->id) { // уведомляем автора о комментарии
+        if ($file->id_user && $file->id_user != App::user()->id) { // уведомляем автора о комментарии
             $ank = new user($file->id_user);
-            $ank->mess("[user]{$user->id}[/user] оставил" . ($user->sex ? '' : 'а') . " комментарий к Вашему файлу [url=/files{$file->getPath()}.htm]$file->runame[/url]");
+            $ank->mess("[user]{App::user()->id}[/user] оставил" . (App::user()->sex ? '' : 'а') . " комментарий к Вашему файлу [url=/files{$file->getPath()}.htm]$file->runame[/url]");
         }
     } else {
         $doc->err(__('Комментарий пуст'));
@@ -306,16 +307,16 @@ if ($can_write && isset($_POST['send']) && isset($_POST['message']) && isset($_P
 
 if (empty($_GET['act'])) {
     // комменты будут отображаться только когда над файлом не производится никаких действий
-    if ($can_write && $user->group) {
+    if ($can_write && App::user()->group) {
         $form = new form(new url(null, array('screen_num' => $query_screen)));
         $form->textarea('message', __('Комментарий'));
-        if ($file->id_user && $file->id_user != $user->id) $form->captcha();
+        if ($file->id_user && $file->id_user != App::user()->id) $form->captcha();
         $form->hidden('token', antiflood::getToken('files'));
         $form->button(__('Отправить'), 'send');
         $form->display();
     }
 
-    if (!empty($_GET['delete_comm']) && $user->group >= $file->group_edit) {
+    if (!empty($_GET['delete_comm']) && App::user()->group >= $file->group_edit) {
         $delete_comm = (int)$_GET['delete_comm'];
         $res = $db->prepare("SELECT COUNT(*) FROM `files_comments` WHERE `id` = ? AND `id_file` = ?");
         $res->execute(Array($delete_comm, $file->id));
@@ -349,7 +350,7 @@ if (empty($_GET['act'])) {
             $post->post = text::toOutput($comment['text']);
             $post->icon($ank->icon());
 
-            if ($user->group >= $file->group_edit) {
+            if (App::user()->group >= $file->group_edit) {
                 $post->action('delete',
                     '?order=' . $order . '&amp;screen_num=' . $query_screen . '&amp;delete_comm=' . $comment['id']);
             }

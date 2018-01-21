@@ -2,6 +2,7 @@
 namespace App;
 
 use App\{convert,files,files_types,ini,imaging,DB,filesystem,text};
+use App\App\App;
 
 /**
  * Работа с файлом загруз-центра
@@ -131,7 +132,7 @@ class files_file
 
         $dir = new files($path_dir_abs);
 
-        if ($dir->group_show > $user->group || $dir->group_write > $user->group) {
+        if ($dir->group_show > App::user()->group || $dir->group_write > App::user()->group) {
             // если нет прав на просмотр или запись в папку
             return false;
         }
@@ -232,7 +233,7 @@ class files_file
     {
         global $user;
         $q = DB::me()->prepare("SELECT `rating` FROM `files_rating` WHERE `id_file` = ? AND `id_user` = ?");
-        $q->execute(Array($this->id, $user->id));
+        $q->execute(Array($this->id, App::user()->id));
         if (!$my_rating = $q->fetch()) {
             $my_rating = 0;
         }
@@ -242,7 +243,7 @@ class files_file
                 // Изменяем запись
                 $my_rating = (int) $set;
                 $res = DB::me()->prepare("UPDATE `files_rating` SET `rating` = ?, `time` = ? WHERE `id_file` = ? AND `id_user` = ? LIMIT 1");
-                $res->execute(Array($my_rating, TIME, $this->id, $user->id));
+                $res->execute(Array($my_rating, TIME, $this->id, App::user()->id));
             } elseif ($set) {
                 // Вносим запись
                 $my_rating = (int) $set;
@@ -252,7 +253,7 @@ class files_file
                 // Удаляем запись
                 $my_rating = 0;
                 $res = DB::me()->prepare("DELETE FROM `files_rating` WHERE `id_file` = ? AND `id_user` = ?");
-                $res->execute(Array($this->id, $user->id));
+                $res->execute(Array($this->id, App::user()->id));
             }
 
             $this->rating_update();

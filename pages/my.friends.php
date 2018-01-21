@@ -2,21 +2,22 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,pages,listing,user};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Мои друзья');
 
 $res = $db->prepare("SELECT COUNT(*) FROM `friends` WHERE `id_user` = ? AND `confirm` = '0'");
-$res->execute(Array($user->id));
-$user->friend_new_count = $res->fetchColumn();
+$res->execute(Array(App::user()->id));
+App::user()->friend_new_count = $res->fetchColumn();
 
 $pages = new pages;
 $res = $db->prepare("SELECT COUNT(*) FROM `friends` WHERE `id_user` = ?");
-$res->execute(Array($user->id));
+$res->execute(Array(App::user()->id));
 $pages->posts = $res->fetchColumn();
 
 $q = $db->prepare("SELECT * FROM `friends` WHERE `id_user` = ? ORDER BY `confirm` ASC, `time` DESC LIMIT " . $pages->limit . ";");
-$q->execute(Array($user->id));
+$q->execute(Array(App::user()->id));
 
 $listing = new listing();
 while ($friend = $q->fetch()) {

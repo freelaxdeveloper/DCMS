@@ -1,5 +1,7 @@
 <?php
 namespace App;
+use App\App\App;
+
 /**
  * Базовый класс системы. Объект хранится в глобальной переменной $dcms
  * @property bool debug Включен режим разработчика
@@ -109,8 +111,7 @@ class dcms
         $id_user = 0;
 
         if (!$is_system) {
-            global $user;
-            $id_user = $user->id;
+            $id_user = App::user()->id;
         }
 
         $res = db::me()->prepare("INSERT INTO `action_list_administrators` (`id_user`, `time`, `module`, `description`) VALUES (?, ?, ?, ?)");

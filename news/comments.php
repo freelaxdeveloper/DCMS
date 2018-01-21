@@ -13,7 +13,7 @@ $id_news = (int) $_GET['id'];
 if (!$news = News::find($id_news)) $doc->access_denied(__('Новость не найдена или удалена'));
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Писать запрещено'), 'write_denied');
     $can_write = false;
 }
@@ -22,7 +22,7 @@ $pages = new pages(NewsComment::where('id_news', $news->id)->count());
 
 if ($can_write) {
 
-    if (isset($_POST['send']) && isset($_POST['comment']) && isset($_POST['token']) && $user->group) {
+    if (isset($_POST['send']) && isset($_POST['comment']) && isset($_POST['token']) && App::user()->group) {
 
         $text = (string) $_POST['comment'];
         $users_in_message = text::nickSearch($text);
@@ -46,12 +46,12 @@ if ($can_write) {
             if ($users_in_message) {
                 for ($i = 0; $i < count($users_in_message) && $i < 20; $i++) {
                     $user_id_in_message = $users_in_message[$i];
-                    if ($user_id_in_message == $user->id) {
+                    if ($user_id_in_message == App::user()->id) {
                         continue;
                     }
                     $ank_in_message = new user($user_id_in_message);
                     if ($ank_in_message->notice_mention) {
-                        $ank_in_message->mess("[user]{$user->id}[/user] упомянул" . ($user->sex ? '' : 'а') . " о Вас в [url=/news/comments.php?id={$news['id']}#comment{$comment->id}]комментарии[/url] к новости");
+                        $ank_in_message->mess("[user]{App::user()->id}[/user] упомянул" . (App::user()->sex ? '' : 'а') . " о Вас в [url=/news/comments.php?id={$news['id']}#comment{$comment->id}]комментарии[/url] к новости");
                     }
                 }
             }
@@ -61,7 +61,7 @@ if ($can_write) {
         }
     }
 
-    if ($user->group) {
+    if (App::user()->group) {
         $form = new form(new url());
         $form->hidden('token', antiflood::getToken('news'));
         $form->textarea('comment', __('Комментарий'));

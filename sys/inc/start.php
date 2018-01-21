@@ -12,7 +12,7 @@ version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0'
 require_once dirname(__FILE__) . '/initialization.php';
 use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,current_user,user,misc,groups};
 use Jenssegers\Blade\Blade;
-
+use App\App\App;
 /**
  * во время автоматического обновления не должно быть запросов со стороны пользователя
  */
@@ -136,51 +136,27 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     }
 
     /**
-     * авторизация пользователя
-     * @global \user $user
-     */
-    if (!empty($_SESSION [SESSION_ID_USER])) {
-        // авторизация по сессии
-        $user = current_user::getInstance($_SESSION [SESSION_ID_USER]);
-    } elseif (!empty($_COOKIE [COOKIE_ID_USER]) && !empty($_COOKIE [COOKIE_USER_PASSWORD]) && !isset($_GET['login_from_cookie']) && $_SERVER ['SCRIPT_NAME'] !== '/pages/login.php' && $_SERVER ['SCRIPT_NAME'] !== '/pages/captcha.php') {
-        // авторизация по COOKIE (получение сессии, по которой пользователь авторизуется)
-        header('Location: /login.php?login_from_cookie&return=' . URL);
-        exit;
-    } else {
-        // пользователь будет являться гостем
-        $user = current_user::getInstance();
-    }
-
-    /**
-     * удаляем сессию пользователя, если по ней не удалось авторизоваться
-     */
-    if ($user->id === false && isset($_SESSION [SESSION_ID_USER])) {
-        unset($_SESSION [SESSION_ID_USER]);
-    }
-
-
-    /**
      * обработка данных пользователя
      */
-    if ($user->id !== false) {
-        $user->last_visit = TIME; // запись последнего посещения
+    if (App::user()->id !== false) {
+        App::user()->last_visit = TIME; // запись последнего посещения
         if (AJAX) {
             // при AJAX запросе только обновляем сведения о времени последнего посещения, чтобы пользователь оставался в онлайне
             $res = $db->prepare("UPDATE `users_online` SET `time_last` = ? WHERE `id_user` = ? LIMIT 1");
-            $res->execute(Array(TIME, $user->id));
+            $res->execute(Array(TIME, App::user()->id));
         } else {
 
-            $user->conversions++; // счетчик переходов
+            App::user()->conversions++; // счетчик переходов
 
             $q = $db->prepare("SELECT * FROM `users_online` WHERE `id_user` = ? LIMIT 1");
-            $q->execute(Array($user->id));
+            $q->execute(Array(App::user()->id));
             if ($q->fetch()) {
                 $res = $db->prepare("UPDATE `users_online` SET `conversions` = `conversions` + '1' , `time_last` = ?, `id_browser` = ?, `ip_long` = ?, `request` = ? WHERE `id_user` = ? LIMIT 1");
-                $res->execute(Array(TIME, $dcms->browser_id, $dcms->ip_long, $_SERVER ['REQUEST_URI'], $user->id));
+                $res->execute(Array(TIME, $dcms->browser_id, $dcms->ip_long, $_SERVER ['REQUEST_URI'], App::user()->id));
             } else {
                 $res = $db->prepare("INSERT INTO `users_online` (`id_user`, `time_last`, `time_login`, `request`, `id_browser`, `ip_long`) VALUES (?, ?, ?, ?, ?, ?)");
-                $res->execute(Array($user->id, TIME, TIME, $_SERVER ['REQUEST_URI'], $dcms->browser_id, $dcms->ip_long));
-                $user->count_visit++; // счетчик посещений
+                $res->execute(Array(App::user()->id, TIME, TIME, $_SERVER ['REQUEST_URI'], $dcms->browser_id, $dcms->ip_long));
+                App::user()->count_visit++; // счетчик посещений
             }
         }
     } else {
@@ -217,7 +193,7 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * при полном бане никуда кроме страницы бана нельзя
      */
-    if ($user->is_ban_full && $_SERVER['SCRIPT_NAME'] != '/pages/ban.php') {
+    if (App::user()->is_ban_full && $_SERVER['SCRIPT_NAME'] != '/pages/ban.php') {
         header('Location: /ban.php?' . SID);
         exit;
     }
@@ -225,7 +201,7 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * включаем полный показ ошибок для создателя, если включено в админке
      */
-    if ($dcms->debug && $user->group == groups::max() && @function_exists('ini_set')) {
+    if ($dcms->debug && App::user()->group == groups::max() && @function_exists('ini_set')) {
         ini_set('error_reporting', E_ALL);
         ini_set('display_errors', true);
     }
@@ -233,8 +209,8 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * пользовательский языковой пакет
      */
-    if ($user->group && $user->language != $user_language_pack->code && languages::exists($user->language)) {
-        $user_language_pack = new language_pack($user->language);
+    if (App::user()->group && App::user()->language != $user_language_pack->code && languages::exists(App::user()->language)) {
+        $user_language_pack = new language_pack(App::user()->language);
     }
 }
 

@@ -3,6 +3,7 @@ namespace App;
 
 use App\{design,widget,document_link,text,document_message,alignedxhtml,url,current_user};
 use Jenssegers\Blade\Blade;
+use App\App\App;
 
 /**
  * Класс для формирования HTML документа.
@@ -25,9 +26,9 @@ class document extends design
     function __construct($group = 0)
     {
         parent::__construct();
-        global $user, $dcms;
+        global $dcms;
         $this->title = $dcms->title;
-        if ($group > $user->group) {
+        if ($group > App::user()->group) {
             $this->access_denied(__('Доступ к данной странице запрещен'));
         }
         ob_start();

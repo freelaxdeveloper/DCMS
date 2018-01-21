@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,files,listing,pages,user,misc,text,form,url};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Удаление сообщений');
@@ -14,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_theme = (int)$_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND (`group_edit` <= ? || `id_moderator` = ?)");
-$q->execute(Array($id_theme, $user->group, $user->id));
+$q->execute(Array($id_theme, App::user()->group, App::user()->id));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна для редактирования'));
@@ -78,14 +79,14 @@ $listing = new listing();
 
 if ($show == 'part') {
     $res = $db->prepare("SELECT COUNT(*) FROM `forum_messages` WHERE `id_theme` = ? AND `group_show` <= ?");
-    $res->execute(Array($theme['id'], $user->group));
+    $res->execute(Array($theme['id'], App::user()->group));
     $pages = new pages;
     $pages->posts = $res->fetchColumn();
     $q = $db->prepare("SELECT `id`, `id_user`, `message`, `time` FROM `forum_messages`  WHERE `id_theme` = ? AND `group_show` <= ? ORDER BY `id` ASC LIMIT " . $pages->limit);
 } else
     $q = $db->prepare("SELECT `id`, `id_user`, `message`, `time` FROM `forum_messages`  WHERE `id_theme` = ? AND `group_show` <= ? ORDER BY `id` ASC");
 
-$q->execute(Array($theme['id'], $user->group));
+$q->execute(Array($theme['id'], App::user()->group));
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $messages) {
         $ch = $listing->checkbox();

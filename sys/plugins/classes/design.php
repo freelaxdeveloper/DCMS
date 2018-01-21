@@ -2,6 +2,8 @@
 namespace App;
 
 use App\{native_templating,themes};
+use App\App\App;
+
 /**
  * Дизайн. Конфигуратор шаблонизатора.
  */
@@ -18,9 +20,9 @@ class design extends native_templating
         if ($theme === false) {
             if (!empty($probe_theme) && themes::exists($probe_theme)) {
                 $theme = themes::getThemeByName($probe_theme);
-            } elseif (themes::exists($user->theme)) {
+            } elseif (themes::exists(App::user()->theme)) {
                 // пользовательская тема оформления
-                $theme = themes::getThemeByName($user->theme);
+                $theme = themes::getThemeByName(App::user()->theme);
             } elseif (themes::exists($dcms->theme)) {
                 // системная тема оформления
                 $theme = themes::getThemeByName($dcms->theme);

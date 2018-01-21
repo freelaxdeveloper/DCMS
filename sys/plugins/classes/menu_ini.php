@@ -2,6 +2,8 @@
 namespace App;
 
 use App\{listing,text,ini};
+use App\App\App;
+
 /**
  * UI. Меню /sys/ini/menu.*.ini
  */
@@ -38,10 +40,10 @@ class menu_ini {
                 $this->_listings[] = $this->_listing = new listing();
             }
 
-            if ($user->group < @$value['group']) {
+            if (App::user()->group < @$value['group']) {
                 continue;
             }
-            if (!empty($value['for_vip']) && !$user->is_vip) {
+            if (!empty($value['for_vip']) && !App::user()->is_vip) {
                 continue;
             }
             $post = $this->_listing->post();

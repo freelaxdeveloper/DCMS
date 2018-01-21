@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,text,form,url};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Форум: Голосование');
@@ -13,7 +14,7 @@ if (!isset($_GET['id_theme']) || !is_numeric($_GET['id_theme'])) {
 $id_theme = (int) $_GET['id_theme'];
 
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_theme, $user->group));
+$q->execute(Array($id_theme, App::user()->group));
 if (!$theme = $q->fetch()) {
     $doc->toReturn(new url('theme.php', array('id', $id_theme)));
     $doc->err(__('Тема не доступна'));
@@ -46,7 +47,7 @@ if (!empty($_POST['vote'])) {
         else {
             $res = $db->prepare("INSERT INTO `forum_vote` (`id_autor`, `name`, " . implode(', ', $k) . ")
 VALUES (?,?, " . implode(', ', $v) . ")");
-            $res->execute(Array($user->id, $vote));
+            $res->execute(Array(App::user()->id, $vote));
 
             if (!$id_vote = $db->lastInsertId()) $doc->err(__('При создании голосования возникла ошибка'));
             else {

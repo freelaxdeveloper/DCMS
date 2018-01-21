@@ -1,14 +1,15 @@
 <?php
 use App\{text,user,groups};
+use App\App\App;
 
 if (isset($_POST['edit_unlink']) && $file->name{0} !== '.') {
     $id_user = $file->id_user;
     $runame = $file->runame;
     if ($file->delete()) {
-        if ($id_user && $id_user != $user->id && !empty($_POST['reason'])) {
+        if ($id_user && $id_user != App::user()->id && !empty($_POST['reason'])) {
             $reason = text::input_text(@$_POST['reason']);
             $ank = new user($id_user);
-            $ank->mess("Ваш файл $runame был удален.\nПричина: $reason.\nУдалил [user]$user->id[/user].");
+            $ank->mess("Ваш файл $runame был удален.\nПричина: $reason.\nУдалил [user]App::user()->id[/user].");
 
             $dcms->log('Файлы', 'Удаление файла ' . $runame . ' пользователя [user]' . $id_user . '[/user]. Причина: ' . $reason);
         } else
@@ -63,7 +64,7 @@ if (isset($_POST['edit_prop'])) {
             }
         }
     }
-    if ($file->group_edit <= $user->group) {
+    if ($file->group_edit <= App::user()->group) {
         if (isset($_POST['group_show'])) { // просмотр
             $group_show = (int)$_POST['group_show'];
             if (isset($groups[$group_show]) && $group_show != $file->group_show) {

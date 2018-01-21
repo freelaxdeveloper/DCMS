@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,user,pages,listing};
+use App\App\App;
 
 $doc = new document(5);
 $doc->title = __('Назначить модератора темы');
@@ -14,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_theme = (int)$_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_theme, $user->group));
+$q->execute(Array($id_theme, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна для редактирования'));

@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,user,files,text,form,url,pages,listing,misc};
+use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Фотоальбомы');
@@ -49,13 +50,13 @@ $doc->description = __('Фотоальбом пользователя %s:%s', $a
 $doc->keywords [] = $album->runame;
 $doc->keywords [] = $ank->login;
 
-if (!empty($_GET ['act']) && $ank->id == $user->id) {
+if (!empty($_GET ['act']) && $ank->id == App::user()->id) {
     switch ($_GET ['act']) {
         case 'prop' :
             $doc->title .= ' - Параметры';
 
             if (!empty($_POST ['prop'])) {
-                if ($album->id_user = $user->id) {
+                if ($album->id_user = App::user()->id) {
 
                     if (isset($_POST['group_show'])) {
                         $album->group_show = $_POST['group_show'];
@@ -178,7 +179,7 @@ for ($i = $start; $i < $end && $i < $pages->posts; $i++) {
 $listing->display(__('Фотографии отсутствуют'));
 $pages->display('?id=' . $ank->id . '&amp;album=' . urlencode($album->name) . '&amp;'); // вывод страниц
 
-if ($ank->id == $user->id) {
+if ($ank->id == App::user()->id) {
     $doc->act(__('Выгрузить фото'), '?id=' . $ank->id . '&amp;album=' . urlencode($album->name) . '&amp;act=photo_add');
     $doc->act(__('Параметры'), '?id=' . $ank->id . '&amp;album=' . urlencode($album->name) . '&amp;act=prop');
     $doc->act(__('Удалить альбом'), '?id=' . $ank->id . '&amp;album=' . urlencode($album->name) . '&amp;act=delete');

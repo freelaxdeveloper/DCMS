@@ -7,6 +7,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,user,text,form,url,listing,misc,files};
+use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Анкета');
@@ -16,16 +17,16 @@ $ank = (empty($_GET ['id'])) ? $user : new user((int)$_GET ['id']);
 if(!$ank->group)
     $doc->access_denied(__('Нет данных'));
 
-$doc->title = ($user->id && $ank->id == $user->id)? __('Моя анкета') : __('Анкета "%s"', $ank->nick);
+$doc->title = (App::user()->id && $ank->id == App::user()->id)? __('Моя анкета') : __('Анкета "%s"', $ank->nick);
 
 $doc->description = __('Анкета "%s"', $ank->nick);
 $doc->keywords [] = $ank->login;
 
 //region Предложение дружбы
-if ($user->group && $ank->id && $user->id != $ank->id && isset($_GET ['friend'])) {
+if (App::user()->group && $ank->id && App::user()->id != $ank->id && isset($_GET ['friend'])) {
     // обработка действий с "другом"
     $q = $db->prepare("SELECT * FROM `friends` WHERE `id_user` = ? AND `id_friend` = ? LIMIT 1");
-    $q->execute(Array($user->id, $ank->id));
+    $q->execute(Array(App::user()->id, $ank->id));
     if ($friend = $q->fetch()) {
         if ($friend ['confirm']) {
 
@@ -33,7 +34,7 @@ if ($user->group && $ank->id && $user->id != $ank->id && isset($_GET ['friend'])
             if (isset($_POST ['delete'])) {
                 // удаляем пользователя из друзей
                 $res = $db->prepare("DELETE FROM `friends` WHERE `id_user` = ? AND `id_friend` = ? OR `id_user` = ? AND `id_friend` = ?");
-                $res->execute(Array($user->id, $ank->id, $ank->id, $user->id));
+                $res->execute(Array(App::user()->id, $ank->id, $ank->id, App::user()->id));
                 $doc->msg(__('Пользователь успешно удален из друзей'));
             }
         } else {
@@ -41,20 +42,20 @@ if ($user->group && $ank->id && $user->id != $ank->id && isset($_GET ['friend'])
             if (isset($_POST ['no'])) {
                 // не принимаем предложение дружбы
                 $res = $db->prepare("DELETE FROM `friends` WHERE `id_user` = ? AND `id_friend` = ? OR `id_user` = ? AND `id_friend` = ?");
-                $res->execute(Array($user->id, $ank->id, $ank->id, $user->id));
+                $res->execute(Array(App::user()->id, $ank->id, $ank->id, App::user()->id));
                 $res = $db->prepare("UPDATE `users` SET `friend_new_count` = `friend_new_count` - '1' WHERE `id` = ? LIMIT 1");
-                $res->execute(Array($user->id));
+                $res->execute(Array(App::user()->id));
 
                 $doc->msg(__('Предложение дружбы отклонено'));
             } elseif (isset($_POST ['ok'])) {
                 // принимаем предложение дружбы
                 $res = $db->prepare("UPDATE `friends` SET `confirm` = '1' WHERE `id_user` = ? AND `id_friend` = ? LIMIT 1");
-                $res->execute(Array($user->id, $ank->id));
+                $res->execute(Array(App::user()->id, $ank->id));
                 $res = $db->prepare("UPDATE `users` SET `friend_new_count` = `friend_new_count` - '1' WHERE `id` = ? LIMIT 1");
-                $res->execute(Array($user->id));
+                $res->execute(Array(App::user()->id));
                 // на всякий случай пытаемся добавить поле (хотя оно уже должно быть), если оно уже есть, то дублироваться не будет
                 $res = $db->prepare("INSERT INTO `friends` (`confirm`, `id_user`, `id_friend`) VALUES ('1', ?, ?)");
-                $res->execute(Array($ank->id, $user->id));
+                $res->execute(Array($ank->id, App::user()->id));
                 $doc->msg(__('Предложение дружбы принято'));
             }
         }
@@ -63,7 +64,7 @@ if ($user->group && $ank->id && $user->id != $ank->id && isset($_GET ['friend'])
             // предлагаем дружбу
             // отметка о запросе дружбы
             $res = $db->prepare("INSERT INTO `friends` (`confirm`, `id_user`, `id_friend`) VALUES ('0', ?, ?), ('1', ?, ?)");
-            $res->execute(Array($ank->id, $user->id, $user->id, $ank->id));
+            $res->execute(Array($ank->id, App::user()->id, App::user()->id, $ank->id));
             $res = $db->prepare("UPDATE `users` SET `friend_new_count` = `friend_new_count` + '1' WHERE `id` = ? LIMIT 1");
             $res->execute(Array($ank->id));
 
@@ -72,9 +73,9 @@ if ($user->group && $ank->id && $user->id != $ank->id && isset($_GET ['friend'])
     }
 }
 
-if ($user->group && $ank->id && $user->id != $ank->id) {
+if (App::user()->group && $ank->id && App::user()->id != $ank->id) {
     $q = $db->prepare("SELECT * FROM `friends` WHERE `id_user` = ? AND `id_friend` = ? LIMIT 1");
-    $q->execute(Array($user->id, $ank->id));
+    $q->execute(Array(App::user()->id, $ank->id));
     if ($friend = $q->fetch()) {
         if ($friend ['confirm']) {
             // пользователь находится в друзьях
@@ -119,7 +120,7 @@ if ($ank->is_ban) {
             $post = $ban_listing->post();
             $adm = new user($c ['id_adm']);
 
-            $post->title = ($adm->group <= $user->group ? '<a href="/profile.view.php?id=' . $adm->id . '">' . $adm->nick . '</a>: ' : '') . text::toValue($c ['code']);
+            $post->title = ($adm->group <= App::user()->group ? '<a href="/profile.view.php?id=' . $adm->id . '">' . $adm->nick . '</a>: ' : '') . text::toValue($c ['code']);
 
 
             if ($c ['time_start'] && TIME < $c ['time_start']) {
@@ -312,7 +313,7 @@ if ($ank->email) {
 
 //region Регистрационный E-mail
 if ($ank->reg_mail) {
-    if ($user->group > $ank->group) {
+    if (App::user()->group > $ank->group) {
         $post = $listing->post();
         $post->title = __('Регистрационный E-mail');
         $post->content = $ank->reg_mail;
@@ -341,7 +342,7 @@ if ($ank->is_friend($user) || $ank->vis_friends) {
 
     $post = $listing->post();
     $post->title = __('Друзья');
-    $post->url = $ank->id == $user->id ? "/my.friends.php" : "/profile.friends.php?id={$ank->id}";
+    $post->url = $ank->id == App::user()->id ? "/my.friends.php" : "/profile.friends.php?id={$ank->id}";
     $post->counter = $k_friends;
 
 } else {
@@ -420,12 +421,12 @@ if ($row = $q->fetch()) {
 $listing->display();
 //endregion
 
-if ($user->group && $ank->id != $user->id) {
+if (App::user()->group && $ank->id != App::user()->id) {
     $doc->act(__('Написать сообщение'), "my.mail.php?id={$ank->id}");
-    if ($user->group > $ank->group) {
+    if (App::user()->group > $ank->group) {
         $doc->act(__('Доступные действия'), "/dpanel/user.actions.php?id={$ank->id}");
     }
 }
 
-if ($user->group)
+if (App::user()->group)
     $doc->ret(__('Личное меню'), '/menu.user.php');

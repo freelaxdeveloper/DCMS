@@ -1,15 +1,16 @@
 <?php
 defined('DCMS') or die();
 use App\{files,text,form,listing,pages,groups,user,design,misc};
+use App\App\App;
 
 $dir = new files($abs_path);
 
-if ($dir->group_show > $user->group) {
+if ($dir->group_show > App::user()->group) {
     $doc->access_denied(__('У Вас нет прав для просмотра данной папки'));
 }
 
-$access_write = $dir->group_write <= $user->group || ($dir->id_user && $user->id == $dir->id_user);
-$access_edit = $dir->group_edit <= $user->group;
+$access_write = $dir->group_write <= App::user()->group || ($dir->id_user && App::user()->id == $dir->id_user);
+$access_edit = $dir->group_edit <= App::user()->group;
 
 $doc->title = $dir->runame;
 $doc->description = $dir->meta_description;

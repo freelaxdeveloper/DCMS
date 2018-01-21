@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,pages,listing,user,text,misc};
+use App\App\App;
 
 $doc = new document();
 
@@ -29,7 +30,7 @@ if ($arr = $q->fetchAll()) {
         $post->icon($p_user->icon());
 
 
-        if ($user->id === $p_user->id || $user->group > $p_user->group) {
+        if (App::user()->id === $p_user->id || App::user()->group > $p_user->group) {
             $post->content .= __('Браузер') . ': ' . text::toValue($ank['browser']) . "<br />\n";
             $post->content .= __('IP-адрес') . ': ' . long2ip($ank['ip_long']) . "<br />\n";
         }

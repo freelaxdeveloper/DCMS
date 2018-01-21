@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,pages,listing};
+use App\App\App;
 
 $doc = new document();
 $pages = new pages;
@@ -25,11 +26,11 @@ while ($ank = $q->fetch()) {
     $post->icon('guest');
     $post->title = $bots ? $ank['browser'] : __('Гость');
     $post->content[] = __("Переходов") . ': ' . $ank['conversions'];
-    if ($user->group || $ank['ip_long'] == $dcms->ip_long)
+    if (App::user()->group || $ank['ip_long'] == $dcms->ip_long)
         $post->content[] = "IP: " . long2ip($ank['ip_long']);
     if(!$bots)
         $post->content[] = __("Браузер") . ': ' . $ank['browser'];
-    if ($user->group > 1 && $ank['browser_ua'] != '')
+    if (App::user()->group > 1 && $ank['browser_ua'] != '')
         $post->content[] = 'User-Agent: '. $ank['browser_ua']; }
 $listing->display($bots ? __('Ботов нет') : __('Нет гостей'));
 

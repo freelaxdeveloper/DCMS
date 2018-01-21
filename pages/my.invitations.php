@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,design,mail,misc,form,url,pages,is_valid};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Пригласительные');
@@ -9,7 +10,7 @@ $doc->title = __('Пригласительные');
 if (isset($_GET['id'])) {
     $id_inv = (int)$_GET['id'];
     $q = $db->prepare("SELECT * FROM `invations` WHERE `id` = ? AND `id_user` = ? AND `id_invite` IS NULL LIMIT 1");
-    $q->execute(Array($id_inv, $user->id));
+    $q->execute(Array($id_inv, App::user()->id));
 
 
     if (!$inv = $q->fetch()) {
@@ -39,7 +40,7 @@ if (isset($_GET['id'])) {
             $inv['code'] = passgen();
             $t = new design();
             $t->assign('title', __('Пригласительный'));
-            $t->assign('login', $user->login);
+            $t->assign('login', App::user()->login);
             $t->assign('site', $dcms->sitename);
             $t->assign('url', 'http://' . $_SERVER['HTTP_HOST'] . '/reg.php?invite=' . $inv['code']);
 
@@ -85,10 +86,10 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-$k_inv = (int)($user->balls / $dcms->balls_for_invite); // количество пригласительных
+$k_inv = (int)(App::user()->balls / $dcms->balls_for_invite); // количество пригласительных
 $doc->msg(__("У Вас %s пригласительны" . misc::number($k_inv, 'й', 'x', 'х'), $k_inv), 'invations');
 $res_cnt_inv = $db->prepare("SELECT COUNT(*) FROM `invations` WHERE `id_user` = ?");
-$res_cnt_inv->execute(Array($user->id));
+$res_cnt_inv->execute(Array(App::user()->id));
 $k = $res_cnt_inv->fetchColumn();
 
 if ($k_inv > $k) {
@@ -97,17 +98,17 @@ if ($k_inv > $k) {
     $arr_ins = array();
     $res = $db->prepare("INSERT INTO `invations` (`id_user`) VALUES (?);");
     for ($i = 0; $i < $k_add; $i++) {
-        $res->execute(Array($user->id));
+        $res->execute(Array(App::user()->id));
     }
 }
 
 
-$res_cnt_inv->execute(Array($user->id));
+$res_cnt_inv->execute(Array(App::user()->id));
 $pages = new pages();
 $pages->posts = $res_cnt_inv->fetchColumn(); // количество пригласительных
 
 $q = $db->prepare("SELECT * FROM `invations` WHERE `id_user` = ? ORDER BY (`id_invite` IS NULL) DESC, (`email` IS NULL) ASC, `id` ASC LIMIT " . $pages->limit);
-$q->execute(Array($user->id));
+$q->execute(Array(App::user()->id));
 
 $listing = new listing();
 if ($arr = $q->fetchAll()) {

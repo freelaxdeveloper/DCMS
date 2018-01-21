@@ -2,6 +2,7 @@
 include_once '../sys/inc/start.php';
 use App\{document,listing,user,text,misc};
 use App\Models\ChatMini;
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Действия');
@@ -35,7 +36,7 @@ $post->icon('ank_view');
 $post->url = '/profile.view.php?id=' . $ank->id;
 
 
-if ($user->group) {
+if (App::user()->group) {
     $post = $listing->post();
     $post->title = __('Ответить');
     $post->icon('reply');
@@ -47,7 +48,7 @@ if ($user->group) {
     $post->url = 'index.php?message=' . $id_message . '&amp;quote';
 }
 
-if ($user->group >= 2) {
+if (App::user()->group >= 2) {
     $post = $listing->post();
     $post->title = __('Удалить сообщение');
     $post->icon('delete');

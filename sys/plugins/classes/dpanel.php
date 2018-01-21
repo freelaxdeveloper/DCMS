@@ -2,6 +2,7 @@
 namespace App;
 
 use App\cache_dpanel_access;
+use App\App\App;
 
 /**
  * Управление доступом в админку
@@ -50,7 +51,7 @@ abstract class dpanel {
      */
     static function key() {
         global $dcms, $user;
-        return 'dpanel.access.' . $user->id . '.' . (string) $dcms->ip_long . '.' . (string) $dcms->browser;
+        return 'dpanel.access.' . App::user()->id . '.' . (string) $dcms->ip_long . '.' . (string) $dcms->browser;
     }
 
 }

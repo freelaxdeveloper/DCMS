@@ -3,6 +3,7 @@ $subdomain_theme_redirect_disable = true; // принудительное отк
 include_once '../sys/inc/start.php';
 use App\{document,cache,cache_aut_failture,captcha,misc,user,crypt,text,form,url};
 use App\App\Authorize;
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Авторизация');
@@ -24,7 +25,7 @@ if (isset($_GET['redirected_from']) && in_array($_GET['redirected_from'], array(
 }
 
 
-if ($user->group) {
+if (App::user()->group) {
     /* if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
         cache::set($_GET['auth_key'], array('session' => $_SESSION, 'cookie' => $_COOKIE), 60);
     } */
@@ -64,16 +65,16 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
             } else {
                 $user = $user_t;
                 cache_aut_failture::set($dcms->ip_long, false, 1);
-                misc::logaut($user->id, 'post', 1); // в журнал 
+                misc::logaut(App::user()->id, 'post', 1); // в журнал 
 
-                if ($user->recovery_password) {
+                if (App::user()->recovery_password) {
                     // если пользователь авторизовался, то ключ для восстановления ему больше не нужен
-                    $user->recovery_password = '';
+                    App::user()->recovery_password = '';
                 }
-                Authorize::authorized($user->id, crypt::encrypt($user->password, $dcms->salt_user));
-                $_SESSION[SESSION_ID_USER] = $user->id;
+                Authorize::authorized(App::user()->id, crypt::encrypt(App::user()->password, $dcms->salt_user));
+                $_SESSION[SESSION_ID_USER] = App::user()->id;
                 if (isset($_POST['save_to_cookie']) && $_POST['save_to_cookie']) {
-                    setcookie(COOKIE_ID_USER, $user->id, TIME + 60 * 60 * 24 * 365);
+                    setcookie(COOKIE_ID_USER, App::user()->id, TIME + 60 * 60 * 24 * 365);
                     setcookie(COOKIE_USER_PASSWORD, crypt::encrypt($password, $dcms->salt_user), TIME + 60 * 60 * 24 * 365);
                 }
             }
@@ -85,7 +86,7 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
     if (crypt::hash(crypt::decrypt($_COOKIE[COOKIE_USER_PASSWORD], $dcms->salt_user), $dcms->salt) === $tmp_user->password) {
          misc::logaut($tmp_user->id, 'cookie', 1); // пишем в журнал успешную авторизацию 
         $user = $tmp_user;
-        $_SESSION[SESSION_ID_USER] = $user->id;
+        $_SESSION[SESSION_ID_USER] = App::user()->id;
     } else {
         $need_of_captcha = true;
         cache_aut_failture::set($dcms->ip_long, true, 600); // при ошибке заставляем пользователя проходить капчу
@@ -95,7 +96,7 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
     }
 }
 
-if ($user->group) {
+if (App::user()->group) {
     // авторизовались успешно
     // удаляем информацию как о госте
     $res = $db->prepare("DELETE FROM `guest_online` WHERE `ip_long` = ? AND `browser` = ?;");

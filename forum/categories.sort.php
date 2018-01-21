@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,misc,listing,text};
+use App\App\App;
 
 $doc = new document(5);
 $doc->title = __('Изменение порядка категорий');
@@ -9,7 +10,7 @@ $doc->title = __('Изменение порядка категорий');
 if (isset($_GET['sortable'])) {
     $sort = explode(',', $_POST['sortable']);
     $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-    $q->execute(Array($user->group));
+    $q->execute(Array(App::user()->group));
     $res_up = $db->prepare("UPDATE `forum_categories` SET `position` = ? WHERE `id` = ?");
     while ($category = $q->fetch()) {
         if (($position = array_search('cid' . $category['id'], $sort)) !== false) {
@@ -29,7 +30,7 @@ if (isset($_GET['sortable'])) {
 
 if (!empty($_GET['id']) && !empty($_GET['act'])) {
     $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-    $q->execute(Array($user->group));
+    $q->execute(Array(App::user()->group));
     $sort = array();
     while ($category = $q->fetch()) {
         $sort[$category['id']] = $category['id'];
@@ -56,7 +57,7 @@ if (!empty($_GET['id']) && !empty($_GET['act'])) {
     $sort = array_values($sort);
 
     $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-    $q->execute(Array($user->group));
+    $q->execute(Array(App::user()->group));
     $res_up = $db->prepare("UPDATE `forum_categories` SET `position` = ? WHERE `id` = ?");
     while ($category = $q->fetch()) {
         if (($position = array_search($category['id'], $sort)) !== false) {
@@ -71,7 +72,7 @@ if (!empty($_GET['id']) && !empty($_GET['act'])) {
 
 $listing = new listing();
 $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-$q->execute(Array($user->group));
+$q->execute(Array(App::user()->group));
 while ($category = $q->fetch()) {
     $post = $listing->post();
     $post->id = 'cid' . $category['id'];

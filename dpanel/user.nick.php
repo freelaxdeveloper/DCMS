@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{dpanel,document,is_valid,user,form,url};
+use App\App\App;
 
 dpanel::check_access();
 $doc = new document(4);
@@ -23,7 +24,7 @@ if (!$ank->vk_id) {
 
 $doc->title .= ' "' . $ank->login . '"';
 
-if ($ank->group >= $user->group) {
+if ($ank->group >= App::user()->group) {
     $doc->toReturn();
     $doc->err(__('Ваш статус не позволяет производить действия с данным пользователем'));
     exit;

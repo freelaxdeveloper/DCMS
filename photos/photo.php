@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,files,user,files_file,captcha,form,url,pages,misc,text,listing};
+use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Фотоальбомы');
@@ -63,7 +64,7 @@ $doc->keywords [] = $album->runame;
 $doc->keywords [] = $ank->login;
 
 // удаление фотографии
-if ($photo->id_user && $photo->id_user == $user->id) {
+if ($photo->id_user && $photo->id_user == App::user()->id) {
     if (!empty($_GET ['act']) && $_GET ['act'] === 'delete') {
 
         if (!empty($_POST ['delete'])) {
@@ -110,7 +111,7 @@ if ($screen = $photo->getScreen($doc->img_max_width(), 0)) {
 }
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->err(__('Новым пользователям разрешено писать только через %s часа пребывания на сайте',
             $dcms->user_write_limit_hour));
     $can_write = false;
@@ -120,22 +121,22 @@ if ($can_write) {
 
 
 // добавление комментария
-    if (isset($_POST ['send']) && isset($_POST ['message']) && $user->group) {
+    if (isset($_POST ['send']) && isset($_POST ['message']) && App::user()->group) {
         $message = text::input_text($_POST ['message']);
 
-        if ($photo->id_user && $photo->id_user != $user->id && (empty($_POST ['captcha']) || empty($_POST ['captcha_session'])
+        if ($photo->id_user && $photo->id_user != App::user()->id && (empty($_POST ['captcha']) || empty($_POST ['captcha_session'])
             || !captcha::check($_POST ['captcha'], $_POST ['captcha_session'])))
                 $doc->err(__('Проверочное число введено неверно'));
         elseif ($dcms->censure && $mat = is_valid::mat($message)) $doc->err(__('Обнаружен мат: %s', $mat));
         elseif ($message) {
-            $user->balls++;
+            App::user()->balls++;
             $res = $db->prepare("INSERT INTO `files_comments` (`id_file`, `id_user`, `time`, `text`) VALUES (?,?,?,?)");
-            $res->execute(Array($photo->id, $user->id, TIME, $message));
+            $res->execute(Array($photo->id, App::user()->id, TIME, $message));
             $doc->msg(__('Комментарий успешно оставлен'));
             $photo->comments++;
 
-            if ($photo->id_user && $photo->id_user != $user->id) { // уведомляем автора о комментарии
-                $ank->mess("$user->login оставил" . ($user->sex ? '' : 'а') . " комментарий к Вашему фото [url=/photos/photo.php?id=$ank->id&album=$album->name&photo=$photo->name]{$photo->runame}[/url]");
+            if ($photo->id_user && $photo->id_user != App::user()->id) { // уведомляем автора о комментарии
+                $ank->mess("App::user()->login оставил" . (App::user()->sex ? '' : 'а') . " комментарий к Вашему фото [url=/photos/photo.php?id=$ank->id&album=$album->name&photo=$photo->name]{$photo->runame}[/url]");
             }
         } else {
             $doc->err(__('Комментарий пуст'));
@@ -143,15 +144,15 @@ if ($can_write) {
     }
 
 // форма добавления комментария
-    if ($user->group) {
+    if (App::user()->group) {
         $form = new form(new url(null, array('id' => $ank->id, 'album' => $album->name, 'photo' => $photo)));
         $form->textarea('message', __('Комментарий'));
-        if ($photo->id_user && $photo->id_user != $user->id) $form->captcha();
+        if ($photo->id_user && $photo->id_user != App::user()->id) $form->captcha();
         $form->button(__('Отправить'), 'send');
         $form->display();
     }
 }
-if (!empty($_GET ['delete_comm']) && $user->group >= $photo->group_edit) {
+if (!empty($_GET ['delete_comm']) && App::user()->group >= $photo->group_edit) {
     $delete_comm = (int) $_GET ['delete_comm'];
     $res = $db->prepare("SELECT COUNT(*) FROM `files_comments` WHERE `id` = ? AND `id_file` = ? LIMIT 1");
     $res->execute(Array($delete_comm, $photo->id));
@@ -182,7 +183,7 @@ if ($arr = $q->fetchAll()) {
         $post->icon($ank2->icon());
         $post->content = text::toOutput($comment ['text']);
 
-        if ($user->group >= $photo->group_edit) {
+        if (App::user()->group >= $photo->group_edit) {
             $post->action('delete',
                 '?id=' . $ank->id . '&amp;album=' . urlencode($album->name) . '&amp;photo=' . urlencode($photo->name) . '&amp;delete_comm=' . $comment ['id']);
         }

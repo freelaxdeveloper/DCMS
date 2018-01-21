@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,files,listing,pages,user,text,misc};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Новые файлы');
@@ -17,7 +18,7 @@ if (strpos($abs_path, FILES) !== 0 || !file_exists($abs_path)) {
 
 $dir = new files($abs_path);
 
-if ($dir->group_show > $user->group) {
+if ($dir->group_show > App::user()->group) {
     $doc->access_denied(__('У Вас нет прав для просмотра новых файлов в данной папке'));
 }
 

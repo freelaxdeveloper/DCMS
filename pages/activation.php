@@ -2,11 +2,12 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,user};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Активация аккаунта');
 
-if ($user->group) {
+if (App::user()->group) {
     $doc->access_denied(__('Вы уже зарегистрированы'));
 }
 

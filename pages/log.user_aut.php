@@ -2,12 +2,13 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,pages,listing,text,misc};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Журнал авторизаций');
 
 $res = $db->prepare("SELECT COUNT(*) FROM `log_of_user_aut` WHERE `id_user` = ?");
-$res->execute(Array($user->id));
+$res->execute(Array(App::user()->id));
 
 $pages = new pages;
 $pages->posts = $res->fetchColumn();
@@ -23,7 +24,7 @@ LEFT JOIN `browsers` ON `browsers`.`id` = `log_of_user_aut`.`id_browser`
 WHERE `log_of_user_aut`.`id_user` = ?
 ORDER BY `time` DESC
 LIMIT " . $pages->limit . ";");
-$q->execute(Array($user->id));
+$q->execute(Array(App::user()->id));
 
 $listing = new listing();
 while ($log = $q->fetch()) {

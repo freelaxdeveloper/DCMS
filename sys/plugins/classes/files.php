@@ -1,6 +1,6 @@
 <?php
 namespace App;
-
+use App\App\App;
 use App\convert;
 /**
  * Работа с директориями загруз-центра
@@ -286,7 +286,7 @@ class files {
         $content = array('dirs' => array(), 'files' => array());
         $path_rel_ru = convert::to_utf8($this->path_rel);
         $q = db::me()->prepare("SELECT * FROM `files_cache` WHERE `group_show` <= ? AND `path_file_rel` LIKE ? AND `path_file_rel` NOT LIKE ? AND `time_add` > ? ORDER BY `time_add` DESC");
-        $q->execute(Array($user->group, $path_rel_ru . '/%', $path_rel_ru . '/.%', NEW_TIME));
+        $q->execute(Array(App::user()->group, $path_rel_ru . '/%', $path_rel_ru . '/.%', NEW_TIME));
         while ($files = $q->fetch()) {
             $abs_path = FILES . convert::of_utf8($files['path_file_rel']);
             $pathinfo = pathinfo($abs_path);
@@ -314,11 +314,11 @@ class files {
         $path_rel_ru = convert::to_utf8($this->path_rel);
         $q = db::me()->prepare("SELECT *
             FROM `files_cache` 
-            WHERE `group_show` <= '" . intval($user->group) . "' 
+            WHERE `group_show` <= '" . intval(App::user()->group) . "' 
                 AND `path_file_rel` LIKE ? 
                 AND `path_file_rel` NOT LIKE ? 
                     ORDER BY `time_add` DESC");
-        $q->execute(Array($user->group, $path_rel_ru . '/%', $path_rel_ru . '/.%'));
+        $q->execute(Array(App::user()->group, $path_rel_ru . '/%', $path_rel_ru . '/.%'));
 
         while ($files = $q->fetch()) {
             $abs_path = FILES . convert::of_utf8($files['path_file_rel']);
@@ -342,7 +342,7 @@ class files {
         $content = array('dirs' => array(), 'files' => array());
         $path_rel_ru = convert::to_utf8($this->path_rel);
         $q = db::me()->prepare("SELECT * FROM `files_cache` WHERE `group_show` <= ? AND `path_file_rel` LIKE ? AND `path_file_rel` NOT LIKE ? AND `runame` LIKE ?");
-        $q->execute(Array($user->group, $path_rel_ru . '/%', $path_rel_ru . '/.%', '%' . $search . '%'));
+        $q->execute(Array(App::user()->group, $path_rel_ru . '/%', $path_rel_ru . '/.%', '%' . $search . '%'));
         while ($files = $q->fetch()) {
             $abs_path = FILES . convert::of_utf8($files ['path_file_rel']);
             $pathinfo = pathinfo($abs_path);
@@ -372,7 +372,7 @@ class files {
         }
 
         global $user;
-        $group = (int) $user->group;
+        $group = (int) App::user()->group;
         if ($count = cache_counters::get('files.' . $this->path_rel . '.' . (int) $is_new . '.' . $group)) {
             return $count;
         }
@@ -489,7 +489,7 @@ class files {
         $list2 = array();
         $c = count($list);
         for ($i = 0; $i < $c; $i++) {
-            if ($list [$i]->group_show <= $user->group)
+            if ($list [$i]->group_show <= App::user()->group)
                 $list2 [] = $list [$i];
         }
         return $list2;
@@ -634,7 +634,7 @@ class files {
                 for ($i = 0; $i < $k && $i < count($all_path); $i++) {
                     $cnf = new files(FILES . '/' . $all_path [$i]);
 
-                    if ($cnf->group_show > $user->group) {
+                    if ($cnf->group_show > App::user()->group) {
                         // если пользователь не сможет зайти в папку, то и ссылку показывать не будем
                         $k++;
                         continue;
