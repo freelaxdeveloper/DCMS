@@ -1,7 +1,7 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,crypt,form};
+use App\{document,form};
 use App\App\App;
 
 $doc = new document(1);

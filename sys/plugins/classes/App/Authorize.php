@@ -3,12 +3,12 @@ namespace App\App;
 
 abstract class Authorize{
     // ключ, с которым будет хранится пользовательский ID
-    const KEY_USER_ID = 'id';
+    const KEY_USER_ID = 'session_id';
     // ключ, с которым будет хранится пользовательский хэш пароля
-    const KEY_USER_PASSWORD = 'what_is_it';
+    const KEY_USER_PASSWORD = 'session_token';
 
     # авторизируемся
-    public static function authorized(int $id_user, string $hash_pass)
+    public static function authorized(string $id_user, string $hash_pass)
     {
         if (self::isAuthorize()) {
             //return;
@@ -24,9 +24,9 @@ abstract class Authorize{
         return self::getId() ? true : false;
     }
     # получаем ID пользователя
-    public static function getId(): int
+    public static function getId(): string
     {
-        return $_SESSION[self::KEY_USER_ID] ?? $_COOKIE[self::KEY_USER_ID] ?? 0;
+        return $_SESSION[self::KEY_USER_ID] ?? $_COOKIE[self::KEY_USER_ID] ?? '';
     }
     # получаем хэш его пароля
     public static function getHash(): string
