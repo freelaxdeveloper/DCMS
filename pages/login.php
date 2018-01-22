@@ -32,7 +32,6 @@ if (App::user()->group) {
 $need_of_captcha = cache_aut_failture::get($dcms->ip_long);
 
 $user = false;
-
 if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_session']) || !captcha::check($_POST['captcha'], $_POST['captcha_session']))) {
     $doc->err(__('Проверочное число введено неверно'));
 } elseif (isset($_POST['login']) && isset($_POST['password'])) {
@@ -44,7 +43,7 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
 
         if(!$user = User::where('login', $login)->first()) {
             $doc->err(__('Логин "%s" не зарегистрирован', $login));
-        } elseif (crypt::hash($password, $dcms->salt) !== $user['password']) {
+        } elseif (!password_verify($password, $user->password)) {
             $need_of_captcha = true;
             cache_aut_failture::set($dcms->ip_long, true, 600); // при ошибке заставляем пользователя проходить капчу
             misc::logaut($user['id'], 'post', 0, 0); // пишем в журнал неудачную попытку войти
@@ -63,13 +62,9 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
                     // если пользователь авторизовался, то ключ для восстановления ему больше не нужен
                     $user->recovery_password = '';
                 }
-                Authorize::authorized($user->id, crypt::encrypt($user->password, $dcms->salt_user));
+                $user->token = bin2hex(random_bytes(random_int(22, 32)));
                 $user->save();
-                /* $_SESSION[SESSION_ID_USER] = App::user()->id;
-                if (isset($_POST['save_to_cookie']) && $_POST['save_to_cookie']) {
-                    setcookie(COOKIE_ID_USER, App::user()->id, TIME + 60 * 60 * 24 * 365);
-                    setcookie(COOKIE_USER_PASSWORD, crypt::encrypt($password, $dcms->salt_user), TIME + 60 * 60 * 24 * 365);
-                } */
+                Authorize::authorized($user->token, $user->password);
             }
         }
     }
@@ -79,10 +74,6 @@ if ($user && $user->group) {
     // удаляем информацию как о госте
     $res = $db->prepare("DELETE FROM `guest_online` WHERE `ip_long` = ? AND `browser` = ?;");
     $res->execute(Array($dcms->ip_long, $dcms->browser_name));
-
-    /* if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
-        cache::set($_GET['auth_key'], array('session' => $_SESSION, 'cookie' => $_COOKIE), 60);
-    } */
 
     $doc->clean();
     header('Location: ' . $return, true, 302);

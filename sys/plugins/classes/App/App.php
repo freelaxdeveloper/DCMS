@@ -1,7 +1,7 @@
 <?php
 namespace App\App;
 
-use App\{crypt,dcms};
+use App\{dcms};
 use App\Models\User;
 use App\App\Authorize;
 
@@ -20,23 +20,16 @@ abstract class App{
     {
         static $current_user;
         if (!$current_user && Authorize::isAuthorize()) {
-            $current_user = User::find(Authorize::getId());
-            /* if ($current_user->id && $current_user->token_time_update < TIME) {
-                $current_user->updateToken();
-            } */
-            # если почему-то хэш пользователя не совпадает с тем что в сессии
-            # сбрасываем авторизацию
-            $hash_password = crypt::decrypt(Authorize::getHash(), dcms::getInstance()->salt_user);
-            if ($current_user->id && $current_user->password != $hash_password) {
-                Authorize::exit();
-                die('Ошибка авторизации');
-                //self::access_denied(__('Ошибка авторизации'), true);
-            }
+            $current_user = User::where([
+                'password' => Authorize::getHash(),
+                'token' => Authorize::getId(),
+            ])->first();
         } elseif (!$current_user) {
             $current_user = new User;
             $current_user->login = '[Гость]';
             $current_user->group = 0;
             $current_user->id = 0;
+            $current_user->language = 'ru';
         }
         return $current_user;
     }

@@ -234,10 +234,11 @@ function view(string $template, array $params = [], bool $view = true)
     }
     
 }
-function dd($array)
+function dd($array, bool $exit = true)
 {
     echo '<pre>';
     print_r($array);
-    echo '</pre';
-    exit;
+    echo '</pre>';
+    if ($exit)
+        exit;
 }

@@ -71,6 +71,12 @@ class document extends design
      */
     function err($text)
     {
+        if (is_array($text)) {
+            foreach ($text as $message) {
+                $this->err[] = new document_message($message[0], true);
+            }
+            return;
+        }
         return $this->err[] = new document_message($text, true);
     }
 
@@ -163,7 +169,7 @@ class document extends design
         $actions = $this->actions;
         $tabs = $this->tabs;
         $url = URL;
-        $current_user = json_encode(App::user()->toArray());
+        $current_user = json_encode(App::user());
         $user = App::user();
 
         $left_column = $this->displaySectionBlade('left_column');
