@@ -36,6 +36,26 @@ class User extends Model{
         return $this->hasMany(ChatMini::class, 'id_user');
     }
 
+    public function getIsWriteableAttribute(): bool
+    {
+        // if ($this->_is_ban())
+        //     return false;
+
+        global $dcms;
+        if (!$dcms->user_write_limit_hour) {
+            // ограничение не установлено
+            return true;
+        } elseif ($this->group >= 2) {
+            // пользователь входит в состав администрации
+            return true;
+        } elseif ($this->reg_date < TIME - $dcms->user_write_limit_hour * 3600) {
+            // пользователь преодолел ограничение
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getItemsPerPageAttribute()
     {
         return 5;

@@ -2,6 +2,8 @@
 namespace App;
 
 use App\text;
+use App\App\App;
+
 /**
  * Работа с текстовыми файлами с BBCODE внутри.
  * Отдельно обрабатывается тег title
@@ -59,9 +61,8 @@ class bb {
             return $path;
         }
 
-        global $user;
         $languages = languages::getList();
-        $user_lang = $languages[$user->language];
+        $user_lang = $languages[App::user()->language];
         
         
         $path_user_lang = str_replace('{lang}', $user_lang['xml_lang'], $path);

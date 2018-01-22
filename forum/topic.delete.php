@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,files,captcha,form,url};
+use App\App\App;
 
 $doc = new document();
 
@@ -13,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 $id_topic = (int) $_GET['id'];
 $q = $db->prepare("SELECT * FROM `forum_topics` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_topic, $user->group));
+$q->execute(Array($id_topic, App::user()->group));
 if (!$topic = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Раздел не доступен для удаления'));

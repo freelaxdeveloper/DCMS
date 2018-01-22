@@ -1,5 +1,7 @@
 <?php
 namespace App;
+use App\App\App;
+
 /**
  * Различные полезные функции
  */
@@ -236,8 +238,8 @@ abstract class misc
             if (!$time) {
                 $time = TIME;
             }
-            if ($user->group) {
-                $time_shift = $user->time_shift;
+            if (App::user()->group) {
+                $time_shift = App::user()->time_shift;
             } else {
                 $time_shift = 0;
             }

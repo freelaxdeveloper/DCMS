@@ -1,13 +1,15 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,text,pages,form,url,listing};
+use App\{document,text,pages,form,url,listing};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(); // инициализация документа для браузера
 $doc->title = __('Отзывы');
 
 if (isset($_GET['id']))
-    $ank = new user($_GET['id']);
+    $ank = User::find($_GET['id']);
 else
     $ank = $user;
 
@@ -16,7 +18,7 @@ if (!$ank->group) {
 }
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Писать запрещено'), 'write_denied');
     $can_write = false;
 }
@@ -25,7 +27,7 @@ if (!$user->is_writeable) {
 $add = 1;
 
 $q = $db->prepare("SELECT COUNT(*) AS `count`, MAX(`time`) AS `time` FROM `reviews_users` WHERE `id_user` = ? AND `id_ank` = ?");
-$q->execute(Array($user->id, $ank->id));
+$q->execute(Array(App::user()->id, $ank->id));
 if ($row = $q->fetch()) {
     $count = $row['count'];
     $time = $row['time'];
@@ -44,17 +46,17 @@ if ($time > NEW_TIME)
 if ($ank->is_vip)
     $add += $add;
 
-if ($ank->id == $user->id)
+if ($ank->id == App::user()->id)
     $doc->title = __('Отзывы обо мне');
 else
     $doc->title = __('"Отзывы о "%s"', $ank->login);
 
-if ($user->group && $can_write && isset($_POST['review']) && $user->id != $ank->id && $add) {
+if (App::user()->group && $can_write && isset($_POST['review']) && App::user()->id != $ank->id && $add) {
     $message = text::input_text($_POST['review']);
 
     if ($message) {
         $res = $db->prepare("INSERT INTO `reviews_users` (`id_user`, `id_ank`, `time`, `text`, `rating`) VALUES (?, ?, ?, ?, ?)");
-        $res->execute(Array($user->id, $ank->id, TIME, $message, $add));
+        $res->execute(Array(App::user()->id, $ank->id, TIME, $message, $add));
         $res = $db->prepare("UPDATE `users` AS `u` SET `u`.`rating` = (SELECT SUM(`rating`) FROM `reviews_users` AS `ru` WHERE `ru`.`id_ank` = :id_user) WHERE `u`.`id` = :id_user LIMIT 1");
         $res->execute(Array(':id_user' => $ank->id));
 
@@ -62,7 +64,7 @@ if ($user->group && $can_write && isset($_POST['review']) && $user->id != $ank->
         $doc->ret(__('Вернуться'), '?id=' . $ank->id);
         $doc->msg(__('Ваш отзыв успешно оставлен'));
 
-        $ank->mess(__("%s оставил" . ($user->sex ? '' : 'а') . " о Вас свой [url=/profile.reviews.php]отзыв[/url]", $user->login));
+        $ank->mess(__("%s оставил" . (App::user()->sex ? '' : 'а') . " о Вас свой [url=/profile.reviews.php]отзыв[/url]", App::user()->login));
 
         exit;
     } else {
@@ -121,7 +123,7 @@ $listing->display(__('Отзывы отсутствуют'));
 
 $pages->display('?id=' . $ank->id . '&amp;from=' . $from . '&amp;'); // вывод страниц
 
-if ($user->group && $can_write && $user->id != $ank->id && $add) {
+if (App::user()->group && $can_write && App::user()->id != $ank->id && $add) {
     $form = new form(new url());
     $form->textarea('review', __('Отзыв о пользователе') . ' *');
     $form->bbcode('* ' . __('Разрешается оставлять только положительные отзывы. Кроме того каждый отзыв увеличивает пользователю рейтинг.'));

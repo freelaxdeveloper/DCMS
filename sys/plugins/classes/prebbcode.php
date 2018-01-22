@@ -2,6 +2,8 @@
 namespace App;
 
 use App\bbcode;
+use App\App\App;
+
 /**
  * Предварительная обработка BBCODE.
  * Используется для того, чтобы скрыть содержимое в теге HIDE, даже когда не нужна обработка BBCODE. Например, при цитировании
@@ -36,14 +38,14 @@ class prebbcode extends bbcode {
 
     function hide_2bb($elem) {
         global $user;
-        if (!empty($elem['attrib']['balls']) && $elem['attrib']['balls'] > $user->balls) {
+        if (!empty($elem['attrib']['balls']) && $elem['attrib']['balls'] > App::user()->balls) {
             return '[spoiler="' . __('Скрытый текст') . '"]' . __('Недостаточно баллов для отображения данного текста (Необходимо: %s)', $elem['attrib']['balls']) . '[/spoiler]';
         }
-        if (!empty($elem['attrib']['group']) && $elem['attrib']['group'] > $user->group) {
+        if (!empty($elem['attrib']['group']) && $elem['attrib']['group'] > App::user()->group) {
             return '[spoiler="' . __('Скрытый текст') . '"]' . __('Недостаточно прав для отображения данного текста (Необходим статус: %s)', groups::name($elem['attrib']['group'])) . '[/spoiler]';
         }
 
-        if (!$user->group) {
+        if (!App::user()->group) {
             return '[spoiler="' . __('Скрытый текст') . '"]' . __('Для просмотра данного текста необходимо авторизоваться') . '[/spoiler]';
         }
 

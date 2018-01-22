@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,user,listing};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Бан');
@@ -10,16 +11,16 @@ if (isset($_GET['return'])) {
     $doc->ret(__('Вернуться'), text::toValue($_GET['return']));
 }
 
-if (!$user->is_ban) {
+if (!App::user()->is_ban) {
     $doc->err(__('Нет активных банов'));
-} elseif ($user->is_ban_full) {
+} elseif (App::user()->is_ban_full) {
     $doc->err(__('Вам запрещена любая активность на сайте'));
-} elseif ($user->is_ban) {
+} elseif (App::user()->is_ban) {
     $doc->err(__('Вам запрещено писать на сайте'));
 }
 
 $q = $db->prepare("SELECT * FROM `ban` WHERE `id_user` = ? ORDER BY `id` DESC");
-$q->execute(Array($user->id));
+$q->execute(Array(App::user()->id));
 
 $listing = new listing();
 while ($c = $q->fetch()) {

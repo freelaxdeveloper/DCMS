@@ -4,6 +4,7 @@ $subdomain_theme_redirect_disable = true; // принудительное отк
 include_once '../sys/inc/start.php';
 use App\{document,form};
 use App\App\Authorize;
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Выход');
@@ -11,8 +12,7 @@ $doc->title = __('Выход');
 if (isset($_POST['exit'])){
     /********************deprecated******************* */
     $res = $db->prepare("DELETE FROM `users_online` WHERE `id_user` = ?;");
-    $res->execute(Array($user->id));
-    $user->guest_init();
+    $res->execute(Array(App::user()->id));
     setcookie(COOKIE_ID_USER);
     setcookie(COOKIE_USER_PASSWORD);
     unset($_SESSION);

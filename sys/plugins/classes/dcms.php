@@ -1,5 +1,9 @@
 <?php
 namespace App;
+
+use App\App\App;
+use App\Models\User;
+
 /**
  * Базовый класс системы. Объект хранится в глобальной переменной $dcms
  * @property bool debug Включен режим разработчика
@@ -91,7 +95,7 @@ class dcms
         new user($users); // предзагрузка данных пользователей из базы
 
         foreach ($users as $id_user) {
-            $ank = new user($id_user);
+            $ank = User::find($id_user);
             $ank->mess($mess);
         }
     }
@@ -109,8 +113,7 @@ class dcms
         $id_user = 0;
 
         if (!$is_system) {
-            global $user;
-            $id_user = $user->id;
+            $id_user = App::user()->id;
         }
 
         $res = db::me()->prepare("INSERT INTO `action_list_administrators` (`id_user`, `time`, `module`, `description`) VALUES (?, ?, ?, ?)");

@@ -1,7 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,captcha,text,form,url};
+use App\{document,captcha,text,form,url};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(4);
 $doc->title = __('Редактирование новости');
@@ -16,9 +18,9 @@ if (!$news = $q->fetch())
     $doc->access_denied(__('Новость не найдена или удалена'));
 
 
-$ank = new user($news['id_user']);
+$ank = User::find($news['id_user']);
 
-if ($ank->group > $user->group)
+if ($ank->group > App::user()->group)
     $doc->access_denied(__('У Вас нет прав для редактирования данной новости'));
 
 $news_e = &$_SESSION['news_edit'][$id];
@@ -38,7 +40,7 @@ if ($news_e['checked'] && isset($_POST['send'])) {
         $doc->err(__('Ошибка при вводе чисел с картинки'));
     else {
         $res = $db->prepare("UPDATE `news` SET `title` = ?, `id_user` = ?, `text` = ?, `sended` = '0' WHERE `id` = ? LIMIT 1");
-        $res->execute(Array($news_e['title'], $user->id, $news_e['text'], $id));
+        $res->execute(Array($news_e['title'], App::user()->id, $news_e['text'], $id));
         $doc->msg(__('Новость успешно отредактирована'));
         $news_e = array();
         header('Refresh: 1; ./');

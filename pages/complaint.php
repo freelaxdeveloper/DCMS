@@ -1,6 +1,8 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,user,menu_code,text,form,url};
+use App\{document,menu_code,text,form,url};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Жалоба на пользователя');
@@ -8,7 +10,7 @@ $doc->title = __('Жалоба на пользователя');
 
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Вы не можете оставить жалобу'), 'write_denied');
     if (!empty($_GET['return'])) {
         $doc->ret(__('Вернуться'), text::toValue($_GET['return']));
@@ -18,9 +20,9 @@ if (!$user->is_writeable) {
 
 
 
-$ank = new user(@$_GET['id']);
+$ank = User::find($_GET['id']);
 
-if (!$ank->group || $ank->group > $user->group) {
+if (!$ank->group || $ank->group > App::user()->group) {
     $doc->toReturn();
     $doc->err(__('Пользователь не найден'));
     exit;
@@ -35,7 +37,7 @@ if (isset($_POST['complaint'])) {
     $comm = text::input_text(@$_POST['comment']);
 
     $res = $db->prepare("SELECT * FROM `complaints` WHERE `id_user` = ? AND `id_ank` = ? AND `link` = ? AND `time` > ?");
-    $res->execute(Array($user->id, $ank->id, $link, NEW_TIME));
+    $res->execute(Array(App::user()->id, $ank->id, $link, NEW_TIME));
     if (!$link) {
         $doc->err(__('Не указана ссылка на нарушение'));
     } elseif (!isset($menu->menu_arr[$code])) {
@@ -47,10 +49,10 @@ if (isset($_POST['complaint'])) {
         $doc->toReturn();
 
         $res = $db->prepare("INSERT INTO `complaints` (`time`, `id_user`, `id_ank`, `link`, `code`, `comment`) VALUES (?, ?, ?, ?, ?, ?)");
-        $res->execute(Array(TIME, $user->id, $ank->id, $link, $code, $comm));
+        $res->execute(Array(TIME, App::user()->id, $ank->id, $link, $code, $comm));
         $doc->msg(__('Жалоба будет рассмотрена модератором'));
 
-        $mess = "Поступила [url=/dpanel/user.complaints.php]жалоба[/url] на пользователя [user]$ank->id[/user] от [user]$user->id[/user]";
+        $mess = "Поступила [url=/dpanel/user.complaints.php]жалоба[/url] на пользователя [user]$ank->id[/user] от [user]App::user()->id[/user]";
         $admins = groups::getAdmins(2);
         foreach ($admins AS $admin) {
             $admin->mess($mess);

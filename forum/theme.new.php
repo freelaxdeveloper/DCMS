@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,captcha,is_valid,form,url};
+use App\App\App;
 
 $doc = new document(1);
 
@@ -16,7 +17,7 @@ $id_topic = (int) $_GET ['id_topic'];
 
 
 $q = $db->prepare("SELECT * FROM `forum_topics` WHERE `id` = ? AND `group_write` <= ?");
-$q->execute(Array($id_topic, $user->group));
+$q->execute(Array($id_topic, App::user()->group));
 if (!$topic = $q->fetch()) {
     $doc->toReturn();
     $doc->err(__('В выбранном разделе нельзя создавать темы'));
@@ -30,13 +31,13 @@ $timelimit = (empty($_SESSION ['antiflood'] ['newtheme']) || $_SESSION ['antiflo
 
 
 $time_reg = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Создавать темы запрещено'), 'write_denied');
     $time_reg = false;
 }
 
 
-if ($user->group >= 2) {
+if (App::user()->group >= 2) {
     $timelimit = true; // админ-составу разрешается создавать темы без ограничений по времени
 }
 
@@ -55,21 +56,21 @@ if ($can_write && isset($_POST ['message']) && isset($_POST ['name'])) {
         $doc->err(__('Обнаружен мат: %s', $mat));
     elseif ($dcms->censure && $mat = is_valid::mat($name))
         $doc->err(__('Обнаружен мат: %s', $mat));
-    elseif ($dcms->forum_theme_captcha && $user->group < 2 && (empty($_POST ['captcha']) || empty($_POST ['captcha_session']) || !captcha::check($_POST ['captcha'], $_POST ['captcha_session']))) {
+    elseif ($dcms->forum_theme_captcha && App::user()->group < 2 && (empty($_POST ['captcha']) || empty($_POST ['captcha_session']) || !captcha::check($_POST ['captcha'], $_POST ['captcha_session']))) {
         $doc->err(__('Проверочное число введено неверно'));
     } elseif ($message && $name) {
-        $user->balls += $dcms->add_balls_create_theme ;
+        App::user()->balls += $dcms->add_balls_create_theme ;
         $res = $db->prepare("UPDATE `forum_topics` SET `time_last` = ? WHERE `id` = ? LIMIT 1");
         $res->execute(Array(TIME, $id_topic));
         $res = $db->prepare("INSERT INTO `forum_themes` (`id_category`, `id_topic`,  `name`, `id_autor`, `time_create`, `id_last`, `time_last`, `group_show`, `group_write`, `group_edit`) VALUES (?,?,?,?,?,?,?,?,?,?)");
-        $res->execute(Array($topic['id_category'], $topic['id'], $name, $user->id, TIME, $user->id, TIME, $topic['group_show'], $topic['group_write'], max($user->group, 2)));
+        $res->execute(Array($topic['id_category'], $topic['id'], $name, App::user()->id, TIME, App::user()->id, TIME, $topic['group_show'], $topic['group_write'], max(App::user()->group, 2)));
         $theme ['id'] = $db->lastInsertId();
         $res = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? LIMIT 1");
         $res->execute(Array($theme['id']));
         $theme = $res->fetch();
 
         $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`) VALUES (?,?,?,?,?,?,?,?)");
-        $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], $user->id, TIME, $message, $theme['group_show'], $theme['group_edit']));
+        $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], App::user()->id, TIME, $message, $theme['group_show'], $theme['group_edit']));
 
         $_SESSION ['antiflood'] ['newtheme'] = TIME;
         $doc->msg(__('Тема успешно создана'));
@@ -89,7 +90,7 @@ if ($can_write) {
     $form->text('name', __('Название темы'));
     $form->bbcode('* ' . __('Название темы должно быть информативным, четко выделяя ее среди других тем. [b]Названия вида "помогите", "как сделать" и т.д. строго запрещены.[/b]'));
     $form->textarea('message', __('Сообщение'));
-    if ($dcms->forum_theme_captcha && $user->group < 2)
+    if ($dcms->forum_theme_captcha && App::user()->group < 2)
         $form->captcha();
     $form->button(__('Создать тему'));
     $form->display();

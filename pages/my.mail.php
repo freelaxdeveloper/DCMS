@@ -1,7 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,document_json,user,text,antiflood,pages,form,misc,listing};
+use App\{document,document_json,text,antiflood,pages,form,misc,listing};
+use App\Models\User;
+use App\App\App;
 
 if (AJAX)
     $doc = new document_json(1);
@@ -12,9 +14,9 @@ $doc->title = __('Моя почта');
 
 if (isset($_GET ['id'])) {
     $id_kont = (int)$_GET ['id'];
-    $ank = new user($id_kont);
+    $ank = User::find($id_kont);
     $res = $db->prepare("SELECT COUNT(*) FROM `mail` WHERE `id_user` = ? AND `id_sender` = ?");
-    $res->execute(Array($user->id, $id_kont));
+    $res->execute(Array(App::user()->id, $id_kont));
     if (!$ank->group && !$res->fetch()) {
         $doc->err(__('Пользователь не найден'));
         $doc->ret(__('К почте'), '?');
@@ -22,21 +24,21 @@ if (isset($_GET ['id'])) {
     }
 
     $can_write = true;
-    if (!$user->is_writeable) {
+    if (!App::user()->is_writeable) {
         $doc->msg(__('Писать запрещено'), 'write_denied');
         $can_write = false;
     }
 
-    $accept_send = $ank->id && $ank->group && $ank->id != $user->id && $can_write;
+    $accept_send = $ank->id && $ank->group && $ank->id != App::user()->id && $can_write;
 
     if ($ank->mail_only_friends && !$ank->is_friend($user)) {
         $accept_send = false;
         $doc->err(__('Писать сообщения могут только друзья'));
-        if ($user->group > $ank->group) {
+        if (App::user()->group > $ank->group) {
             $accept_send = true;
             $doc->msg(__('Ваш статус позволяет оставить сообщение данному пользователю несмотря на установленное ограничение'));
         }
-    } elseif ($ank->id && $user->mail_only_friends && !$user->is_friend($ank) && $user->group >= $ank->group) {
+    } elseif ($ank->id && App::user()->mail_only_friends && !App::user()->is_friend($ank) && App::user()->group >= $ank->group) {
         $doc->err(__('Пользователь не сможет Вам ответить'));
     }
 
@@ -50,14 +52,14 @@ if (isset($_GET ['id'])) {
         } elseif (!$mess)
             $doc->err(__('Сообщение пусто'));
         else {
-            $ank->mess($mess, $user->id);
+            $ank->mess($mess, App::user()->id);
 
             if ($doc instanceof document_json) {
                 $doc->form_value('mess', '');
                 $doc->form_value('token', antiflood::getToken('mail'));
             }
 
-            $user->balls += $dcms->add_balls_mail ;
+            App::user()->balls += $dcms->add_balls_mail ;
             $doc->msg(__('Сообщение успешно отправлено'));
             header('Refresh: 1; url=?id=' . $id_kont);
             exit();
@@ -82,7 +84,7 @@ if (isset($_GET ['id'])) {
 
     $pages = new pages ();
     $res = $db->prepare("SELECT COUNT(*) FROM `mail` WHERE (`id_user` = ? AND `id_sender` = ?) OR (`id_user` = ? AND `id_sender` = ?)");
-    $res->execute(Array($user->id, $id_kont, $id_kont, $user->id));
+    $res->execute(Array(App::user()->id, $id_kont, $id_kont, App::user()->id));
     $pages->posts = $res->fetchColumn(); // количество писем
 
 
@@ -91,14 +93,14 @@ WHERE (`id_user` = ? AND `id_sender` = ?)
       OR (`id_user` = ? AND `id_sender` = ?)
 ORDER BY `id` DESC
 LIMIT " . $pages->limit);
-    $q->execute(Array($user->id, $id_kont, $id_kont, $user->id));
+    $q->execute(Array(App::user()->id, $id_kont, $id_kont, App::user()->id));
 
     // отметка о прочтении писем
     $res = $db->prepare("UPDATE `mail` SET `is_read` = '1' WHERE `id_user` = ? AND `id_sender` = ?");
-    $res->execute(Array($user->id, $id_kont));
+    $res->execute(Array(App::user()->id, $id_kont));
 
     // уменьшаем кол-во непрочитанных писем на количество помеченных как прочитанные
-    $user->mail_new_count = $user->mail_new_count - $res->rowCount();
+    App::user()->mail_new_count = App::user()->mail_new_count - $res->rowCount();
 
     $id_after = false;
     $listing = new listing();
@@ -145,14 +147,14 @@ LIMIT " . $pages->limit);
 }
 
 $res = $db->prepare("SELECT COUNT(*) FROM `mail` WHERE `id_user` = ? AND `is_read` = '0'");
-$res->execute(Array($user->id));
-$user->mail_new_count = $res->fetchColumn();
+$res->execute(Array(App::user()->id));
+App::user()->mail_new_count = $res->fetchColumn();
 
 $pages = new pages ();
 
 if (isset($_GET ['only_unreaded'])) {
     $res = $db->prepare("SELECT COUNT(DISTINCT(`mail`.`id_sender`)) FROM `mail` WHERE `mail`.`id_user` = ? AND `mail`.`is_read` = '0'");
-    $res->execute(Array($user->id));
+    $res->execute(Array(App::user()->id));
     $pages->posts = $res->fetchColumn();
     $q = $db->prepare("SELECT `users`.`id`,
         `mail`.`id_sender`,
@@ -167,7 +169,7 @@ if (isset($_GET ['only_unreaded'])) {
         LIMIT " . $pages->limit);
 } else {
     $res = $db->prepare("SELECT COUNT(DISTINCT(`mail`.`id_sender`)) FROM `mail` WHERE `mail`.`id_user` = ?");
-    $res->execute(Array($user->id));
+    $res->execute(Array(App::user()->id));
     $pages->posts = $res->fetchColumn();
     $q = $db->prepare("SELECT `users`.`id`,
         `mail`.`id_sender`,
@@ -182,15 +184,15 @@ if (isset($_GET ['only_unreaded'])) {
         LIMIT " . $pages->limit);
 }
 
-$q->execute(Array($user->id));
+$q->execute(Array(App::user()->id));
 $listing = new listing();
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $mail) {
-        $ank = new user((int)$mail['id_sender']);
+        $ank = User::find((int)$mail['id_sender']);
         $post = $listing->post();
         $post->icon($ank->icon());
         $post->url = '?id=' . $ank->id;
-        $post->title = $ank->nick();
+        $post->title = $ank->login;
         $post->counter = isset($_GET ['only_unreaded']) ? '+' . $mail['count'] : $mail['count'];
         $post->highlight = !$mail['is_read'];
     }

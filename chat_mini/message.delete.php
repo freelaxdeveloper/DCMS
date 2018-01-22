@@ -1,8 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,text};
-use App\Models\ChatMini;
+use App\{document,text};
+use App\Models\{ChatMini,User};
 
 $doc = new document(2);
 $doc->title = __('Удаление сообщения');
@@ -23,7 +23,7 @@ $message->delete();
 
 $doc->msg(__('Сообщение успешно удалено'));
 
-$ank = new user($message ['id_user']);
+$ank = User::find($message->id_user);
 
 $dcms->log('Мини чат', "Удаление сообщения от [url=/profile.view.php?id={$ank->id}]{$ank->login}[/url] ([when]$message[time][/when]):\n" . $message ['message']);
 

@@ -5,7 +5,7 @@ use App\{document};
 
 $doc = new document();
 $doc->title = __('Ошибка');
-
+$doc->template = 'error';
 // возврат туда, откуда пришли
 $return = false;
 

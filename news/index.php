@@ -17,6 +17,6 @@ view('news.news', compact('news'));
 
 $pages->display('?'); // вывод страниц
 
-if ($user->group >= 4) {
+if (App::user()->group >= 4) {
     $doc->act(__('Добавить новость'), 'news.add.php');
 }

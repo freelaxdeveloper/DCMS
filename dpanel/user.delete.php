@@ -1,14 +1,16 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,groups,user,ini,misc,listing,form,url};
+use App\{dpanel,document,groups,ini,misc,listing,form,url};
+use App\Models\User;
+use App\App\App;
 
 dpanel::check_access();
 $groups = groups::load_ini();
 $doc = new document(4);
 $doc->title = __('Удаление пользователя');
 
-if (isset($_GET['id_ank'])) $ank = new user($_GET['id_ank']);
-else $ank = $user;
+if (isset($_GET['id_ank'])) $ank = User::find($_GET['id_ank']);
+else $ank = App::user();
 
 if (!$ank->group) {
     $doc->toReturn();
@@ -18,7 +20,7 @@ if (!$ank->group) {
 
 $doc->title .= ' "' . $ank->nick . '"';
 
-if ($ank->group >= $user->group) {
+if ($ank->group >= App::user()->group) {
     $doc->toReturn();
     $doc->err(__('Ваш статус не позволяет производить действия с данным пользователем'));
     exit;
@@ -32,7 +34,7 @@ if (isset($_POST['delete'])) {
         $doc->err(__('Проверочное число введено неверно'));
     } else {
         misc::user_delete($ank->id);
-        $dcms->log('Пользователи', 'Удаление пользователя ' . $ank->nick . ' (ID ' . $ank->id . ')');
+        $dcms->log('Пользователи', 'Удаление пользователя ' . $ank->login . ' (ID ' . $ank->id . ')');
         $doc->msg(__('Пользователь успешно удален'));
         $doc->ret(__('Админка'), '/dpanel/');
         exit;
@@ -53,7 +55,7 @@ $listing->display();
 $form = new form(new url());
 $form->captcha();
 $form->bbcode(__('Пользователь будет удален без возможности восстановления. Подтвердите удаление пользователя "%s".',
-        $ank->nick));
+        $ank->login));
 $form->button(__('Удалить'), 'delete');
 $form->display();
 

@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,files,listing,user,form,text,misc,url};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Файлы');
@@ -37,8 +38,8 @@ $autor = new user((int) $message['id_user']);
 $access_edit = false;
 $edit_time = $message['time'] - TIME + 600;
 
-if ($user->group >= $message['group_edit']) $access_edit = true;
-elseif ($user->id == $autor->id && $edit_time > 0) {
+if (App::user()->group >= $message['group_edit']) $access_edit = true;
+elseif (App::user()->id == $autor->id && $edit_time > 0) {
     $access_edit = true;
     $doc->msg(__('Для выгрузки файлов осталось %s сек', $edit_time));
 }
@@ -70,7 +71,7 @@ $post_dir_path = FILES . '/.forum/' . $message['id_theme'] . '/' . $message['id'
 if (!@is_dir($post_dir_path)) {
     if (!$p_dir = $theme_dir->mkdir(__('Файлы к сообщению #%d', $message['id']), $message['id']))
             $doc->access_denied(__('Не удалось создать папку под файлы сообщения'));
-    $p_dir->id_user = $user->id;
+    $p_dir->id_user = App::user()->id;
     $p_dir->group_show = 0; // папка будет доступна гостям
     unset($p_dir);
 }
@@ -85,9 +86,9 @@ if (!empty($_FILES['file'])) {
             $doc->err(__('Размер файла превышает установленные ограниченияя'));
     else {
         if ($files_ok = $dir->filesAdd(array($_FILES['file']['tmp_name'] => $_FILES['file']['name']))) {
-            $files_ok[$_FILES['file']['tmp_name']]->id_user = $user->id;
+            $files_ok[$_FILES['file']['tmp_name']]->id_user = App::user()->id;
             $files_ok[$_FILES['file']['tmp_name']]->group_show = $dir->group_show;
-            $files_ok[$_FILES['file']['tmp_name']]->group_edit = max($user->group, $dir->group_write, 2);
+            $files_ok[$_FILES['file']['tmp_name']]->group_edit = max(App::user()->group, $dir->group_write, 2);
             unset($files_ok);
             $doc->msg(__('Файл "%s" успешно добавлен', $_FILES['file']['name']));
         } else {

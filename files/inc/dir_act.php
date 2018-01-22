@@ -2,6 +2,7 @@
 
 defined('DCMS') or die();
 use App\{text,captcha,files,groups};
+use App\App\App;
 
 /**
  * Преобразуем $_FILES в более удобный массив
@@ -68,9 +69,9 @@ if ($access_write) {
             }
 
             if ($files_ok = $dir->filesAdd(array($file ['tmp_name'] => $file ['name']))) {
-                $files_ok [$file ['tmp_name']]->id_user = $user->id;
-                $files_ok [$file ['tmp_name']]->group_edit = max($user->group, $dir->group_write, 2);
-                $user->balls += $dcms->add_balls_upload_file;
+                $files_ok [$file ['tmp_name']]->id_user = App::user()->id;
+                $files_ok [$file ['tmp_name']]->group_edit = max(App::user()->group, $dir->group_write, 2);
+                App::user()->balls += $dcms->add_balls_upload_file;
                 $doc->msg(__('Файл "%s" успешно добавлен', $file ['name']));
                 // записываем свое действие в общий лог
                 if ($dir->group_write > 1)
@@ -88,7 +89,7 @@ if ($access_edit) {
     if (!empty($_POST ['file_import']) && !empty($_POST ['url'])) {
         if ($file = $dir->fileImport($_POST ['url'])) {
             $doc->msg(__('Файл "%s" успешно импортирован', $file->runame));
-            $file->id_user = $user->id;
+            $file->id_user = App::user()->id;
             // записываем свое действие в общий лог
             if ($dir->group_write > 1) {
                 $dcms->log('Файлы', 'Импорт файла [url="/files' . $file->getPath() . '"]' . $file->runame . '[/url]');
@@ -115,7 +116,7 @@ if ($access_edit) {
 
         foreach ($dirs as $dir2) {
             // если нет прав на чтение папки или на запись в папку, то пропускаем
-            if ($dir2->group_show > $user->group || $dir2->group_write > $user->group) {
+            if ($dir2->group_show > App::user()->group || $dir2->group_write > App::user()->group) {
                 continue;
             }
             // мы не можем папку переместить саму в себя
@@ -150,7 +151,7 @@ if ($access_edit) {
         elseif (!$new_dir = $dir->mkdir($runame))
             $doc->err(__('Не удалось создать папку на сервере'));
         else {
-            $new_dir->id_user = $user->id;
+            $new_dir->id_user = App::user()->id;
 
             $dcms->log('Файлы', 'Создание папки [url="/files' . $new_dir->getPath() . '"]' . $new_dir->runame . '[/url]');
 

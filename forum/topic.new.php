@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,url,form,text};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Новый раздел');
@@ -13,7 +14,7 @@ if (!isset($_GET['id_category']) || !is_numeric($_GET['id_category'])) {
 $id_category = (int) $_GET['id_category'];
 
 $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `id` = ? AND `group_write` <= ?");
-$q->execute(Array($id_category, $user->group));
+$q->execute(Array($id_category, App::user()->group));
 if (!$category = $q->fetch()) {
     $doc->toReturn();
     $doc->err(__('В выбранной категории запрещено создавать разделы'));
@@ -29,7 +30,7 @@ if (isset($_POST['name'])) {
     } else {
         $res = $db->prepare("INSERT INTO `forum_topics` (`id_category`, `time_create`,`time_last`, `name`, `description`, `group_show`, `group_write`, `group_edit`) VALUES (?,?,?,?,?,?,?,?)");
         $res->execute(Array($category['id'], TIME, TIME, $name, $description, $category['group_show'], max($category['group_show'],
-                1), max($user->group, 4)));
+                1), max(App::user()->group, 4)));
         $id_topic = $db->lastInsertId();
         $doc->msg(__('Раздел успешно создан'));
 

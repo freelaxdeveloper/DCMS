@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{groups,document,files,form,url};
+use App\App\App;
 
 $groups = groups::load_ini(); // загружаем массив групп
 $doc = new document();
@@ -14,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_theme = (int) $_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_theme, $user->group));
+$q->execute(Array($id_theme, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна для редактирования'));
@@ -84,7 +85,7 @@ if (isset($_POST['save'])) {
     }
     // после изменения параметров темы обновляем данные, сохраненные в базе
     $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
-    $q->execute(Array($id_theme, $user->group));
+    $q->execute(Array($id_theme, App::user()->group));
     if (!$theme = $q->fetch()) {
         header('Refresh: 1; url=./');
         $doc->err(__('Тема не доступна для редактирования'));

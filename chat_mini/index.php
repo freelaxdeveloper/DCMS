@@ -13,13 +13,13 @@ $pages = new pages(ChatMini::count());
 
 $can_write = true;
 /** @var $user \user */
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Писать запрещено'), 'write_denied');
     $can_write = false;
 }
 
 if ($can_write && $pages->this_page == 1) {
-    if (isset($_POST['send']) && isset($_POST['message']) && isset($_POST['token']) && $user->group) {
+    if (isset($_POST['send']) && isset($_POST['message']) && isset($_POST['token']) && App::user()->group) {
         $message = (string)$_POST['message'];
         $users_in_message = text::nickSearch($message);
         $message = text::input_text($message);
@@ -29,7 +29,7 @@ if ($can_write && $pages->this_page == 1) {
         } elseif ($dcms->censure && $mat = is_valid::mat($message)) {
             $doc->err(__('Обнаружен мат: %s', $mat));
         } elseif ($message) {
-            $user->balls += $dcms->add_balls_chat ;
+            App::user()->balls += $dcms->add_balls_chat ;
 
             $comment = new ChatMini(['message' => $message, 'time' => TIME]);
             App::User(true)->chatMini()->save($comment);
@@ -44,7 +44,7 @@ if ($can_write && $pages->this_page == 1) {
 
     }
 
-    if ($user->group) {
+    if (App::user()->group) {
         $message_form = '';
         if (isset($_GET ['message']) && is_numeric($_GET ['message'])) {
             $id_message = (int)$_GET ['message'];
@@ -67,10 +67,10 @@ if ($can_write && $pages->this_page == 1) {
     }
 }
 
-$messages = ChatMini::orderBy('id', 'DESC')->get()->forPage($pages->this_page, $user->items_per_page);
+$messages = ChatMini::orderBy('id', 'DESC')->get()->forPage($pages->this_page, App::user()->items_per_page);
 view('chat_mini.messages', compact('messages'));
 
 $pages->display('?'); // вывод страниц
 
-if ($user->group >= 3)
+if (App::user()->group >= 3)
     $doc->act(__('Удаление сообщений'), 'message.delete_all.php');

@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,themes,form,url,listing};
+use App\App\App;
 
 if (!empty($_GET['theme']) && themes::exists($_GET['theme'])) {
     $probe_theme = $_GET['theme'];
@@ -18,7 +19,7 @@ if (!empty($probe_theme)) {
     $theme = themes::getThemeByName($probe_theme);
 
     if (isset($_POST['save'])) {
-        $user->theme = $probe_theme;
+        App::user()->theme = $probe_theme;
         $doc->msg('Тема оформления успешно изменена');
         exit;
     }
@@ -43,7 +44,7 @@ foreach ($themes_list as $theme) {
     $post = $listing->post();
     $post->icon('theme');
     $post->title = $theme->getViewName();
-    $post->highlight = $user->theme == $theme->getName();
+    $post->highlight = App::user()->theme == $theme->getName();
     $post->url = '?theme=' . urlencode($theme->getName());
     $supported = $theme->browserSupport($dcms->browser_type);
     $post->content[] = __('Поддерживаемые типы браузеров: %s', implode(', ', $theme->getBrowsers()));

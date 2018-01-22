@@ -1,5 +1,6 @@
 <?php
-use App\{DB,user,listing,misc};
+use App\{DB,listing,misc};
+use App\Models\User;
 
 defined('DCMS') or die;
 
@@ -25,7 +26,7 @@ if ($dcms->widget_items_count) {
     if ($arr = $q->fetchAll()) {
         foreach ($arr AS $ank) {
             $post = $listing->post();
-            $p_user = new user($ank['id']);
+            $p_user = User::find($ank['id']);
             $post->icon($p_user->icon());
             $post->title = $p_user->nick();
             $post->url = '/profile.view.php?id=' . $p_user->id;

@@ -1,5 +1,5 @@
 <?php
-
+use App\Models\User;
 class widget_feed_chat implements widget_feed_module
 {
 
@@ -16,10 +16,10 @@ class widget_feed_chat implements widget_feed_module
         $q = db::me()->query("SELECT * FROM `chat_mini` ORDER BY `id` DESC LIMIT " . $limit);
         if ($arr = $q->fetchAll()) {
             foreach ($arr AS $message) {
-                $ank = new user($message['id_user']);
+                $ank = User::find($message['id_user']);
                 $post = new listing_post();
                 $post->id = 'chat_post_' . $message['id'];
-                $post->title = $ank->nick();
+                $post->title = $ank->login;
                 $post->post = text::toOutput($message['message']);
                 $post->icon($ank->icon());
 

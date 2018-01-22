@@ -1,5 +1,6 @@
 <?php
 namespace App;
+use App\App\App;
 
 /**
  * Работа с виджетами
@@ -128,15 +129,15 @@ class widget
         }
 
         if ($this->_data ['cache_by_user']) {
-            $cache_id [] = 'ur-' . $user->id;
+            $cache_id [] = 'ur-' . App::user()->id;
         }
 
         if ($this->_data ['cache_by_timeshift']) {
-            $cache_id [] = 'ts-' . $user->time_shift;
+            $cache_id [] = 'ts-' . App::user()->time_shift;
         }
 
         if ($this->_data ['cache_by_group']) {
-            $cache_id [] = 'gp-' . intval($user->group);
+            $cache_id [] = 'gp-' . intval(App::user()->group);
         }
 
         if (SID) {

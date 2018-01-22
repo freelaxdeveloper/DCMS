@@ -2,6 +2,8 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,text,form,url};
+use App\App\App;
+
 $doc = new document(2);
 $doc->title = __('Форум');
 
@@ -16,7 +18,7 @@ FROM `forum_themes`
 LEFT JOIN `forum_categories` ON `forum_categories`.`id` = `forum_themes`.`id_category`
 LEFT JOIN `forum_topics` ON `forum_topics`.`id` = `forum_themes`.`id_topic`
 WHERE `forum_themes`.`id` = ? AND `forum_themes`.`group_show` <= ? AND `forum_topics`.`group_show` <= ? AND `forum_categories`.`group_show` <= ?");
-$q->execute(Array($id_theme, $user->group, $user->group, $user->group));
+$q->execute(Array($id_theme, App::user()->group, App::user()->group, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна'));

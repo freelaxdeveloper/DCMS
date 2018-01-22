@@ -3,7 +3,7 @@ namespace App;
 
 include_once H . '/sys/plugins/id3/getid3/getid3.php';
 
-use App\getID3;
+use getID\getID3;
 
 /**
  * Получение свойств из медиа файлов с использованием библиотеки getid3

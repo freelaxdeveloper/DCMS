@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,groups,text,form,url};
+use App\App\App;
 
 $groups = groups::load_ini(); // загружаем массив групп
 $doc = new document ();
@@ -15,7 +16,7 @@ if (!isset($_GET ['id']) || !is_numeric($_GET ['id'])) {
 $id_topic = (int) $_GET ['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_topics` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_topic, $user->group));
+$q->execute(Array($id_topic, App::user()->group));
 if (!$topic = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Раздел не доступен для редактирования'));
@@ -57,7 +58,7 @@ if (isset($_POST ['save'])) {
     if (isset($_POST ['category'])) {
         $category = (int) $_POST ['category'];
         $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `id` = ? AND `group_show` <= ? AND `group_write` <= ?");
-        $q->execute(Array($category, $user->group, $user->group));
+        $q->execute(Array($category, App::user()->group, App::user()->group));
         if ($category != $topic ['id_category'] AND $category = $q->fetch()) {
             $topic ['id_category'] = $category ['id'];
             $dcms->log('Форум', 'Перемещение раздела [url=/forum/topic.php?id=' . $topic ['id'] . ']' . $topic ['name'] . '[/url] в категорию [url=/forum/category.php?id=' . $category ['id'] . ']' . $category ['name'] . '[/url]');
@@ -135,7 +136,7 @@ $form->textarea('description', __('Описание'), $topic['description']);
 
 $options = array();
 $q = $db->prepare("SELECT `id`,`name` FROM `forum_categories` WHERE `group_show` <= ? ORDER BY `position` ASC");
-$q->execute(Array($user->group));
+$q->execute(Array(App::user()->group));
 while ($category = $q->fetch())
     $options [] = array($category ['id'], $category ['name'], $category ['id'] == $topic ['id_category']);
 $form->select('category', __('Категория'), $options);

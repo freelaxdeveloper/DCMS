@@ -38,6 +38,6 @@ if ($theme['id_vote']) {
             }
         }
 
-        $votes->display($user->group >= $vote['group_vote'] && $vote_accept);
+        $votes->display(App::user()->group >= $vote['group_vote'] && $vote_accept);
     }
 }

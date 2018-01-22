@@ -1,12 +1,14 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,is_valid,crypt,user,form,url,design,mail};
+use App\{document,is_valid,crypt,form,url,design,mail};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Восстановление пароля');
 
-if ($user->group) {
+if (App::user()->group) {
     $doc->err(__('Вы уже авторизованы'));
     exit;
 }
@@ -17,7 +19,7 @@ if (!empty($_GET['id']) && !empty($_GET['code'])) {
     $id = (int) $_GET['id'];
     $code = preg_replace('#[^a-z0-9]#i', '', $_GET['code']);
 
-    $ank = new user($id);
+    $ank = User::find($id);
 
     if (!$ank->group) {
         $doc->err(__('Пользователь с ID#%s не зарегистрирован', $id));
@@ -64,7 +66,7 @@ if (isset($_POST['post'])) {
         if (!$row = $q->fetch()) {
             $doc->err(__('Учетная запись, зарегистрированная на данный Email не обнаружена'));
         } else {
-            $ank = new user($row['id']);
+            $ank = User::find($row['id']);
             $ank->recovery_password = $recovery_password = md5(passgen(100));
 
             $t = new design();

@@ -1,7 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,captcha,design,text,mail,form,url};
+use App\{document,captcha,design,text,mail,form,url};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(4);
 $doc->title = __('Рассылка новости');
@@ -15,9 +17,9 @@ if (!$news = $q->fetch())
     $doc->access_denied(__('Новость не найдена или уже удалена'));
 
 
-$ank = new user($news['id_user']);
+$ank = User::find($news['id_user']);
 
-if ($ank->group > $user->group)
+if ($ank->group > App::user()->group)
     $doc->access_denied(__('У Вас нет прав для рассылки данной новости'));
 if ($news['sended'])
     $doc->access_denied(__('Новость уже была разослана'));

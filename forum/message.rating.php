@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document};
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Редактирование сообщения');
@@ -21,13 +22,13 @@ if (!$message = $q->fetch()) {
     exit;
 }
 
-if ($message['id_user'] == $user->id) {
+if ($message['id_user'] == App::user()->id) {
     $doc->err(__('Нельзя голосовать за свое сообщение'));
     exit;
 }
 
 $q = $db->prepare("SELECT * FROM `forum_rating` WHERE `id_message` = ? AND `id_user` = ?");
-$q->execute(Array($id_message, $user->id));
+$q->execute(Array($id_message, App::user()->id));
 
 if ($q->fetch()) {
     $doc->err(__('Вы уже голосовали за это сообщение'));
@@ -39,14 +40,14 @@ switch (@$_GET['change']) {
         $rating = 1;
         break;
     case 'down':
-        if ($user->balls - $dcms->forum_rating_down_balls < 0) {
+        if (App::user()->balls - $dcms->forum_rating_down_balls < 0) {
             $doc->err(__('Недостаточно баллов для понижения рейтинга'));
             exit;
         }
-        $user->balls -= $dcms->forum_rating_down_balls;
+        App::user()->balls -= $dcms->forum_rating_down_balls;
         $rating = -1;
         if ($dcms->forum_rating_down_balls) {
-            $user->mess(__("На понижение рейтинга сообщения пользователя %s потрачено баллов: %s", '[user]' . $message['id_user'] . '[/user]', $dcms->forum_rating_down_balls));
+            App::user()->mess(__("На понижение рейтинга сообщения пользователя %s потрачено баллов: %s", '[user]' . $message['id_user'] . '[/user]', $dcms->forum_rating_down_balls));
         }
         break;
     default:
@@ -54,7 +55,7 @@ switch (@$_GET['change']) {
 }
 
 $res = $db->prepare("INSERT INTO `forum_rating` (`id_message`, `id_user`, `time`, `rating`) VALUES (:id_msg, :id_user, :t, :rating)");
-$res->execute(array(':id_msg' => $id_message, ':id_user' => $user->id, ':t' => TIME, ':rating' => $rating));
+$res->execute(array(':id_msg' => $id_message, ':id_user' => App::user()->id, ':t' => TIME, ':rating' => $rating));
 
 $res = $db->prepare("UPDATE `forum_messages` AS `fm`
 SET `fm`.`rating` = (SELECT SUM(`rating`) FROM `forum_rating` AS `fr` WHERE `fr`.`id_message` = :id_msg),

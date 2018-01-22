@@ -1,10 +1,11 @@
 <?php
 use App\{listing,DB,cache_counters,misc};
+use App\App\App;
 
 defined('DCMS') or die;
 global $user;
 $db = DB::me();
-if (false === ($new_posts = cache_counters::get('forum.new_posts.' . $user->group))) {
+if (false === ($new_posts = cache_counters::get('forum.new_posts.' . App::user()->group))) {
     $res = $db->prepare("SELECT COUNT(*)
 FROM `forum_themes` AS `th`
 INNER JOIN `forum_topics` AS `tp` ON `tp`.`id` = `th`.`id_topic` AND `tp`.`theme_view` = :v
@@ -13,13 +14,13 @@ WHERE `th`.`group_show` <= :g
 AND `tp`.`group_show` <= :g
 AND `cat`.`group_show` <= :g
 AND `th`.`time_last` > :t");
-    $res->execute(Array(':v' => 1, ':g' => $user->group, ':t' => NEW_TIME));
+    $res->execute(Array(':v' => 1, ':g' => App::user()->group, ':t' => NEW_TIME));
     $new_posts = $res->fetchColumn();
-    cache_counters::set('forum.new_posts.' . $user->group, $new_posts, 60);
+    cache_counters::set('forum.new_posts.' . App::user()->group, $new_posts, 60);
 }
 
 
-if (false === ($new_themes = cache_counters::get('forum.new_themes.' . $user->group))) {
+if (false === ($new_themes = cache_counters::get('forum.new_themes.' . App::user()->group))) {
     $res = $db->prepare("SELECT COUNT(*)
 FROM `forum_themes` AS `th`
 INNER JOIN `forum_topics` AS `tp` ON `tp`.`id` = `th`.`id_topic` AND `tp`.`theme_view` = :v
@@ -28,9 +29,9 @@ WHERE `th`.`group_show` <= :g
 AND `tp`.`group_show` <= :g
 AND `cat`.`group_show` <= :g
 AND `th`.`time_create` > :t");
-    $res->execute(Array(':v' => 1, ':g' => $user->group, ':t' => NEW_TIME));
+    $res->execute(Array(':v' => 1, ':g' => App::user()->group, ':t' => NEW_TIME));
     $new_themes = $res->fetchColumn();
-    cache_counters::set('forum.new_themes.' . $user->group, $new_themes, 60);
+    cache_counters::set('forum.new_themes.' . App::user()->group, $new_themes, 60);
 }
 
 $res = $db->query("SELECT COUNT(*) FROM `users_online` WHERE `request` LIKE '/forum/%'");

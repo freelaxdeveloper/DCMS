@@ -17,11 +17,13 @@
         "jenssegers/blade": "^1.1",
         "illuminate/pagination": "^5.5",
         "slim/slim": "3.*",
-        "robmorgan/phinx": "0.5.*"
+        "robmorgan/phinx": "0.5.*",
+        "mgp25/instagram-php": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "App\\": "sys/plugins/classes/"
+            "App\\": "sys/plugins/classes/",
+            "getID\\": "sys/plugins/id3/getid3/"
         }
     }
 }

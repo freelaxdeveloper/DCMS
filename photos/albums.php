@@ -1,12 +1,14 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,user,files,text,form,url,listing};
+use App\{document,files,text,form,url,listing};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Фотоальбомы');
 
 if (!empty($_GET ['id'])) {
-    $ank = new user((int) $_GET ['id']);
+    $ank = User::find((int) $_GET ['id']);
 } else {
     $ank = $user;
 }
@@ -15,7 +17,7 @@ if (!$ank->group) {
     $doc->access_denied(__('Ошибка пользователя'));
 }
 
-if ($ank->id == $user->id) {
+if ($ank->id == App::user()->id) {
     $doc->title = __('Мои фотоальбомы');
 } else {
     $doc->title = __('Фотоальбомы %s', $ank->login);
@@ -44,7 +46,7 @@ if (!@is_dir($albums_path)) {
 $albums_dir = new files($albums_path);
 
 // создание альбома
-if ($ank->id == $user->id && !empty($_GET ['act']) && $_GET ['act'] == 'create') {
+if ($ank->id == App::user()->id && !empty($_GET ['act']) && $_GET ['act'] == 'create') {
     $doc->title .= ' - ' . __('Создать альбом');
 
     if (!empty($_POST ['name'])) {
@@ -84,6 +86,6 @@ $listing->display(__('Фотоальбомы отсутствуют'));
 
 
 
-if ($user->id == $ank->id) {
+if (App::user()->id == $ank->id) {
     $doc->act(__('Создать альбом'), '?id=' . $ank->id . '&amp;act=create');
 }

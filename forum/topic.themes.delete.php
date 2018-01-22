@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,files,misc,listing,pages,user,form};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Удаление тем');
@@ -14,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_topic = (int)$_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_topics` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_topic, $user->group));
+$q->execute(Array($id_topic, App::user()->group));
 if (!$topic = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Раздел не доступен для редактирования'));
@@ -51,7 +52,7 @@ WHERE `forum_messages`.`id_theme` = ?");
             if (function_exists('set_time_limit'))
                 set_time_limit(30);
 
-            $q->execute(Array($n[1], $user->group));
+            $q->execute(Array($n[1], App::user()->group));
             if (!$theme = $q->fetch()) {
                 continue;
             }
@@ -80,14 +81,14 @@ $doc->tab(__('Постранично'), "?id=$topic[id]&amp;show=part", $show ==
 $listing = new listing();
 if ($show == 'part') {
     $res = $db->prepare("SELECT COUNT(*) FROM `forum_themes` WHERE `id_topic` = ? AND `group_show` <= ?");
-    $res->execute(Array($topic['id'], $user->group));
+    $res->execute(Array($topic['id'], App::user()->group));
     $pages = new pages;
     $pages->posts = $res->fetchColumn();
     $q = $db->prepare("SELECT * FROM `forum_themes`  WHERE `id_topic` = ? AND `group_show` <= ? ORDER BY `time_last` DESC LIMIT " . $pages->limit);
-    $q->execute(Array($topic['id'], $user->group));
+    $q->execute(Array($topic['id'], App::user()->group));
 } else {
     $q = $db->prepare("SELECT * FROM `forum_themes`  WHERE `id_topic` = ? AND `group_show` <= ? ORDER BY `time_last` DESC");
-    $q->execute(Array($topic['id'], $user->group));
+    $q->execute(Array($topic['id'], App::user()->group));
 }
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $theme) {

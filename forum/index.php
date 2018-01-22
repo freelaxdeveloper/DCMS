@@ -3,6 +3,7 @@
 include_once '../sys/inc/start.php';
 use App\{document,cache_counters,listing,pages,text};
 use App\Models\{ForumCategory,ForumTheme,ForumMessage};
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Форум - Категории');
@@ -14,9 +15,9 @@ $post->url = 'search.php';
 $post->title = __('Поиск');
 $post->icon('forum.search');
 
-if (false === ($new_themes = cache_counters::get('forum.new_themes.' . $user->group))) {
+if (false === ($new_themes = cache_counters::get('forum.new_themes.' . App::user()->group))) {
     $new_themes = ForumTheme::group()->where('time_create', '>', NEW_TIME)->count();
-    cache_counters::set('forum.new_themes.' . $user->group, $new_themes, 20);
+    cache_counters::set('forum.new_themes.' . App::user()->group, $new_themes, 20);
 }
 $post = $listing->post();
 $post->url = 'last.themes.php';
@@ -26,9 +27,9 @@ if ($new_themes) {
 }
 $post->icon('forum.lt');
 
-if (false === ($new_posts = cache_counters::get('forum.new_posts.' . $user->group))) {
+if (false === ($new_posts = cache_counters::get('forum.new_posts.' . App::user()->group))) {
     $new_posts = ForumMessage::group()->where('time', '>', NEW_TIME)->count();
-    cache_counters::set('forum.new_posts.' . $user->group, $new_posts, 20);
+    cache_counters::set('forum.new_posts.' . App::user()->group, $new_posts, 20);
 }
 
 $post = $listing->post();
@@ -40,14 +41,14 @@ if ($new_posts) {
 $post->icon('forum.lp');
 
 
-if ($user->id) {
-    if (false === ($my_themes = cache_counters::get('forum.my_themes.' . $user->id))) {
+if (App::user()->id) {
+    if (false === ($my_themes = cache_counters::get('forum.my_themes.' . App::user()->id))) {
         # количество тем у которых есть новые сообщения не от автора
          $my_themes = ForumMessage::group()->where([
             ['time', '>', NEW_TIME],
-            ['id_user', '<>', $user->id],
+            ['id_user', '<>', App::user()->id],
         ])->count();
-        cache_counters::set('forum.my_themes.' . $user->id, $my_themes, 20);
+        cache_counters::set('forum.my_themes.' . App::user()->id, $my_themes, 20);
     }
 
 
@@ -65,12 +66,12 @@ $pages->posts = ForumCategory::group()->count();
 
 $listing->display(__('Доступных Вам категорий нет'));
 
-$categories = ForumCategory::group()->get()->forPage($pages->this_page, $user->items_per_page);
+$categories = ForumCategory::group()->get()->forPage($pages->this_page, App::user()->items_per_page);
 view('forum.category', compact('categories'));
 
 $pages->display('?'); // вывод страниц
 
-if ($user->group >= 5) {
+if (App::user()->group >= 5) {
     $doc->act(__('Создать категорию'), 'category.new.php');
     $doc->act(__('Порядок категорий'), 'categories.sort.php');
     $doc->act(__('Статистика'), 'stat.php');

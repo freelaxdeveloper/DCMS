@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,DB,line_chart,line_chart_series,text};
+use App\App\App;
 
 $doc = new document(5);
 $doc->title = __('Форум');
@@ -13,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_cat = (int)$_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `id` = ? AND `group_show` <= ?");
-$q->execute(Array($id_cat, $user->group));
+$q->execute(Array($id_cat, App::user()->group));
 if (!$topic_this = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Категория не доступна'));

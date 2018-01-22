@@ -1,8 +1,9 @@
 <?php
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
-use App\{document,cache,cache_aut_failture,captcha,misc,user,crypt,text,form,url};
-use App\App\Authorize;
+use App\{document,cache,cache_aut_failture,captcha,misc,crypt,text,form,url};
+use App\App\{Authorize,App};
+use App\Models\User;
 
 $doc = new document();
 $doc->title = __('Авторизация');
@@ -22,19 +23,15 @@ if (isset($_GET['redirected_from']) && in_array($_GET['redirected_from'], array(
         $return = '/';
     }
 }
-
-
-if ($user->group) {
-    /* if (isset($_GET['auth_key']) && cache::get($_GET['auth_key']) === 'request') {
-        cache::set($_GET['auth_key'], array('session' => $_SESSION, 'cookie' => $_COOKIE), 60);
-    } */
-
+if (App::user()->group) {
     $doc->clean();
     header('Location: ' . $return, true, 302);
     exit;
 }
 
 $need_of_captcha = cache_aut_failture::get($dcms->ip_long);
+
+$user = false;
 
 if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_session']) || !captcha::check($_POST['captcha'], $_POST['captcha_session']))) {
     $doc->err(__('Проверочное число введено неверно'));
@@ -45,24 +42,20 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
         $login = (string) $_POST['login'];
         $password = (string) $_POST['password'];
 
-        $q = $db->prepare("SELECT `id`, `password` FROM `users` WHERE `login` = ? LIMIT 1");
-        $q->execute(Array($login));
-        if(!$row = $q->fetch()) {
+        if(!$user = User::where('login', $login)->first()) {
             $doc->err(__('Логин "%s" не зарегистрирован', $login));
-        } elseif (crypt::hash($password, $dcms->salt) !== $row['password']) {
+        } elseif (crypt::hash($password, $dcms->salt) !== $user['password']) {
             $need_of_captcha = true;
             cache_aut_failture::set($dcms->ip_long, true, 600); // при ошибке заставляем пользователя проходить капчу
-            misc::logaut($row['id'], 'post', 0, 0); // пишем в журнал неудачную попытку войти
+            misc::logaut($user['id'], 'post', 0, 0); // пишем в журнал неудачную попытку войти
             $doc->err(__('Вы ошиблись при вводе пароля'));
         } else {
-            $user_t = new user((int)$row['id']);
-            if(!$user_t->group) {
+            if(!$user->group) {
                 $doc->err(__('Ошибка при получении профиля пользователя'));
-            } elseif ($user_t->a_code) {
+            } elseif ($user->a_code) {
                 $doc->err(__('Аккаунт не активирован'));
-                misc::logaut($user_t->id, 'post', 0, 0);
+                misc::logaut($user->id, 'post', 0, 0);
             } else {
-                $user = $user_t;
                 cache_aut_failture::set($dcms->ip_long, false, 1);
                 misc::logaut($user->id, 'post', 1); // в журнал 
 
@@ -71,31 +64,17 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
                     $user->recovery_password = '';
                 }
                 Authorize::authorized($user->id, crypt::encrypt($user->password, $dcms->salt_user));
-                $_SESSION[SESSION_ID_USER] = $user->id;
+                $user->save();
+                /* $_SESSION[SESSION_ID_USER] = App::user()->id;
                 if (isset($_POST['save_to_cookie']) && $_POST['save_to_cookie']) {
-                    setcookie(COOKIE_ID_USER, $user->id, TIME + 60 * 60 * 24 * 365);
+                    setcookie(COOKIE_ID_USER, App::user()->id, TIME + 60 * 60 * 24 * 365);
                     setcookie(COOKIE_USER_PASSWORD, crypt::encrypt($password, $dcms->salt_user), TIME + 60 * 60 * 24 * 365);
-                }
+                } */
             }
         }
     }
-} elseif (!empty($_COOKIE[COOKIE_ID_USER]) && !empty($_COOKIE[COOKIE_USER_PASSWORD])) {
-    $tmp_user = new user($_COOKIE[COOKIE_ID_USER]);
-
-    if (crypt::hash(crypt::decrypt($_COOKIE[COOKIE_USER_PASSWORD], $dcms->salt_user), $dcms->salt) === $tmp_user->password) {
-         misc::logaut($tmp_user->id, 'cookie', 1); // пишем в журнал успешную авторизацию 
-        $user = $tmp_user;
-        $_SESSION[SESSION_ID_USER] = $user->id;
-    } else {
-        $need_of_captcha = true;
-        cache_aut_failture::set($dcms->ip_long, true, 600); // при ошибке заставляем пользователя проходить капчу
-        misc::logaut($tmp_user->id, 'cookie', 0); // пишем в журнал попытку входа по куках
-        setcookie(COOKIE_ID_USER);
-        setcookie(COOKIE_USER_PASSWORD);
-    }
 }
-
-if ($user->group) {
+if ($user && $user->group) {
     // авторизовались успешно
     // удаляем информацию как о госте
     $res = $db->prepare("DELETE FROM `guest_online` WHERE `ip_long` = ? AND `browser` = ?;");
@@ -117,7 +96,7 @@ if (isset($_GET['return'])) {
 $form = new form(new url(null, array('return' => $return)));
 $form->input('login', __('Логин'));
 $form->password('password', __('Пароль') . ' [' . '[url=/pass.php]' . __('забыли') . '[/url]]');
-$form->checkbox('save_to_cookie', __('Запомнить меня'));
+//$form->checkbox('save_to_cookie', __('Запомнить меня'));
 if ($need_of_captcha) $form->captcha();
 $form->button(__('Авторизация'));
 $form->display();

@@ -1,15 +1,17 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,pages,listing,user,text,misc};
+use App\{document,pages,listing,text,misc};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Мои темы');
 
-$ank = (empty($_GET['id'])) ? $user : new user((int) $_GET['id']);
+$ank = (empty($_GET['id'])) ? App::user() : User::find((int) $_GET['id']);
 if (!$ank->group)
     $doc->access_denied(__('Нет данных'));
-$doc->title = ($ank->id == $user->id) ? __('Мои темы') : __('Темы пользователя "%s"', $ank->login);
+$doc->title = ($ank->id == App::user()->id) ? __('Мои темы') : __('Темы пользователя "%s"', $ank->login);
 $pages = new pages;
 $res = $db->prepare("SELECT COUNT(DISTINCT(`msg`.`id_theme`))
 FROM `forum_messages` AS `msg`
@@ -22,7 +24,7 @@ AND `tp`.`group_show` <= :ugr
 AND `cat`.`group_show` <= :ugr
 AND `msg`.`group_show` <= :ugr");
 $res->execute(Array(':aid' => $ank->id,
-                    ':ugr' => $user->group));
+                    ':ugr' => App::user()->group));
 $pages = new pages;
 $pages->posts = $res->fetchColumn();
 
@@ -44,7 +46,7 @@ AND `msg`.`group_show` <= :ugr
 GROUP BY `msg`.`id_theme`
 ORDER BY MAX(`msg`.`time`) DESC LIMIT ".$pages->limit);
 $q->execute(Array(':aid' => $ank->id,
-                  ':ugr' => $user->group));
+                  ':ugr' => App::user()->group));
 
 $listing = new listing();
 if ($arr = $q->fetchAll()) {
@@ -63,7 +65,7 @@ if ($arr = $q->fetchAll()) {
     }
 }
 
-$listing->display(($ank->id == $user->id) ? __('Созданных Вами тем не найдено') : __('%s еще не создавал' . ($ank->sex ? '' : 'а') . ' тем на форуме', $ank->login));
+$listing->display(($ank->id == App::user()->id) ? __('Созданных Вами тем не найдено') : __('%s еще не создавал' . ($ank->sex ? '' : 'а') . ' тем на форуме', $ank->login));
 
 $pages->display("?id=$ank->id&amp;"); // вывод страниц
 $doc->ret(__('Форум'), './');

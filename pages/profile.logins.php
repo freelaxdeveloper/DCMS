@@ -7,6 +7,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,misc,pages,listing};
+use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Логины');
@@ -16,7 +17,7 @@ $ank = (empty($_GET ['id'])) ? $user : new user((int)$_GET ['id']);
 if (!$ank->group)
     $doc->access_denied(__('Нет данных'));
 
-$doc->title = ($user->id && $ank->id == $user->id)? __('Мои логины') : __('Логины "%s"', $ank->nick);
+$doc->title = (App::user()->id && $ank->id == App::user()->id)? __('Мои логины') : __('Логины "%s"', $ank->nick);
 
 $doc->description = __('Логины "%s"', $ank->nick);
 $doc->keywords [] = $ank->login;
@@ -37,6 +38,6 @@ $listing->display(__('Изменений логинов не обнаружен�
 $pages->display('?') ;
 
 $doc->ret(__('Анкета'), '/profile.view.php?id=' . $ank->id);
-if ($user->group)
+if (App::user()->group)
     $doc->ret(__('Личное меню'), '/menu.user.php');
 

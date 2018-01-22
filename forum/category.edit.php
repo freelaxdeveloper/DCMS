@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,groups,text,url,form};
+use App\App\App;
 
 $groups = groups::load_ini(); // загружаем массив групп
 $doc = new document();
@@ -15,7 +16,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_category = (int) $_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_categories` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_category, $user->group));
+$q->execute(Array($id_category, App::user()->group));
 if (!$category = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Категория не доступна для редактирования'));

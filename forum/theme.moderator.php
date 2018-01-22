@@ -1,7 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,text,user,pages,listing};
+use App\{document,text,pages,listing};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document(5);
 $doc->title = __('Назначить модератора темы');
@@ -14,7 +16,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_theme = (int)$_GET['id'];
 
 $q = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? AND `group_edit` <= ?");
-$q->execute(Array($id_theme, $user->group));
+$q->execute(Array($id_theme, App::user()->group));
 if (!$theme = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Тема не доступна для редактирования'));
@@ -43,7 +45,7 @@ $doc->ret(__('Форум'), './');
 
 if(isset($_GET['id_user'])){
     $id_user = (int) $_GET['id_user'] ;
-    $ank = new user($id_user) ;
+    $ank = User::find($id_user) ;
     
     if(!$ank->group){
         $doc->err(__('Нет данных')) ;
@@ -70,10 +72,10 @@ $listing = new listing() ;
 $q = $db->query("SELECT `users`.`id` FROM `users` INNER JOIN `forum_messages` ON `forum_messages`.`id_theme` = '" . $theme['id'] . "' AND `forum_messages`.`id_user` = `users`.`id` WHERE `users`.`group` = '1' GROUP BY `users`.`id` LIMIT " . $pages->limit) ;
 $res = $q->fetchAll() ;
 foreach($res AS $users){
-    $ank = new user($users['id']) ;
+    $ank = User::find($users['id']) ;
     
     $post = $listing->post() ;
-    $post->title = $ank->nick() ;
+    $post->title = $ank->login ;
     $post->icon($ank->icon()) ;
     if($ank->id == $theme['id_moderator']){
         $post->bottom = __('Модератор') ;

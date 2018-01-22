@@ -1,7 +1,9 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,files,listing,pages,user,text,misc};
+use App\{document,files,listing,pages,text,misc};
+use App\Models\User;
+use App\App\App;
 
 $doc = new document();
 $doc->title = __('Новые файлы');
@@ -17,7 +19,7 @@ if (strpos($abs_path, FILES) !== 0 || !file_exists($abs_path)) {
 
 $dir = new files($abs_path);
 
-if ($dir->group_show > $user->group) {
+if ($dir->group_show > App::user()->group) {
     $doc->access_denied(__('У Вас нет прав для просмотра новых файлов в данной папке'));
 }
 
@@ -34,7 +36,7 @@ $pages->posts = count($files);
 $start = $pages->my_start();
 $end = $pages->end();
 for ($i = $start; $i < $end && $i < $pages->posts; $i++) {
-    $ank = new user($files[$i]->id_user);
+    $ank = User::find($files[$i]->id_user);
 
     $post = $listing->post();
     $post->title = text::toValue($files[$i]->runame);

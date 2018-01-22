@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,stemmer,text,listing,pages,form};
+use App\App\App;
 
 $doc = new document();
 
@@ -15,7 +16,7 @@ $search_query = & $_SESSION['search']['query'];
 $search_query_sql = & $_SESSION['search']['query_sql'];
 $doc->title = __('Поиск');
 
-if ($dcms->forum_search_reg && !$user->group) {
+if ($dcms->forum_search_reg && !App::user()->group) {
     $doc->err(__('Поиск по форуму доступен только зарегистрированым пользователям'));
     $doc->ret(__('К категориям'), './');
     exit;
@@ -54,7 +55,7 @@ LEFT JOIN `forum_messages` ON `forum_themes`.`id` = `forum_messages`.`id_theme`
 WHERE `forum_themes`.`group_show` <= ? AND  (`forum_messages`.`group_show` IS NULL OR `forum_messages`.`group_show` <= ?)
 AND MATCH (`forum_themes`.`name`,`forum_messages`.`message`) AGAINST (" . $db->quote(implode(' ', $search_query_sql)) . " IN BOOLEAN MODE)
 GROUP BY `forum_themes`.`id`");
-        $q->execute(Array($user->group, $user->group));
+        $q->execute(Array(App::user()->group, App::user()->group));
         $searched = $q->fetchAll();
     }
 }

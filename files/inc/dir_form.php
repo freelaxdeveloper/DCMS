@@ -1,6 +1,8 @@
 <?php
 defined('DCMS') or die();
 use App\{misc,form};
+use App\App\App;
+
 // файл отвечает за отображение возможных действий
 if ($access_write) {
     // выгрузка и импорт файлов
@@ -68,7 +70,7 @@ if ($access_edit) {
             $dirs = $root_dir->getPathesRecurse($dir);
             foreach ($dirs as $dir2) {
 
-                if ($dir2->group_show > $user->group || $dir2->group_write > $user->group) {
+                if ($dir2->group_show > App::user()->group || $dir2->group_write > App::user()->group) {
                     // если нет прав на чтение папки или на запись в папку, то пропускаем
                     continue;
                 }
@@ -85,7 +87,7 @@ if ($access_edit) {
             $dirs = $root_dir->getPathesRecurse($dir);
             foreach ($dirs as $dir2) {
 
-                if ($dir2->group_show > $user->group || $dir2->group_write > $user->group) {
+                if ($dir2->group_show > App::user()->group || $dir2->group_write > App::user()->group) {
                     // если нет прав на чтение папки или на запись в папку, то пропускаем
                     continue;
                 }

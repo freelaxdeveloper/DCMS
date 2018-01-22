@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,user,text,listing,misc,form,url,sprite};
+use App\App\App;
 
 $doc = new document();
 $doc->title = 'Просмотр сообщения';
@@ -13,7 +14,7 @@ if (!isset($_GET['id_message']) || !is_numeric($_GET['id_message'])) {
 $id_message = (int) $_GET['id_message'];
 
 $q = $db->prepare("SELECT * FROM `forum_messages` WHERE `id` = ? AND `group_show` <= ?");
-$q->execute(Array($id_message, $user->group));
+$q->execute(Array($id_message, App::user()->group));
 if (!$message = $q->fetch()) {
     header('Refresh: 1; url=./');
     $doc->err(__('Сообщение не доступно'));
@@ -31,7 +32,7 @@ if (!$theme = $q->fetch()) {
 }
 
 
-if ($theme['group_show'] > $user->group) {
+if ($theme['group_show'] > App::user()->group) {
     $doc->err(__('Параметры темы не позволяют просматривать данное сообщение'));
     $doc->ret(__('В раздел'), 'topic.php?id=' . $message['id_topic']);
     exit;
@@ -41,7 +42,7 @@ $doc->title = $theme['name'];
 
 
 $can_write = true;
-if (!$user->is_writeable) {
+if (!App::user()->is_writeable) {
     $doc->msg(__('Писать запрещено'), 'write_denied');
     $can_write = false;
 }
@@ -59,12 +60,12 @@ if (isset($_GET['quote'])) {
     $re = '@' . $autor->login . ', ';
 }
 
-if ($can_write && isset($_POST['message']) && $theme['group_write'] <= $user->group) {
+if ($can_write && isset($_POST['message']) && $theme['group_write'] <= App::user()->group) {
     $message = (string) $_POST['message'];
     $users_in_message = text::nickSearch($message);
     $message_re = text::input_text($message);
 
-    if ($dcms->forum_message_captcha && $user->group < 2 && (empty($_POST['captcha']) || empty($_POST['captcha_session'])
+    if ($dcms->forum_message_captcha && App::user()->group < 2 && (empty($_POST['captcha']) || empty($_POST['captcha_session'])
         || !captcha::check($_POST['captcha'], $_POST['captcha_session']))) {
         $doc->err(__('Проверочное число введено неверно'));
     } elseif ($dcms->censure && $mat = is_valid::mat($message_re)) {
@@ -74,7 +75,7 @@ if ($can_write && isset($_POST['message']) && $theme['group_write'] <= $user->gr
 
         $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`)
  VALUES (?,?,?,?,?,?,?,?)");
-        $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], $user->id, TIME, $message_re, $theme['group_show'],
+        $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], App::user()->id, TIME, $message_re, $theme['group_show'],
             $theme['group_edit']));
         $id_message = $db->lastInsertId();
 
@@ -82,14 +83,14 @@ if ($can_write && isset($_POST['message']) && $theme['group_write'] <= $user->gr
 
 
         $res = $db->prepare("UPDATE `forum_themes` SET `time_last` = ?, `id_last` = ? WHERE `id` = ? LIMIT 1");
-        $res->execute(Array(TIME, $user->id, $theme['id']));
+        $res->execute(Array(TIME, App::user()->id, $theme['id']));
         $doc->msg(__('Ответ успешно отправлен'));
 
 
         if ($users_in_message) {
             for ($i = 0; $i < count($users_in_message) && $i < 20; $i++) {
                 $user_id_in_message = $users_in_message[$i];
-                if ($user_id_in_message == $user->id || ($user_id_in_message == $autor->id && $autor->notification_forum)) {
+                if ($user_id_in_message == App::user()->id || ($user_id_in_message == $autor->id && $autor->notification_forum)) {
                     // самому себе уведомление не нужно, а автору сообщения отправим отдельно
                     continue;
                 }
@@ -98,16 +99,16 @@ if ($can_write && isset($_POST['message']) && $theme['group_write'] <= $user->gr
                     $res = $db->prepare("SELECT COUNT(*) FROM `forum_messages` WHERE `id_theme` = ? AND `group_show` <= ?");
                     $res->execute(Array($theme['id'], $ank_in_message->group));
                     $count_posts_for_user = $res->fetchColumn();
-                    $ank_in_message->mess("[user]{$user->id}[/user] упомянул" . ($user->sex ? '' : 'а') . " о Вас на форуме в [url=/forum/message.php?id_message={$id_message}]сообщении[/url] в теме [url=/forum/theme.php?id={$theme['id']}&postnum={$count_posts_for_user}#message{$id_message}]{$theme['name']}[/url]");
+                    $ank_in_message->mess("[user]{App::user()->id}[/user] упомянул" . (App::user()->sex ? '' : 'а') . " о Вас на форуме в [url=/forum/message.php?id_message={$id_message}]сообщении[/url] в теме [url=/forum/theme.php?id={$theme['id']}&postnum={$count_posts_for_user}#message{$id_message}]{$theme['name']}[/url]");
                 }
             }
         }
 
-        if ($autor->notification_forum && $user->id != $autor->id) {
+        if ($autor->notification_forum && App::user()->id != $autor->id) {
             $res = $db->prepare("SELECT COUNT(*) FROM `forum_messages` WHERE `id_theme` = ? AND `group_show` <= ?");
             $res->execute(Array($theme['id'], $autor->group));
             $count_posts_for_user = $res->fetchColumn();
-            $autor->mess("[user]{$user->id}[/user] ответил" . ($user->sex ? '' : 'а') . " Вам на форуме в [url=/forum/message.php?id_message={$id_message}]сообщении[/url] в теме [url=/forum/theme.php?id={$theme['id']}&postnum={$count_posts_for_user}#message{$id_message}]{$theme['name']}[/url]");
+            $autor->mess("[user]{App::user()->id}[/user] ответил" . (App::user()->sex ? '' : 'а') . " Вам на форуме в [url=/forum/message.php?id_message={$id_message}]сообщении[/url] в теме [url=/forum/theme.php?id={$theme['id']}&postnum={$count_posts_for_user}#message{$id_message}]{$theme['name']}[/url]");
         }
 
         $doc->ret(__('В тему'), 'theme.php?id=' . $theme['id'] . '&amp;page=end#message' . $id_message);
@@ -117,7 +118,7 @@ if ($can_write && isset($_POST['message']) && $theme['group_write'] <= $user->gr
     }
 }
 
-if ($autor->id && $user->id) {
+if ($autor->id && App::user()->id) {
     $doc->title = __('Ответ для "%s"', $autor->login);
     //$can_write = false;
 } else {
@@ -134,17 +135,17 @@ $post->icon($autor->icon());
 $post->content = text::toOutput($message['message']);
 
 
-if ($user->group && $user->id != $autor->id) {
+if (App::user()->group && App::user()->id != $autor->id) {
     $img_thumb_down = '<a href="{url}" class="DCMS_thumb_down ' . implode(' ',
             sprite::getClassName('thumb_down', SPRITE_CLASS_PREFIX)) . '"></a>';
     $img_thumb_up = '<a href="{url}" href="" class="DCMS_thumb_up ' . implode(' ',
             sprite::getClassName('thumb_up', SPRITE_CLASS_PREFIX)) . '"></a>';
 
     $q = $db->prepare("SELECT `rating` FROM `forum_rating` WHERE `id_user` = :id_user AND `id_message` = :id_msg LIMIT 1");
-    $q->execute(array(':id_user' => $user->id, ':id_msg' => $message['id']));
+    $q->execute(array(':id_user' => App::user()->id, ':id_msg' => $message['id']));
     $my_rating = $q->fetchColumn();
     if (!$my_rating) $my_rating = 0;
-    if ($my_rating == 0 && $user->balls - $dcms->forum_rating_down_balls >= 0) {
+    if ($my_rating == 0 && App::user()->balls - $dcms->forum_rating_down_balls >= 0) {
         $post->bottom .= str_replace('{url}',
             'message.rating.php?id=' . $message['id'] . '&amp;change=down&amp;return=' . URL, $img_thumb_down);
     }
@@ -173,10 +174,10 @@ $listing->display();
 
 
 if (!isset($_GET['files'])) {
-    if ($can_write && $theme['group_write'] <= $user->group) {
+    if ($can_write && $theme['group_write'] <= App::user()->group) {
         $form = new form(new url());
         $form->textarea('message', __('Ответ'), $re);
-        if ($dcms->forum_message_captcha && $user->group < 2) $form->captcha();
+        if ($dcms->forum_message_captcha && App::user()->group < 2) $form->captcha();
         $form->button(__('Отправить'));
         $form->display();
     }

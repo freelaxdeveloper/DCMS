@@ -7,9 +7,11 @@
         </span>
         <a class="post_title" href="{{$url}}">{{$title}}</a>
         <span class="post_actions">
-            @foreach ($actions as $action)
-                <a href="{{$action['url']}}"><img src="{{App\App\App::icon($action['icon'])}}" alt="" /></a>
-            @endforeach
+            @if (!empty($actions))
+                @foreach ($actions as $action)
+                    <a href="{{$action['url']}}"><img src="{{App\App\App::icon($action['icon'])}}" alt="" /></a>
+                @endforeach
+            @endif
         </span>
         @if (!empty($counter))
             <span class="post_counter">{{$counter}}</span>

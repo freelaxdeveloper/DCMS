@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 use App\{document,languages,language_pack,listing,url};
+use App\App\App;
 
 $doc = new document(); // инициализация документа для браузера
 $doc->title = __('Настройки языка');
@@ -12,8 +13,8 @@ if (!empty($_GET['set_lang'])) {
     } else {
         $user_language_pack = new language_pack($_GET['set_lang']);
 
-        if ($user->group) {
-            $user->language = $user_language_pack->code;
+        if (App::user()->group) {
+            App::user()->language = $user_language_pack->code;
         } else {
             $_SESSION['language'] = $user_language_pack->code;
         }
