@@ -1,14 +1,15 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,text,pages,form,url,listing};
+use App\{document,text,pages,form,url,listing};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(); // инициализация документа для браузера
 $doc->title = __('Отзывы');
 
 if (isset($_GET['id']))
-    $ank = new user($_GET['id']);
+    $ank = User::find($_GET['id']);
 else
     $ank = $user;
 

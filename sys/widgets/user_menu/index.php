@@ -1,5 +1,5 @@
 <?php
-if (current_user::getInstance()->group){
+if (App::user()->group){
     $menu = new menu_ini('user');
     $menu->display();
 }

@@ -2,6 +2,7 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,design,mail,misc,form,url,pages,is_valid};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(1);
@@ -116,10 +117,10 @@ if ($arr = $q->fetchAll()) {
         $post = $listing->post();
         $post->icon('invite');
         if ($inv['id_invite']) {
-            $ank = new user($inv['id_invite']);
+            $ank = User::find($inv['id_invite']);
             $post->time = misc::when($inv['time_reg']);
             $post->content = __('Использован');
-            $post->title = $ank->nick();
+            $post->title = $ank->login;
             $post->url = '/profile.view.php?id=' . $ank->id;
         } elseif ($inv['email']) {
             $post->url = '?id=' . $inv['id'];

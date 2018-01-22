@@ -1,13 +1,14 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,user,menu_code,pages,text,listing,misc};
+use App\{dpanel,document,menu_code,pages,text,listing,misc};
+use App\Models\User;
 
 dpanel::check_access();
 $doc = new document(2);
 $doc->title = __('Жалобы');
 
 if (!empty($_GET['id_ank']) && !empty($_GET['code'])) {
-    $ank = new user($_GET['id_ank']);
+    $ank = User::find($_GET['id_ank']);
     $code = (string) $_GET['code'];
 
     $codes = new menu_code('code');
@@ -67,8 +68,8 @@ $q = $db->query("SELECT *, COUNT(*) as `count` FROM `complaints` WHERE `processe
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $c) {
         $post = $listing->post();
-        $ank = new user($c['id_ank']);
-        $post->title = $ank->nick();
+        $ank = User::find($c['id_ank']);
+        $post->title = $ank->login;
         $post->counter = $c['count'];
         $post->url = "?id_ank=$c[id_ank]&amp;code=" . urlencode($c['code']);
         $post->content[] = $c['code'];

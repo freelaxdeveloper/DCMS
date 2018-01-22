@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\current_user;
+use App\Models\User;
 
 /**
  * Работа с данными текущего пользователя
@@ -16,7 +16,7 @@ class api_user implements api_controller
      */
     public static function get($request_data)
     {
-        return current_user::getInstance()->getCustomData($request_data);
+        return App::user()->get()->toArray();
     }
 
 } 

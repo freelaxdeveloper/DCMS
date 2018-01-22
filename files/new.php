@@ -1,7 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,files,listing,pages,user,text,misc};
+use App\{document,files,listing,pages,text,misc};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document();
@@ -35,7 +36,7 @@ $pages->posts = count($files);
 $start = $pages->my_start();
 $end = $pages->end();
 for ($i = $start; $i < $end && $i < $pages->posts; $i++) {
-    $ank = new user($files[$i]->id_user);
+    $ank = User::find($files[$i]->id_user);
 
     $post = $listing->post();
     $post->title = text::toValue($files[$i]->runame);

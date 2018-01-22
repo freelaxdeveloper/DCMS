@@ -6,13 +6,14 @@
  */
 
 include_once '../sys/inc/start.php';
-use App\{document,user,text,form,url,listing,misc,files};
+use App\{document,text,form,url,listing,misc,files};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document ();
 $doc->title = __('Анкета');
 
-$ank = (empty($_GET ['id'])) ? $user : new user((int)$_GET ['id']);
+$ank = (empty($_GET ['id'])) ? App::user() : User::find((int)$_GET ['id']);
 
 if(!$ank->group)
     $doc->access_denied(__('Нет данных'));

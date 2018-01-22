@@ -1,6 +1,8 @@
 <?php
 defined('DCMS') or die;
-use App\{files,files_file,listing,user,misc,form,url,antiflood,pages,text,design};
+use App\{files,files_file,listing,misc,form,url,antiflood,pages,text,design};
+use App\Models\User;
+
 use App\App\App;
 
 $pathinfo = pathinfo($abs_path);
@@ -201,7 +203,7 @@ if (empty($_GET['act'])) {
     }
 
     if ($file->id_user) {
-        $ank = new user($file->id_user);
+        $ank = User::find($file->id_user);
 
         $post = $listing->post();
         $post->title = __('Файл загрузил' . ($ank->sex ? '' : 'а'));
@@ -297,7 +299,7 @@ if ($can_write && isset($_POST['send']) && isset($_POST['message']) && isset($_P
         $file->comments++;
 
         if ($file->id_user && $file->id_user != App::user()->id) { // уведомляем автора о комментарии
-            $ank = new user($file->id_user);
+            $ank = User::find($file->id_user);
             $ank->mess("[user]{App::user()->id}[/user] оставил" . (App::user()->sex ? '' : 'а') . " комментарий к Вашему файлу [url=/files{$file->getPath()}.htm]$file->runame[/url]");
         }
     } else {
@@ -341,11 +343,11 @@ if (empty($_GET['act'])) {
     if ($arr = $q->fetchAll()) {
         foreach ($arr AS $comment) {
 
-            $ank = new user($comment['id_user']);
+            $ank = User::find($comment['id_user']);
 
             $post = $listing->post();
             $post->url = '/profile.view.php?id=' . $ank->id;
-            $post->title = $ank->nick();
+            $post->title = $ank->login;
             $post->time = misc::when($comment['time']);
             $post->post = text::toOutput($comment['text']);
             $post->icon($ank->icon());

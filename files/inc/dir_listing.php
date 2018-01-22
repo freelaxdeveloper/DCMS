@@ -1,6 +1,8 @@
 <?php
 defined('DCMS') or die();
-use App\{files,text,form,listing,pages,groups,user,design,misc};
+use App\{files,text,form,listing,pages,groups,design,misc};
+use App\Models\User;
+
 use App\App\App;
 
 $dir = new files($abs_path);
@@ -150,7 +152,7 @@ for ($i = $start; $i < $end && $i < $pages->posts; $i++) {
             $post2 = __('Файл скачан') . ': ' . intval($files [$i]->downloads) . ' ' . __(misc::number($files [$i]->downloads, 'раз', 'раза', 'раз')) . "\n";
             break;
         case 'id_user' :
-            $ank = new user($files [$i]->id_user);
+            $ank = User::find($files [$i]->id_user);
             $post2 = __('Добавил' . ($ank->sex ? '' : 'а')) . ': ' . $ank->login . "\n";
             break;
         default :

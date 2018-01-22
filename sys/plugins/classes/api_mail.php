@@ -1,7 +1,8 @@
 <?php
 namespace App;
 
-use App\{api_controller,current_user,ApiAuthRequiredException,ApiException,DB,text};
+use App\{api_controller,ApiAuthRequiredException,ApiException,DB,text};
+use App\Models\User;
 use App\App\App;
 
 /**
@@ -15,7 +16,7 @@ class api_mail implements api_controller
         if (!App::user()->id)
             throw new ApiAuthRequiredException($request_data);
 
-        $ank = new user((int)@$request_data['id_user']);
+        $ank = User::find((int)@$request_data['id_user']);
         if (!$ank->id)
             throw new ApiException($request_data, __("Не указан контакт (id_user)"));
 

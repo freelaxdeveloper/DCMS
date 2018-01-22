@@ -1,7 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,captcha,text,form,url};
+use App\{document,captcha,text,form,url};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(4);
@@ -17,7 +18,7 @@ if (!$news = $q->fetch())
     $doc->access_denied(__('Новость не найдена или удалена'));
 
 
-$ank = new user($news['id_user']);
+$ank = User::find($news['id_user']);
 
 if ($ank->group > App::user()->group)
     $doc->access_denied(__('У Вас нет прав для редактирования данной новости'));

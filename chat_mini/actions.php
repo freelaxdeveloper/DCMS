@@ -1,7 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,listing,user,text,misc};
-use App\Models\ChatMini;
+use App\{document,listing,text,misc};
+use App\Models\{ChatMini,User};
 use App\App\App;
 
 $doc = new document();
@@ -22,13 +22,13 @@ if (!$message = ChatMini::find($id_message)) {
 
 $listing = new listing;
 
-$ank = new user($message->id_user);
+$ank = User::find($message->id_user);
 
 $post = $listing->post();
-$post->title = $ank->nick();
+$post->title = $ank->login;
 $post->content = text::toOutput($message->message);
 $post->time = misc::when($message->time);
-$post->icon($ank->icon());
+$post->icon($ank->icon);
 
 $post = $listing->post();
 $post->title = __('Посмотреть анкету');

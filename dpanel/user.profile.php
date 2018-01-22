@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,groups,user,text,is_valid,themes,url};
+use App\{dpanel,document,groups,text,is_valid,themes,url};
+use App\Models\User;
 use App\App\App;
 
 dpanel::check_access();
@@ -11,9 +12,9 @@ $doc->title = __('Профиль');
 $browser_types = array('light', 'mobile', 'full');
 
 if (isset($_GET ['id_ank'])) {
-    $ank = new user($_GET ['id_ank']);
+    $ank = User::find($_GET ['id_ank']);
 } else {
-    $ank = $user;
+    $ank = App::user();
 }
 
 if (!$ank->group) {

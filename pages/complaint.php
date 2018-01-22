@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,user,menu_code,text,form,url};
+use App\{document,menu_code,text,form,url};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(1);
@@ -19,7 +20,7 @@ if (!App::user()->is_writeable) {
 
 
 
-$ank = new user(@$_GET['id']);
+$ank = User::find($_GET['id']);
 
 if (!$ank->group || $ank->group > App::user()->group) {
     $doc->toReturn();

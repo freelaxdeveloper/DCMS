@@ -1,13 +1,14 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,pages,listing,user,text,misc};
+use App\{document,pages,listing,text,misc};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(1);
 $doc->title = __('Мои темы');
 
-$ank = (empty($_GET['id'])) ? $user : new user((int) $_GET['id']);
+$ank = (empty($_GET['id'])) ? App::user() : User::find((int) $_GET['id']);
 if (!$ank->group)
     $doc->access_denied(__('Нет данных'));
 $doc->title = ($ank->id == App::user()->id) ? __('Мои темы') : __('Темы пользователя "%s"', $ank->login);

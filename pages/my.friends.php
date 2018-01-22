@@ -1,7 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,pages,listing,user};
+use App\{document,pages,listing};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document(1);
@@ -22,9 +23,9 @@ $q->execute(Array(App::user()->id));
 $listing = new listing();
 while ($friend = $q->fetch()) {
     $post = $listing->post();
-    $ank = new user($friend['id_friend']);
+    $ank = User::find($friend['id_friend']);
     $post->url = '/profile.view.php?id=' . $ank->id;
-    $post->title = $ank->nick();
+    $post->title = $ank->login;
     $post->icon($ank->icon());
     $post->highlight = !$friend['confirm'];
     $post->content = $friend['confirm'] ? null : __('Хочет быть Вашим другом');

@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,user,listing,pages,text};
+use App\{dpanel,document,listing,pages,text};
+use App\Models\User;
 
 dpanel::check_access();
 $doc = new document(4);
@@ -14,13 +15,13 @@ if (!empty($_GET['approve'])) {
     if ($k) {
         $res = $db->prepare("DELETE FROM `users_suspicion` WHERE `id_user` = ? LIMIT 1");
         $res->execute(Array($app));
-        $ank = new user($app);
+        $ank = User::find($app);
         $doc->msg(__('Пользователь %s успешно одобрен', $ank->login));
     }
 }
 
 if (isset($_GET['id'])) {
-    $ank = new user((int)$_GET['id']);
+    $ank = User::find((int)$_GET['id']);
     if (!$ank->id) {
         $doc->err(__('Пользователь не найден'));
         $doc->ret(__('Подозрительные пользователи'), '?');
@@ -39,7 +40,7 @@ if (isset($_GET['id'])) {
     $listing = new listing();
 
     $post = $listing->post();
-    $post->title = $ank->nick();
+    $post->title = $ank->login;
     $post->icon($ank->icon());
     $post2 = __('E-mail: %s', $ank->reg_mail) . "\n";
     $post2 .= __('Фраза: %s', $sus['text']);
@@ -74,11 +75,11 @@ $pages->posts = $res->fetchColumn(); // количество постов
 $q = $db->query("SELECT *  FROM `users_suspicion` ORDER BY `id_user` ASC LIMIT " . $pages->limit);
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $sus) {
-        $ank = new user($sus['id_user']);
+        $ank = User::find($sus['id_user']);
 
         $post = $listing->post();
         $post->url = '?id=' . $ank->id;
-        $post->title = $ank->nick();
+        $post->title = $ank->login;
         $post->icon($ank->icon());
         $post2 = __('E-mail: %s', $ank->reg_mail) . "\n";
         $post2 .= __('Фраза: %s', $sus['text']);

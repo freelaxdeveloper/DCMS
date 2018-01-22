@@ -1,5 +1,6 @@
 <?php
-use App\{text,user,groups};
+use App\{text,groups};
+use App\Models\User;
 use App\App\App;
 
 if (isset($_POST['edit_unlink']) && $file->name{0} !== '.') {
@@ -8,7 +9,7 @@ if (isset($_POST['edit_unlink']) && $file->name{0} !== '.') {
     if ($file->delete()) {
         if ($id_user && $id_user != App::user()->id && !empty($_POST['reason'])) {
             $reason = text::input_text(@$_POST['reason']);
-            $ank = new user($id_user);
+            $ank = User::find($id_user);
             $ank->mess("Ваш файл $runame был удален.\nПричина: $reason.\nУдалил [user]App::user()->id[/user].");
 
             $dcms->log('Файлы', 'Удаление файла ' . $runame . ' пользователя [user]' . $id_user . '[/user]. Причина: ' . $reason);

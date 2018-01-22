@@ -1,14 +1,15 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,is_valid,user,form,url};
+use App\{dpanel,document,is_valid,form,url};
+use App\Models\User;
 use App\App\App;
 
 dpanel::check_access();
 $doc = new document(4);
 $doc->title = __('Изменение ника');
 
-if (isset($_GET['id_ank'])) $ank = new user($_GET['id_ank']);
-else $ank = $user;
+if (isset($_GET['id_ank'])) $ank = User::find($_GET['id_ank']);
+else $ank = App::user();
 
 if (!$ank->group) {
     $doc->toReturn();

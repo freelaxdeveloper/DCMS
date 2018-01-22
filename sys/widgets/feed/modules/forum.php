@@ -1,5 +1,5 @@
 <?php
-
+use App\App\App;
 class widget_feed_forum implements widget_feed_module
 {
 
@@ -21,8 +21,8 @@ class widget_feed_forum implements widget_feed_module
         foreach ($all_messages AS $message) {
             $post = new listing_post();
             $post->id = 'message' . $message['id'];
-            $ank = new user((int)$message['id_user']);
-            $post->title = $ank->nick();
+            $ank = User::find((int)$message['id_user']);
+            $post->title = $ank->login;
             $post->icon($ank->icon());
 //            $post->time = misc::when($message['time']);
 //            $post->url = 'message.php?id_message=' . $message['id'];
@@ -57,7 +57,7 @@ class widget_feed_forum implements widget_feed_module
             JOIN `forum_categories` AS `cat` ON `cat`.`id` = `th`.`id_category`
             WHERE GREATEST(`th`.`group_show`, `tp`.`group_show`, `cat`.`group_show`, `fm`.`group_show`) <= :group_show
             ORDER BY `fm`.`id` DESC LIMIT " . $limit);
-        $q->execute(array(':group_show' => current_user::getInstance()->group));
+        $q->execute(array(':group_show' => App::user()->group));
 
         return $q->fetchAll();
     }

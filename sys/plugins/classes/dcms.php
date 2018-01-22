@@ -1,6 +1,8 @@
 <?php
 namespace App;
+
 use App\App\App;
+use App\Models\User;
 
 /**
  * Базовый класс системы. Объект хранится в глобальной переменной $dcms
@@ -93,7 +95,7 @@ class dcms
         new user($users); // предзагрузка данных пользователей из базы
 
         foreach ($users as $id_user) {
-            $ank = new user($id_user);
+            $ank = User::find($id_user);
             $ank->mess($mess);
         }
     }

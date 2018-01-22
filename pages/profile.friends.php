@@ -1,12 +1,13 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,user,pages,listing};
+use App\{document,pages,listing};
+use App\Models\User;
 
 $doc = new document(1);
 $doc->title = __('Друзья');
 
-$ank = new user(@$_GET['id']);
+$ank = User::find(@$_GET['id']);
 
 if (!$ank->id) {
     $doc->toReturn();

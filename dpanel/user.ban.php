@@ -7,7 +7,7 @@ dpanel::check_access();
 $doc = new document(2);
 $doc->title = __('Бан пользователя');
 
-$ank = new user(@$_GET ['id_ank']);
+$ank = User::find($_GET ['id_ank']);
 
 if (!$ank->group) {
     $doc->toReturn();

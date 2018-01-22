@@ -13,7 +13,6 @@ if (isset($_POST['exit'])){
     /********************deprecated******************* */
     $res = $db->prepare("DELETE FROM `users_online` WHERE `id_user` = ?;");
     $res->execute(Array(App::user()->id));
-    App::user()->guest_init();
     setcookie(COOKIE_ID_USER);
     setcookie(COOKIE_USER_PASSWORD);
     unset($_SESSION);

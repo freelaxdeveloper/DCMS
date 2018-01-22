@@ -22,7 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "sys/plugins/classes/"
+            "App\\": "sys/plugins/classes/",
+            "getID\\": "sys/plugins/id3/getid3/"
         }
     }
 }

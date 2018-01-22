@@ -1,5 +1,7 @@
 <?php
 namespace App;
+use App\Models\User;
+
 /**
  * Обработчик BBCODE
  */
@@ -1293,8 +1295,8 @@ class bbcode
 
         //return '<pre>'.print_r($elem,1).'</pre>';
 
-        $ank = new user((int)$elem['val'][0]['str']);
-        return '<a href="/profile.view.php?id=' . $ank->id . '">' . $ank->nick() . '</a>';
+        $ank = User::find((int)$elem['val'][0]['str']);
+        return '<a href="/profile.view.php?id=' . $ank->id . '">' . $ank->login . '</a>';
     }
 
     function smile_2html($elem)
@@ -1376,20 +1378,20 @@ class bbcode
         if (!empty($elem['attrib']['quote'])) {
             if (preg_match('#^([0-9]+):([0-9]+):(.+)$#ui', $elem['attrib']['quote'], $log)) {
                 $time = (int)$log [1];
-                $ank = new user((int)$log[2]);
+                $ank = User::find((int)$log[2]);
             } else {
                 return '<div class="DCMS_quote">' . $this->get_html($elem['val']) . '</div>';
             }
         } elseif (!empty($elem['attrib']['time']) && !empty($elem['attrib']['id_user'])) {
             $time = (int)$elem['attrib']['time'];
-            $ank = new user((int)$elem['attrib']['id_user']);
+            $ank = User::find((int)$elem['attrib']['id_user']);
         } else {
             return '<div class="DCMS_quote">' . $this->get_html($elem['val']) . '</div>';
         }
 
 
         if ($time && $ank->id) {
-            $title = "<span class='DCMS_quote_title'><a href='/profile.view.php?id=$ank->id'>" . $ank->nick() . "</a> (" . misc::when($time) . ")</span>:";
+            $title = "<span class='DCMS_quote_title'><a href='/profile.view.php?id=$ank->id'>" . $ank->login . "</a> (" . misc::when($time) . ")</span>:";
         } else {
             $title = '';
         }

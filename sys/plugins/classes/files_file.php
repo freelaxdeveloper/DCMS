@@ -279,19 +279,19 @@ class files_file
      */
     protected function _getPropertiesAuto()
     {
-        if ($this->properties_auto_comlete)
+        /* if ($this->properties_auto_comlete)
             return;
         if ($desc = files_types::getPropertiesType($this->path_file_abs)) {
             if (@function_exists('set_time_limit')) {
                 @set_time_limit(30);
             }
             $propert = "files_properties_$desc";
-            $prop_obj = new $propert($this->path_file_abs);
+            $prop_obj = new files_properties_id3($this->path_file_abs);
             if ($prop = $prop_obj->getProperties()) {
                 $this->_data = array_merge((array)$prop, $this->_data);
             }
         }
-        $this->properties_auto_comlete = 1;
+        $this->properties_auto_comlete = 1; */
     }
 
     /**
@@ -394,7 +394,7 @@ class files_file
         if ($this->screens_auto_comlete)
             return;
         if ($screen = files_types::getScreenType($this->path_file_abs)) {
-            $screener = "files_screen_$screen";
+            $screener = "\\App\\files_screen_{$screen}";
             $scr_obj = new $screener($this->path_file_abs);
 
             if (@function_exists('set_time_limit')) {

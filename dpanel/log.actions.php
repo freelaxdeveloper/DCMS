@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,pages,user,listing,misc,text};
+use App\{document,pages,listing,misc,text};
+use App\Models\User;
 
 $doc = new document(2);
 $doc->title = __('Лог действий');
@@ -10,7 +11,7 @@ if (isset($_GET['id_user'])) {
     $sql_where = ' WHERE 1 = 1';
 
     if ($_GET['id_user'] !== 'all') {
-        $ank = new user($_GET['id_user']);
+        $ank = User::find($_GET['id_user']);
         $doc->title .= ' "' . $ank->login . '"';
         $id_user = $ank->id;
         $sql_where = " WHERE `id_user` = '$ank->id'";
@@ -28,9 +29,9 @@ if (isset($_GET['id_user'])) {
         $q->execute(Array($module));
         if ($arr = $q->fetchAll()) {
             foreach ($arr AS $action) {
-                $ank = new user($action['id_user']);
+                $ank = User::find($action['id_user']);
                 $post = $listing->post();
-                $post->title = $ank->nick();
+                $post->title = $ank->login;
                 $post->time = misc::when($action['time']);
                 $post->content = text::toOutput($action['description']);
             }
@@ -76,8 +77,8 @@ $post->url = '?id_user=all';
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $ank_q) {
         $post = $listing->post();
-        $ank = new user($ank_q['id_user']);
-        $post->title = $ank->nick();
+        $ank = User::find($ank_q['id_user']);
+        $post->title = $ank->login;
         $post->counter = $ank_q['count'];
         $post->url = '?id_user=' . $ank->id;
         $post->icon($ank->icon());

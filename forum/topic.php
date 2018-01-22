@@ -1,7 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
 
-use App\{document,pages,listing,text,misc,current_user,user};
+use App\{document,pages,listing,text,misc,user};
 use App\Models\{ForumTopic,ForumMessage,ForumTheme};
 use App\App\App;
 

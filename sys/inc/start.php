@@ -10,7 +10,7 @@ version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0'
  * Выделены в отдельный файл чтобы избежать дублирования кода в инсталляторе
  */
 require_once dirname(__FILE__) . '/initialization.php';
-use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,current_user,user,misc,groups};
+use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,user,misc,groups};
 use Jenssegers\Blade\Blade;
 use App\App\App;
 /**
@@ -201,10 +201,10 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * включаем полный показ ошибок для создателя, если включено в админке
      */
-    if ($dcms->debug && App::user()->group == groups::max() && @function_exists('ini_set')) {
+    #if ($dcms->debug && App::user()->group == groups::max() && @function_exists('ini_set')) {
         ini_set('error_reporting', E_ALL);
         ini_set('display_errors', true);
-    }
+    #}
 
     /**
      * пользовательский языковой пакет

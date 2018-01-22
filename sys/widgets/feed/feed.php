@@ -29,7 +29,7 @@ require_once dirname(__FILE__) . '/modules/users.php';
 require_once dirname(__FILE__) . '/modules/files.php';
 require_once dirname(__FILE__) . '/modules/obmen.php';
 
-$user = current_user::getInstance();
+$user = App::user();
 
 
 $listing = new listing();

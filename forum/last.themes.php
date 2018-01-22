@@ -2,7 +2,7 @@
 
 include_once '../sys/inc/start.php';
 include 'inc/functions.php';
-use App\{document,cache,current_user,listing,user,pages,text,misc};
+use App\{document,cache,listing,user,pages,text,misc};
 use App\Models\ForumTheme;
 use App\App\App;
 

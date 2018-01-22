@@ -1,5 +1,6 @@
 <?php
-use App\{listing,text,files,misc,user};
+use App\{listing,text,files,misc};
+use App\Models\User;
 
 defined('DCMS') or die;
 global $user;
@@ -21,7 +22,7 @@ if ($new_files)
     $post->counter = '+' . $new_files;
 
 for ($i = 0; $i < $new_files && $i < $dcms->widget_items_count; $i++) {
-    $ank = new user($files[$i]->id_user);
+    $ank = User::find($files[$i]->id_user);
     $post = $listing->post();
     $post->title = text::toValue($files[$i]->runame);
     $post->time = misc::when($files[$i]->time_add);
@@ -29,7 +30,7 @@ for ($i = 0; $i < $new_files && $i < $dcms->widget_items_count; $i++) {
     $post->image = $files[$i]->image();
     $post->icon($files[$i]->icon());
     if ($ank->id)
-        $post->bottom = $ank->nick();
+        $post->bottom = $ank->login;
     
 }
 

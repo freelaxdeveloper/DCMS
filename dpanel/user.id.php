@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,groups,user,form,captcha};
+use App\{dpanel,document,groups,form,captcha};
+use App\Models\User;
 use App\App\App;
 
 dpanel::check_access();
@@ -9,9 +10,9 @@ $doc = new document(6);
 $doc->title = __('Изменение ID пользователя');
 
 if (isset($_GET['id_ank']))
-    $ank = new user($_GET['id_ank']);
+    $ank = User::find($_GET['id_ank']);
 else
-    $ank = $user;
+    $ank = App::user();
 
 if (!$ank->group) {
     $doc->toReturn();

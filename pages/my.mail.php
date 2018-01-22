@@ -1,7 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,document_json,user,text,antiflood,pages,form,misc,listing};
+use App\{document,document_json,text,antiflood,pages,form,misc,listing};
+use App\Models\User;
 use App\App\App;
 
 if (AJAX)
@@ -13,7 +14,7 @@ $doc->title = __('Моя почта');
 
 if (isset($_GET ['id'])) {
     $id_kont = (int)$_GET ['id'];
-    $ank = new user($id_kont);
+    $ank = User::find($id_kont);
     $res = $db->prepare("SELECT COUNT(*) FROM `mail` WHERE `id_user` = ? AND `id_sender` = ?");
     $res->execute(Array(App::user()->id, $id_kont));
     if (!$ank->group && !$res->fetch()) {
@@ -187,11 +188,11 @@ $q->execute(Array(App::user()->id));
 $listing = new listing();
 if ($arr = $q->fetchAll()) {
     foreach ($arr AS $mail) {
-        $ank = new user((int)$mail['id_sender']);
+        $ank = User::find((int)$mail['id_sender']);
         $post = $listing->post();
         $post->icon($ank->icon());
         $post->url = '?id=' . $ank->id;
-        $post->title = $ank->nick();
+        $post->title = $ank->login;
         $post->counter = isset($_GET ['only_unreaded']) ? '+' . $mail['count'] : $mail['count'];
         $post->highlight = !$mail['is_read'];
     }

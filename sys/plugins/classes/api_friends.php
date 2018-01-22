@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\{current_user,DB,ApiAuthRequiredException,api_controller};
+use App\{DB,ApiAuthRequiredException,api_controller};
 use App\App\App;
 
 /**

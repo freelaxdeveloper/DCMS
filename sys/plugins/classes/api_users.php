@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\user;
+use App\Models\User;
 
 /**
  * Работа с данными произвольных пользователей
@@ -17,7 +17,7 @@ class api_users implements api_controller
      */
     public static function getData($id)
     {
-        $user = new user((int)$id);
+        $user = User::find((int)$id);
         return $user->getCustomData(array('login', 'group', 'last_visit', 'sex', 'balls'));
     }
 } 

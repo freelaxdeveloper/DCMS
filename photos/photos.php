@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,user,files,text,form,url,pages,listing,misc};
+use App\{document,files,text,form,url,pages,listing,misc};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document ();
@@ -8,7 +9,7 @@ $doc->title = __('Фотоальбомы');
 
 
 if (!empty($_GET ['id'])) {
-    $ank = new user((int) $_GET ['id']);
+    $ank = User::find((int) $_GET ['id']);
 } else {
     $ank = $user;
 }

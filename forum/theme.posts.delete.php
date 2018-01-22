@@ -1,7 +1,8 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,files,listing,pages,user,misc,text,form,url};
+use App\{document,files,listing,pages,misc,text,form,url};
+use App\Models\User;
 use App\App\App;
 
 $doc = new document();
@@ -91,7 +92,7 @@ if ($arr = $q->fetchAll()) {
     foreach ($arr AS $messages) {
         $ch = $listing->checkbox();
 
-        $ank = new user((int)$messages['id_user']);
+        $ank = User::find((int)$messages['id_user']);
 
         $ch->title = $ank->nick;
         $ch->time = misc::when($messages['time']);

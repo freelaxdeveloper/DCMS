@@ -21,7 +21,7 @@ class widget_feed_obmen implements widget_feed_module
         if ($new_files) {
             for ($i = 0; $i < $new_files && $i < dcms::getInstance()->widget_items_count; $i++) {
 
-                $ank = new user($files[$i]->id_user);
+                $ank = User::find($files[$i]->id_user);
                 $post = new listing_post();
                 $post->title = text::toValue($files[$i]->runame);
                 $post->url = "/files" . $files[$i]->getPath() . ".htm";
@@ -37,7 +37,7 @@ class widget_feed_obmen implements widget_feed_module
                 $w_post->time = misc::when($files[$i]->time_add);
                 $w_post->content = $post->fetch();
                 if ($ank->id)
-                    $w_post->bottom = $ank->nick();
+                    $w_post->bottom = $ank->login;
                 $posts[] = $w_post;
             }
 

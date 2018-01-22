@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\{design,widget,document_link,text,document_message,alignedxhtml,url,current_user};
+use App\{design,widget,document_link,text,document_message,alignedxhtml,url};
 use Jenssegers\Blade\Blade;
 use App\App\App;
 
@@ -134,7 +134,7 @@ class document extends design
      */
     private function output()
     {
-        global $dcms, $user_language_pack, $user;
+        global $dcms, $user_language_pack;
         if ($this->outputed) {
             // повторная отправка html кода вызовет нарушение синтаксиса документа, да и вообще нам этого нафиг не надо
             return;
@@ -163,7 +163,8 @@ class document extends design
         $actions = $this->actions;
         $tabs = $this->tabs;
         $url = URL;
-        $current_user = json_encode(current_user::getInstance()->getCustomData(array('id', 'group', 'mail_new_count', 'friend_new_count', 'nick')));
+        $current_user = json_encode(App::user()->toArray());
+        $user = App::user();
 
         $left_column = $this->displaySectionBlade('left_column');
         $header = $this->displaySectionBlade('header');

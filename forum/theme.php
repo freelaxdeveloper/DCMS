@@ -1,6 +1,6 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{document,current_user,sprite,user,listing,misc,text,pages,groups};
+use App\{document,sprite,user,listing,misc,text,pages,groups};
 use App\Models\{ForumView,ForumTheme,ForumMessage};
 use App\App\App;
 

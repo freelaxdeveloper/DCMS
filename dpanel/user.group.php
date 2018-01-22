@@ -1,6 +1,7 @@
 <?php
 include_once '../sys/inc/start.php';
-use App\{dpanel,document,groups,user,form,url};
+use App\{dpanel,document,groups,form,url};
+use App\Models\User;
 use App\App\App;
 
 dpanel::check_access();
@@ -8,7 +9,7 @@ $groups = groups::load_ini();
 $doc = new document(4);
 $doc->title = __('Изменение статуса');
 
-if (isset($_GET['id_ank'])) $ank = new user($_GET['id_ank']);
+if (isset($_GET['id_ank'])) $ank = User::find($_GET['id_ank']);
 else $ank = $user;
 
 if (!$ank->group) {
