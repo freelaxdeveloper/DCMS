@@ -87,8 +87,8 @@ if (App::user()->group && $ank->id && App::user()->id != $ank->id) {
                 $form->display();
             }
 
-            if (!$ank->is_friend($user))
-                echo "<b>" . __('Пользователь еще не подтвердил факт Вашей дружбы') . "</b><br />";
+            /* if (!$ank->is_friend($user))
+                echo "<b>" . __('Пользователь еще не подтвердил факт Вашей дружбы') . "</b><br />"; */
             $doc->act(__('Удалить из друзей'), "?id={$ank->id}&amp;friend=delete");
         } else {
             // пользователь не в друзьях
@@ -146,7 +146,7 @@ if ($ank->is_ban) {
 //region Профиль пользователя
 $listing = new listing();
 //region Аватар
-if ($path = $ank->getAvatar($doc->img_max_width())) {
+if ($path = $ank->avatar) {
     echo "<img class='DCMS_photo' src='" . $path . "' alt='" . __('Аватар %s', $ank->login) . "' /><br />\n";
 }
 //endregion
@@ -156,7 +156,7 @@ if ($ank->group > 1) {
     $post = $listing->post();
     $post->title = $ank->group_name;
     $post->highlight = true;
-    $post->icon($ank->icon());
+    $post->icon($ank->icon);
 
     //echo "<b>$ank->group_name</b>";
 
@@ -258,7 +258,7 @@ if ($ank->language || $ank->languages) { // $ank->language(s)
 //endregion
 
 //region аська
-if ($ank->icq_uin) {
+/* if ($ank->icq_uin) {
     if ($ank->is_friend($user) || $ank->vis_icq) {
         $post = $listing->post();
         $post->title = 'ICQ UIN';
@@ -271,11 +271,11 @@ if ($ank->icq_uin) {
         $post->url = '/faq.php?info=hide&amp;return=' . URL;
         $post->content = __('Информация скрыта');
     }
-}
+} */
 //endregion
 
 //region Skype
-if ($ank->skype) {
+/* if ($ank->skype) {
     if ($ank->is_friend($user) || $ank->vis_skype) {
 
         $post = $listing->post();
@@ -290,11 +290,11 @@ if ($ank->skype) {
         $post->url = '/faq.php?info=hide&amp;return=' . URL;
         $post->content = __('Информация скрыта');
     }
-}
+} */
 //endregion
 
 //region E-mail
-if ($ank->email) {
+/* if ($ank->email) {
     if ($ank->is_friend($user) || $ank->vis_email) {
         $post = $listing->post();
         $post->title = 'E-mail';
@@ -309,7 +309,7 @@ if ($ank->email) {
         $post->url = '/faq.php?info=hide&amp;return=' . URL;
         $post->content = __('Информация скрыта');
     }
-}
+} */
 //endregion
 
 //region Регистрационный E-mail
@@ -336,7 +336,7 @@ if ($ank->wmid) {
 //endregion
 
 //region Друзья
-if ($ank->is_friend($user) || $ank->vis_friends) {
+#if ($ank->is_friend($user) || $ank->vis_friends) {
     $res = $db->prepare("SELECT COUNT(*) FROM `friends` WHERE `id_user` = ? AND `confirm` = '1'");
     $res->execute(Array($ank->id));
     $k_friends = $res->fetchColumn();
@@ -346,12 +346,12 @@ if ($ank->is_friend($user) || $ank->vis_friends) {
     $post->url = $ank->id == App::user()->id ? "/my.friends.php" : "/profile.friends.php?id={$ank->id}";
     $post->counter = $k_friends;
 
-} else {
+/* } else {
     $post = $listing->post();
     $post->title = __('Друзья');
     $post->url = '/faq.php?info=hide&amp;return=' . URL;
     $post->content = __('Информация скрыта');
-}
+} */
 //endregion
 
 //region Рейтинг

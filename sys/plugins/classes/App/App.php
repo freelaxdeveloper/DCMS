@@ -21,9 +21,13 @@ abstract class App{
         static $current_user;
         if (!$current_user && Authorize::isAuthorize()) {
             $current_user = User::where([
-                'password' => Authorize::getHash(),
-                'token' => Authorize::getId(),
+                'id' => Authorize::getId(),
+                'token' => Authorize::getToken(),
             ])->first();
+            if (!$current_user) {
+                Authorize::exit();
+                redirect();
+            }
         } elseif (!$current_user) {
             $current_user = new User;
             $current_user->login = '[Гость]';
@@ -32,6 +36,12 @@ abstract class App{
             $current_user->language = 'ru';
         }
         return $current_user;
+    }
+    /**
+     * генерация токена
+     */
+    public static function generateToken(int $lenght = 32): string {
+        return md5(TIME) . bin2hex(md5(TIME) . random_bytes($lenght));
     }
     
 }

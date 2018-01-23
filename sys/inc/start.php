@@ -242,3 +242,11 @@ function dd($array, bool $exit = true)
     if ($exit)
         exit;
 }
+function redirect(string $path = '/') {
+    header('Location: ' . $path);
+    exit;
+}
+function refresh(string $path = '/') {
+    header('Refresh:1; ' . $path);
+    exit;
+}

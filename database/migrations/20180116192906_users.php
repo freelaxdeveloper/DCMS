@@ -8,12 +8,10 @@ class Users extends Migration
     public function up()  {
         $this->schema->create('users', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('vk_id')->nullable();
-            $table->string('vk_first_name')->nullable();
-            $table->string('vk_last_name')->nullable();
             $table->unsignedSmallInteger('group')->default(1);
             $table->string('login');
             $table->string('password');
+            $table->string('token');
             $table->string('a_code')->nullable()->comment('Код активации');
             $table->string('recovery_password')->nullable()->comment('Ключ для восстановления пароля');
             $table->enum('sex', ['0', '1'])->default(1)->comment('Пол');

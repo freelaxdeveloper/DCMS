@@ -1,22 +1,23 @@
 <?php
 namespace App\App;
 
+use App\Models\User;
+use App\App\Crypt;
+
 abstract class Authorize{
-    // ключ, с которым будет хранится пользовательский ID
-    const KEY_USER_ID = 'session_id';
-    // ключ, с которым будет хранится пользовательский хэш пароля
-    const KEY_USER_PASSWORD = 'session_token';
+    const KEY_TOKEN = 'session_token';
+    const KEY_ID = 'session_id';
 
     # авторизируемся
-    public static function authorized(string $id_user, string $hash_pass)
+    public static function authorized(User $user)
     {
         if (self::isAuthorize()) {
-            //return;
+            return;
         }
-        $_SESSION[self::KEY_USER_ID] = $id_user;
-        $_SESSION[self::KEY_USER_PASSWORD] = $hash_pass;
-        setcookie(self::KEY_USER_ID, $id_user, TIME + 3600 * 24 * 365, '/');
-        setcookie(self::KEY_USER_PASSWORD, $hash_pass, TIME + 3600 * 24 * 365, '/');
+        $_SESSION[self::KEY_TOKEN] = $user->token;
+        $_SESSION[self::KEY_ID] = Crypt::encrypt($user->id);
+        setcookie(self::KEY_TOKEN, $user->token, TIME + 3600 * 24 * 365, '/');
+        setcookie(self::KEY_ID, Crypt::encrypt($user->id), TIME + 3600 * 24 * 365, '/');
     }
     # проверям авторизованы ли
     public static function isAuthorize(): bool
@@ -26,19 +27,21 @@ abstract class Authorize{
     # получаем ID пользователя
     public static function getId(): string
     {
-        return $_SESSION[self::KEY_USER_ID] ?? $_COOKIE[self::KEY_USER_ID] ?? '';
+        $id = $_SESSION[self::KEY_ID] ?? $_COOKIE[self::KEY_ID] ?? '';
+        return Crypt::decrypt($id);
     }
-    # получаем хэш его пароля
-    public static function getHash(): string
+    # получаем токен пользователя
+    public static function getToken(): string
     {
-        return $_SESSION[self::KEY_USER_PASSWORD] ?? $_COOKIE[self::KEY_USER_PASSWORD] ?? 0;
+        return $_SESSION[self::KEY_TOKEN] ?? $_COOKIE[self::KEY_TOKEN] ?? '';
     }
+
     # выходим с авторизации
     public static function exit()
     {
-        unset($_SESSION[self::KEY_USER_ID]);
-        unset($_SESSION[self::KEY_USER_PASSWORD]);
-        setcookie(self::KEY_USER_ID, null, null, '/');
-        setcookie(self::KEY_USER_PASSWORD, null, null, '/');
+        unset($_SESSION[self::KEY_TOKEN]);
+        unset($_SESSION[self::KEY_ID]);
+        setcookie(self::KEY_TOKEN, null, null, '/');
+        setcookie(self::KEY_ID, null, null, '/');
     }
 }

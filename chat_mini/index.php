@@ -29,10 +29,10 @@ if ($can_write && $pages->this_page == 1) {
         } elseif ($dcms->censure && $mat = is_valid::mat($message)) {
             $doc->err(__('Обнаружен мат: %s', $mat));
         } elseif ($message) {
-            App::user()->balls += $dcms->add_balls_chat ;
+            App::user()->increment('balls', $dcms->add_balls_chat);
 
             $comment = new ChatMini(['message' => $message, 'time' => TIME]);
-            App::User(true)->chatMini()->save($comment);
+            App::User()->chatMini()->save($comment);
 
             header('Refresh: 1; url=?' . passgen() . '&' . SID);
             $doc->ret(__('Вернуться'), '?' . passgen());

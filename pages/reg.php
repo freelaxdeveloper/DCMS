@@ -47,9 +47,11 @@ if (isset($_POST['post'])) {
             'password' => $hash,
             'sex' => $_POST['sex'],
             'reg_date' => TIME,
+            'token' => App::generateToken(),
         ]);
-        Authorize::authorized($newUser->id, $newUser->password);
+        Authorize::authorized($newUser);
         $doc->msg('Регистрация успешна');
+        refresh();
     }
 }
 $form = new form('?' . passgen());
