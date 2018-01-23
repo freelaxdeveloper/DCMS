@@ -2,10 +2,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\{files,files_file,groups};
 use App\Models\ChatMini;
 
 class User extends Model{
-    public $timestamps = false;
     protected $guarded = ['id'];
 
     public function getIconAttribute(){
@@ -34,6 +34,21 @@ class User extends Model{
     public function chatMini()
     {
         return $this->hasMany(ChatMini::class, 'id_user');
+    }
+    function getGroupNameAttribute()
+    {
+        return groups::name($this->group);
+    }
+
+    function getAvatarAttribute()
+    {
+        $avatar_file_name = $this->id . '.jpg';
+        $avatars_path = FILES . '/.avatars'; // папка с аватарами
+        $avatars_dir = new files($avatars_path);
+        if ($avatars_dir->is_file($avatar_file_name)) {
+            $avatar = new files_file($avatars_path, $avatar_file_name);
+            return $avatar->getScreen($max_width, 0);
+        }
     }
 
     public function getIsWriteableAttribute(): bool

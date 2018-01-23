@@ -1,13 +1,12 @@
 <?php
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
-use App\{document,cache,cache_aut_failture,captcha,misc,crypt,text,form,url};
+use App\{document,cache,cache_aut_failture,captcha,misc,text,form,url};
 use App\App\{Authorize,App};
 use App\Models\User;
 
 $doc = new document();
 $doc->title = __('Авторизация');
-
 
 if (isset($_GET['redirected_from']) && in_array($_GET['redirected_from'], array('light', 'pda', 'mobile', 'full'))) {
     $subdomain_var = "subdomain_" . $_GET['redirected_from'];
@@ -62,9 +61,9 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
                     // если пользователь авторизовался, то ключ для восстановления ему больше не нужен
                     $user->recovery_password = '';
                 }
-                $user->token = bin2hex(random_bytes(random_int(22, 32)));
+                $user->token = App::generateToken();
                 $user->save();
-                Authorize::authorized($user->token, $user->password);
+                Authorize::authorized($user);
             }
         }
     }

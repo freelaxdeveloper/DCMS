@@ -61,7 +61,7 @@ class language_pack {
         foreach ($lngs as $file) {
             $data[basename($file, '.lng')] = keyvalue::read($file);
         }
-        cache::set('language.' . $this->code, $data, 60);
+        //cache::set('language.' . $this->code, $data, 60);
         return $data;
     }
 
@@ -140,9 +140,9 @@ class language_pack {
     }
 
     function __destruct() {
-        if ($this->_save_default) {
+        /* if ($this->_save_default) {
             keyvalue::save(H . '/sys/languages/for_translate.lng', $this->_default);
-        }
+        } */
     }
 
 }
