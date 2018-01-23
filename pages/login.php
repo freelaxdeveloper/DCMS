@@ -62,6 +62,10 @@ if ($need_of_captcha && (empty($_POST['captcha']) || empty($_POST['captcha_sessi
                     $user->recovery_password = '';
                 }
                 $user->token = App::generateToken();
+
+                if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
+                    $user->password = password_hash($password, PASSWORD_DEFAULT);
+                }
                 $user->save();
                 Authorize::authorized($user);
             }
