@@ -27,9 +27,6 @@ namespace App;
  * @property int ank_m_r Месяц рождения
  * @property int ank_d_r День рождения
  * @property mixed reg_mail
- * @property int vk_id
- * @property string vk_first_name
- * @property string vk_last_name
  */
 class user
 {

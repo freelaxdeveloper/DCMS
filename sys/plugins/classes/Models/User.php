@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\{files,files_file,groups};
-use App\Models\ChatMini;
+use App\Models\{ChatMini,Browser};
 
 class User extends Model{
     protected $guarded = ['id'];
@@ -23,8 +23,6 @@ class User extends Model{
         }
         // пользователь
         if ($this->group) {
-            if ($this->vk_id && $this->vk_first_name && $this->vk_last_name)
-                return 'user.vk';
             return 'user.' . $this->sex;
         }
         // гость

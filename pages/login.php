@@ -94,10 +94,3 @@ $form->password('password', __('Пароль') . ' [' . '[url=/pass.php]' . __('
 if ($need_of_captcha) $form->captcha();
 $form->button(__('Авторизация'));
 $form->display();
-
-if ($dcms->vk_auth_enable && $dcms->vk_app_id && $dcms->vk_app_secret) {
-    $vk = new vk($dcms->vk_app_id, $dcms->vk_app_secret);
-    $form = new form($vk->getAuthorizationUri('http://' . $_SERVER['HTTP_HOST'] . '/vk.php', 'email'));
-    $form->button(__('Вход через %s', 'vk.com'));
-    $form->display();
-}

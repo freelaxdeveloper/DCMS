@@ -1,7 +1,7 @@
 <?php
 $subdomain_theme_redirect_disable = true; // принудительное отключение редиректа на поддомены, соответствующие типу браузера
 include_once '../sys/inc/start.php';
-use App\{document,is_valid,crypt,design,mail,form,url,vk,captcha,antiflood};
+use App\{document,is_valid,crypt,design,mail,form,url,captcha,antiflood};
 use App\Models\User;
 use App\App\{App, Authorize};
 

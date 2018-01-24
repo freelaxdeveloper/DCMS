@@ -10,7 +10,7 @@ class LogOfUserAut extends Migration
             $table->increments('id');
             $table->integer('id_user')->unsigned()->comment('ID юзера');
             $table->integer('user_id')->nullable()->unsigned()->comment('ID юзера ВК');
-            $table->enum('method', ['cookie', 'post', 'get', 'vk'])->default('post')->comment('Method');
+            $table->enum('method', ['cookie', 'post', 'get'])->default('post')->comment('Method');
             $table->unsignedBigInteger('iplong')->comment('IP Адрес');
             #$table->ipAddress('iplong')->comment('IP Адрес');
             $table->integer('time')->unsigned()->comment('дата');

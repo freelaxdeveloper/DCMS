@@ -1,0 +1,17 @@
+[title]8.0.0 Beta[/title]
+
+Первая BETA версия
+
+[add] Добавлен менеджер зависимостей [url=https://habrahabr.ru/post/145946/]Composer[/url]
+[add] Добавлена система объектно-реляционного отображения (ORM) [url=https://laravel.ru/docs/v4/eloquent]Eloquent[/url]
+[add] Добавлен шаблоизатор [url=http://laravel.su/docs/5.0/templates]Blade[/url]
+[secure] Переработана система авторизации/регистрации.
+[fix] Исправлена captcha при регистрации
+[fix] Языковые пакеты больше не мусорят в /sys/tmp/
+[del] Убрана авторизация через VK
+[add] Добавлена система миграций [url=http://docs.phinx.org/en/latest/index.html]Phinx[/url], которая изменена под работу [url=https://laravel.ru/docs/v5/migrations]миграций фреймворка Laravel[/url] (структуру миграций пишем по документации Laravel)
+[add] Добавлен валидатор [url=https://github.com/vlucas/valitron]vlucas/valitron[/url]
+[del] Удалена папка /sys/plugins/id3/getid3/ с соотвествующим функционалом
+[del] Удалены touch и mobile темы
+[del] Удалены устаревшие ф-ции PHP
+[change] Установщик (/install/) не проверяет таблицы прошлых версий DCMS и не загружает таблицы в БД

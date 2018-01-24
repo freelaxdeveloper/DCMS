@@ -1,42 +1,32 @@
 <?php
 
 include_once '../sys/inc/start.php';
-use App\{document,pages,listing,user,text,misc};
+use App\{document,pages,listing,text,misc};
+use App\Models\{User,UserOnline};
 use App\App\App;
 
 $doc = new document();
 
-$pages = new pages;
-$res = $db->query("SELECT COUNT(*) FROM `users_online`");
-$pages->posts = $res->fetchColumn();
+$pages = new pages(UserOnline::count());
 
 $doc->title = __('Сейчас на сайте (%s)', $pages->posts);
 
-$q = $db->query("SELECT `users_online`.* , `browsers`.`name` AS `browser`
- FROM `users_online`
- LEFT JOIN `browsers`
- ON `users_online`.`id_browser` = `browsers`.`id`
- ORDER BY `users_online`.`time_login` DESC LIMIT " . $pages->limit);
-
-
 $listing = new listing();
 
-if ($arr = $q->fetchAll()) {
-    foreach ($arr AS $ank) {
-        $p_user = new user($ank['id_user']);
+if ($arr = UserOnline::get()->forPage($pages->this_page, App::user()->items_per_page)) {
+    foreach ($arr AS $user) {
         $post = $listing->post();
-        $post->title = $p_user->nick();
-        $post->url = '/profile.view.php?id=' . $p_user->id;
-        $post->icon($p_user->icon());
+        $post->title = $user->user->login;
+        $post->url = '/profile.view.php?id=' . $user->user->id;
+        $post->icon($user->user->icon);
 
-
-        if (App::user()->id === $p_user->id || App::user()->group > $p_user->group) {
-            $post->content .= __('Браузер') . ': ' . text::toValue($ank['browser']) . "<br />\n";
-            $post->content .= __('IP-адрес') . ': ' . long2ip($ank['ip_long']) . "<br />\n";
+        if (App::user()->id === $user->user->id || App::user()->group > $user->user->group) {
+            $post->content[] = __('Браузер') . ': ' . text::toValue($user->browser->name);
+            $post->content[] = __('IP-адрес') . ': ' . long2ip($user->ip_long);
         }
 
-        $post->content .= __('Переходов') . ': ' . $ank['conversions'] . "<br />";
-        $post->content .= __('Последний визит') . ': ' . misc::when($p_user->last_visit) . '<br />';
+        $post->content[] = __('Переходов') . ': ' . $user->conversions;
+        $post->content[] = __('Последний визит') . ': ' . misc::when($user->last_visit);
     }
 
 }

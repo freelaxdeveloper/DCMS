@@ -2,7 +2,7 @@
 namespace App;
 
 use App\Models\User;
-
+use App\App\App;
 /**
  * Работа с данными текущего пользователя
  * Class api_user

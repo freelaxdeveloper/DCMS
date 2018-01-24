@@ -1,3 +1,0 @@
-[title]7.0.7.79[/title]
-
-[fix] Весь кэш стал сохраняться в файле  cache.cache_group.tmp
