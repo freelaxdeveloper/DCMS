@@ -27,19 +27,19 @@ abstract class misc
     /**
      * Журнал авторизаций 2.5 от «S1S13AF7», со счетчиком и юзер-агентом
      */
-    static function logaut($id, $method, $status, $vk_id = 0) {
+    static function logaut($id, $method, $status) {
             global $dcms; /* будем получать IP, ID браузера, домен, … */
         $ua = (string) @$_SERVER['HTTP_USER_AGENT']; // (string) USER_AGENT
         
         $q = DB::me()->prepare("SELECT * FROM `log_of_user_aut` WHERE `id_user` = :id AND `user_id` = :uid AND `iplong` = :ip_long AND `browser_ua` = :ua AND `domain` = :domain AND `method` = :method AND `status` = :status ORDER BY `time` DESC LIMIT 1");
-        $q->execute(Array(':id' => $id, ':uid' => $vk_id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status));
+        $q->execute(Array(':id' => $id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status));
 
         if(!$row = $q->fetch()) { /* якщо записи з такими параметрами відсутні, то додаємо у базу */
             $res = DB::me()->prepare("INSERT INTO `log_of_user_aut` (`id_user`,`user_id`,`method`,`iplong`, `time`, `id_browser`,`browser`,`browser_ua`,`domain`,`status`) VALUES (:id,:uid,:method,:ip_long,:time,:br_id,:br_name,:ua,:domain,:status)");
-            $res->execute(Array(':id' => $id, ':uid' => $vk_id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status, ':br_id' => $dcms->browser_id, ':br_name' => $dcms->browser_name, ':time' => TIME));
+            $res->execute(Array(':id' => $id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status, ':br_id' => $dcms->browser_id, ':br_name' => $dcms->browser_name, ':time' => TIME));
         } else {
             $res = DB::me()->prepare("UPDATE `log_of_user_aut` SET `time` = :time, `id_browser` = :br_id, `count` = `count` + 1 WHERE `id_user` = :id AND `user_id` = :uid AND `iplong` = :ip_long AND `browser_ua` = :ua AND `domain` = :domain AND `method` = :method AND `status` = :status LIMIT 1");
-            $res->execute(Array(':id' => $id, ':uid' => $vk_id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status, ':br_id' => $dcms->browser_id, ':time' => TIME));
+            $res->execute(Array(':id' => $id, ':ip_long' => $dcms->ip_long, ':ua' => $ua, ':domain' => $dcms->subdomain_main, ':method' => $method, ':status' => $status, ':br_id' => $dcms->browser_id, ':time' => TIME));
         }
     }
 

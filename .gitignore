@@ -6,7 +6,6 @@ sys/tmp/*
 sys/files/*.!config.dir.ini
 sys/languages/*/_*.lng
 sys/ini/settings.ini
-sys/ini/iv.dat
 sys/files/*
 sys/themes/default/cache/*
 sys/files/*/.!config.dir.ini

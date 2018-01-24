@@ -27,6 +27,7 @@ foreach ($cats AS $cat) {
  LEFT JOIN `forum_themes` AS `ft` ON `fv`.`id_theme` = `ft`.`id`
  WHERE `ft`.`id_category` = $cat[id] AND `fv`.`time` >= $time_start AND `fv`.`time` < $time_end) AS $field";
     }
+    $a = 'SELECT '.implode(',', array_values($fields));
 
     $q = DB::me()->query('SELECT '.implode(',', array_values($fields)));
     $result = $q->fetch();

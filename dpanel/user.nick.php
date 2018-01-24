@@ -17,12 +17,6 @@ if (!$ank->group) {
     exit;
 }
 
-if (!$ank->vk_id) {
-    $doc->toReturn();
-    $doc->err(__('Нельзя переименовать пользователя vk.com'));
-    exit;
-}
-
 $doc->title .= ' "' . $ank->login . '"';
 
 if ($ank->group >= App::user()->group) {

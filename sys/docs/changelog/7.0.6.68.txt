@@ -1,4 +1,0 @@
-[title]7.0.6.68[/title]
-
-[add] Добавлен языковой пакет Polski, обновлены English и Ukrainian
-[fix] При установке системы появлялась ошибка  [u]Use of undefined constant HTMLENT_OPTIONS[/u]
