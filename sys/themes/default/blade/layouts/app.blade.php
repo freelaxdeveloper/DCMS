@@ -2,38 +2,11 @@
 <html lang="en" ng-app="Dcms">
 <head>
     <link rel="shortcut icon" href="/favicon.ico"/>
-    <link rel="stylesheet" href="/sys/themes/.common/system.css" type="text/css"/>
-    <link rel="stylesheet" href="/sys/themes/.common/icons.css" type="text/css"/>
-    <link rel="stylesheet" href="/sys/themes/.common/theme_light.css" type="text/css"/>
-    <link rel="stylesheet" href="/sys/themes/.common/animate.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/sys/themes/default/style.css?14"/>
-    <noscript>
-        <meta http-equiv="refresh" content="0; URL=/pages/bad_browser.html"/>
-    </noscript>
-    <script>
-        (function () {
-            var getIeVer = function () {
-                var rv = -1; // Return value assumes failure.
-                if (navigator.appName === 'Microsoft Internet Explorer') {
-                    var ua = navigator.userAgent;
-                    var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-                    if (re.exec(ua) !== null)
-                        rv = parseFloat(RegExp.$1);
-                }
-                return rv;
-            };
-            var ver = getIeVer();
-            if (ver !== -1 && ver < 9) {
-                window.location.href = "/pages/bad_browser.html";
-            }
-        })();
-    </script>
-    <script charset="utf-8" src="/sys/themes/.common/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/.common/angular.min.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/.common/angular-animate.min.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/.common/dcmsApi.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/.common/elastic.js" type="text/javascript"></script>
-    <script charset="utf-8" src="/sys/themes/default/js.js?6" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="{{ elixir('default/css/core.css') }}" type="text/css"/>
+
+    <script charset="utf-8" src="{{ elixir('default/js/core.js') }}" type="text/javascript"></script>
+    <script charset="utf-8" src="{{ elixir('default/js/highcharts.js') }}" type="text/javascript"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -11,3 +11,4 @@ sys/themes/default/cache/*
 sys/files/*/.!config.dir.ini
 config.php
 sys/key/*
+node_modules/

@@ -234,7 +234,7 @@ function view(string $template, array $params = [], bool $view = true)
     }
     
 }
-function dd($array, bool $exit = true)
+function dd($array, bool $exit = true): void
 {
     echo '<pre>';
     print_r($array);
@@ -242,11 +242,24 @@ function dd($array, bool $exit = true)
     if ($exit)
         exit;
 }
-function redirect(string $path = '/') {
+function redirect(string $path = '/'): void
+{
     header('Location: ' . $path);
     exit;
 }
-function refresh(string $path = '/') {
+function refresh(string $path = '/'): void
+{
     header('Refresh:1; ' . $path);
     exit;
+}
+function elixir(string $path): string
+{
+    $dir = '/public/build/';
+    $manifest = file_get_contents(H . $dir . 'rev-manifest.json');
+    $manifest = json_decode($manifest);
+    if (empty($manifest->$path)) {
+        throw new \Exception("File# {$path} not exists");
+    }
+    $filePath = $dir . $manifest->$path;
+    return $filePath;
 }

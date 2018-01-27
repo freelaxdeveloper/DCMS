@@ -14,7 +14,7 @@ if (!isset($_GET ['id']) || !is_numeric($_GET ['id'])) {
 }
 $id_message = (int) $_GET ['id'];
 
-if (!$message = ChatMini::find($id_message)) {
+if (!$message = ChatMini::findOrFail($id_message)) {
     $doc->toReturn('./');
     $doc->err(__('Сообщение не найдено'));
     exit();

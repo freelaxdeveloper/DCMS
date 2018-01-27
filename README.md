@@ -8,3 +8,5 @@
 <b>openssl rsa -in ./sys/key/private.pem -out sys/key/public.pem -outform PEM -pubout</b><br><br>
  - Для выполнения миграций<br>
 <b>php vendor/bin/phinx migrate -c config-phinx.php</b><br><br>
+
+gulp --production

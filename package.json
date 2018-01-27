@@ -1,0 +1,20 @@
+{
+    "private": true,
+    "devDependencies": {
+      "gulp": "^3.9.1",
+      "gulp-concat": "^2.6.1",
+      "gulp-csso": "^3.0.0",
+      "gulp-imagemin": "^4.0.0",
+      "gulp-jade": "^1.1.0",
+      "gulp-livereload": "^3.8.1",
+      "gulp-myth": "^1.1.0",
+      "gulp-stylus": "^2.6.0",
+      "gulp-uglify": "^3.0.0",
+      "jquery": "^3.2",
+      "laravel-mix": "^1.0",
+      "laravel-elixir": "^1.0",
+      "lodash": "^4.17.4",
+      "vue": "^2.5.7"
+    }
+  }
+  
