@@ -43,7 +43,7 @@ $themes = ForumTheme::whereHas('messages', function ($query) {
     $query->group();
 })->withCount(['messages' => function ($query) {
     $query->group();
-}, 'views'])->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, App::user()->items_per_page);
+}, 'views'])->where('id_topic', $topic->id)->orderByRaw('top ASC', 'time_last ASC')->get()->forPage($pages->this_page, App::user()->items_per_page);
 
 view('forum.themes', compact('themes'));
 
