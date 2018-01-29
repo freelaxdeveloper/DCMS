@@ -1,5 +1,5 @@
 <?php
-define('H', $_SERVER['OLDPWD']);
+define('H', '/var/www/dcms');
 define('TEMP', H . '/sys/temp/');
 define('TIME', time());
 
@@ -26,11 +26,18 @@ $capsule->bootEloquent();
 
 $user = User::first();
 
-echo $user->login;
 
+$content = '';
+$content .= date("Y-m-d H:i:s") . "\n\n";
+foreach ($_SERVER as $key => $value) {
+    if (is_array($value)) {
+        continue;
+    }
+    $content .= "{$key} -> {$value} \n\n";
+}
 
-file_put_contents(H . '/test.txt', ':-( ' . date("H:i:s"));
-
+file_put_contents(H . '/test.txt', $content);
+exit;
 function execute_cron_file($path)
 {
     global $db, $dcms, $log_of_visits;

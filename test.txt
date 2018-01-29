@@ -1,1 +1,32 @@
-:-( 20:17:06
+2018-01-29 22:30:01
+
+LANGUAGE -> ru_UA:ru 
+
+HOME -> /root 
+
+LOGNAME -> root 
+
+PATH -> /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin 
+
+LANG -> ru_UA.UTF-8 
+
+SHELL -> /bin/sh 
+
+PWD -> /root 
+
+PHP_SELF -> /var/www/dcms/sys/cron.php 
+
+SCRIPT_NAME -> /var/www/dcms/sys/cron.php 
+
+SCRIPT_FILENAME -> /var/www/dcms/sys/cron.php 
+
+PATH_TRANSLATED -> /var/www/dcms/sys/cron.php 
+
+DOCUMENT_ROOT ->  
+
+REQUEST_TIME_FLOAT -> 1517257801.1219 
+
+REQUEST_TIME -> 1517257801 
+
+argc -> 1 
+

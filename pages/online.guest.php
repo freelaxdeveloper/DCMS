@@ -2,36 +2,25 @@
 
 include_once '../sys/inc/start.php';
 use App\{document,pages,listing};
+use App\Models\GuestOnline;
 use App\App\App;
 
-$doc = new document();
-$pages = new pages;
-
 $bots = isset($_GET['bots']) ? '1' : '0';
+
+$doc = new document;
+$pages = new pages(GuestOnline::when($bots, function ($query) use ($bots) {
+    return $query->where('is_robot', $bots);
+})->where('conversions', '>=', 3)->count());
 
 $doc->tab(__('Роботы'), '?bots', $bots);
 $doc->tab(__('Гости'), '?', !$bots);
 
-$res = $db->prepare("SELECT COUNT(*) FROM `guest_online` WHERE `conversions` >= '5' AND `is_robot` = ?");
-$res->execute(array($bots));
-$pages->posts = $res->fetchColumn();
+$guests = GuestOnline::when($bots, function ($query) use ($bots) {
+    return $query->where('is_robot', $bots);
+})->where('conversions', '>=', 3)->get();
+
+view('pages.online_guest', compact('guests'));
 
 $doc->title = $bots ? __('Роботы на сайте (%s)', $pages->posts) : __('Гости на сайте (%s)', $pages->posts);
-
-$q = $db->prepare("SELECT * FROM `guest_online` WHERE `conversions` >= '5' AND `is_robot` = ? ORDER BY `time_start` DESC LIMIT " . $pages->limit);
-$q->execute(array($bots));
-$listing = new listing();
-while ($ank = $q->fetch()) {
-    $post = $listing->post();
-    $post->icon('guest');
-    $post->title = $bots ? $ank['browser'] : __('Гость');
-    $post->content[] = __("Переходов") . ': ' . $ank['conversions'];
-    if (App::user()->group || $ank['ip_long'] == $dcms->ip_long)
-        $post->content[] = "IP: " . long2ip($ank['ip_long']);
-    if(!$bots)
-        $post->content[] = __("Браузер") . ': ' . $ank['browser'];
-    if (App::user()->group > 1 && $ank['browser_ua'] != '')
-        $post->content[] = 'User-Agent: '. $ank['browser_ua']; }
-$listing->display($bots ? __('Ботов нет') : __('Нет гостей'));
 
 $pages->display('?' . ($bots ? 'bots' : '') . '&amp;');

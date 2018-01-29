@@ -13,11 +13,9 @@ class GuestOnline extends Migration
             $table->enum('is_robot', ['0', '1'])->default(0);
             $table->string('browser');
             $table->string('browser_ua')->comment('user_agent');
-            $table->integer('time_start')->unsigned();
-            $table->integer('time_last')->index();
             $table->string('domain')->comment('Домен');
             $table->string('request')->comment('Последняя страница');
-            $table->integer('conversions')->unsigned()->default(1)->comment('Количество переходов	');
+            $table->integer('conversions')->unsigned()->default(0)->comment('Количество переходов	');
             $table->timestamps();
         });
     }

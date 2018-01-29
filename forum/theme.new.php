@@ -3,7 +3,7 @@
 include_once '../sys/inc/start.php';
 use App\{document,text,captcha,is_valid,form,url};
 use App\App\App;
-
+use App\Models\ForumTheme;
 $doc = new document(1);
 
 $doc->title = __('Новая тема');
@@ -62,21 +62,35 @@ if ($can_write && isset($_POST ['message']) && isset($_POST ['name'])) {
         App::user()->balls += $dcms->add_balls_create_theme ;
         $res = $db->prepare("UPDATE `forum_topics` SET `time_last` = ? WHERE `id` = ? LIMIT 1");
         $res->execute(Array(TIME, $id_topic));
-        $res = $db->prepare("INSERT INTO `forum_themes` (`id_category`, `id_topic`,  `name`, `id_autor`, `time_create`, `id_last`, `time_last`, `group_show`, `group_write`, `group_edit`) VALUES (?,?,?,?,?,?,?,?,?,?)");
-        $res->execute(Array($topic['id_category'], $topic['id'], $name, App::user()->id, TIME, App::user()->id, TIME, $topic['group_show'], $topic['group_write'], max(App::user()->group, 2)));
-        $theme ['id'] = $db->lastInsertId();
-        $res = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? LIMIT 1");
+
+        $theme = ForumTheme::create([
+            'id_category' => $topic['id_category'],
+            'id_topic' => $topic['id'],
+            'name' => $name,
+            'id_autor' => App::user()->id,
+            //'time_create' => $topic['id_category'],
+            //'time_last' => App::user()->id,
+            'id_last' => App::user()->id,
+            'group_show' => $topic['group_show'],
+            'group_write' => $topic['group_write'],
+            'group_edit' => max(App::user()->group, 2),
+        ]);
+        /* $res = $db->prepare("INSERT INTO `forum_themes` (`id_category`, `id_topic`,  `name`, `id_autor`, `time_create`, `id_last`, `time_last`, `group_show`, `group_write`, `group_edit`) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        $res->execute(Array($topic['id_category'], $topic['id'], $name, App::user()->id, TIME, App::user()->id, TIME, $topic['group_show'], $topic['group_write'], max(App::user()->group, 2))); */
+
+        //$theme ['id'] = $db->lastInsertId();
+        /* $res = $db->prepare("SELECT * FROM `forum_themes` WHERE `id` = ? LIMIT 1");
         $res->execute(Array($theme['id']));
-        $theme = $res->fetch();
+        $theme = $res->fetch(); */
 
         $res = $db->prepare("INSERT INTO `forum_messages` (`id_category`, `id_topic`, `id_theme`, `id_user`, `time`, `message`, `group_show`, `group_edit`) VALUES (?,?,?,?,?,?,?,?)");
-        $res->execute(Array($theme['id_category'], $theme['id_topic'], $theme['id'], App::user()->id, TIME, $message, $theme['group_show'], $theme['group_edit']));
+        $res->execute(Array($theme->id_category, $theme->id_topic, $theme->id, App::user()->id, TIME, $message, $theme->group_show, $theme->group_edit));
 
         $_SESSION ['antiflood'] ['newtheme'] = TIME;
         $doc->msg(__('Тема успешно создана'));
 
         //header('Refresh: 1; url=theme.php?id=' . $theme ['id']);
-        $doc->ret(__('В тему'), 'theme.php?id=' . $theme ['id']);
+        $doc->ret(__('В тему'), 'theme.php?id=' . $theme->id);
         exit();
     } else {
         $doc->err(__('Сообщение или название темы пусто'));

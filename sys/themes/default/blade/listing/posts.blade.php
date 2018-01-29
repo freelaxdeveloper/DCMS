@@ -1,11 +1,15 @@
-<div class="post clearfix icon @if($actions)actions @endif @if($bottom)bottom @endif @if($time)time @endif @if($content)content @endif @if(isset($counter))counter @endif"
+<div class="post clearfix icon @if(!empty($actions))actions @endif @if(!empty($bottom))bottom @endif @if(!empty($time))time @endif @if(!empty($content))content @endif @if(isset($counter))counter @endif"
     data-ng-controller="ListingPostCtrl"
-    data-post-url="{{$url}}">
+    data-post-url="@if (!empty($url)){{$url}}@endif">
     <div class="post_head">
         <span class="post_icon">
             <img src="{{ App\App\App::icon($icon) }}" alt="">
         </span>
-        <a class="post_title" href="{{$url}}">{{$title}}</a>
+        @if (empty($url))
+            {{$title}}
+        @else
+            <a class="post_title" href="{{$url}}">{{$title}}</a>
+        @endif
         <span class="post_actions">
             @if (!empty($actions))
                 @foreach ($actions as $action)
