@@ -11,8 +11,10 @@ version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0'
  */
 require_once dirname(__FILE__) . '/initialization.php';
 use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,user,misc,groups};
+use App\Models\{UserOnline,GuestOnline};
 use Jenssegers\Blade\Blade;
-use App\App\App;
+use Carbon\Carbon;
+use App\App\{App,Authorize};
 /**
  * во время автоматического обновления не должно быть запросов со стороны пользователя
  */
@@ -113,11 +115,10 @@ try {
     die('Ошибка подключения к базе данных:' . $e->getMessage());
 }
 
-if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * Поэтапная отправка писем из очереди
      */
-    mail::queue_process();
+    //mail::queue_process();
 
     /**
      * Запись переходов со сторонних сайтов
@@ -138,58 +139,47 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     /**
      * обработка данных пользователя
      */
-    if (App::user()->id !== false) {
-        App::user()->last_visit = TIME; // запись последнего посещения
-        if (AJAX) {
-            // при AJAX запросе только обновляем сведения о времени последнего посещения, чтобы пользователь оставался в онлайне
-            $res = $db->prepare("UPDATE `users_online` SET `time_last` = ? WHERE `id_user` = ? LIMIT 1");
-            $res->execute(Array(TIME, App::user()->id));
-        } else {
-
-            App::user()->conversions++; // счетчик переходов
-
-            $q = $db->prepare("SELECT * FROM `users_online` WHERE `id_user` = ? LIMIT 1");
-            $q->execute(Array(App::user()->id));
-            if ($q->fetch()) {
-                $res = $db->prepare("UPDATE `users_online` SET `conversions` = `conversions` + '1' , `time_last` = ?, `id_browser` = ?, `ip_long` = ?, `request` = ? WHERE `id_user` = ? LIMIT 1");
-                $res->execute(Array(TIME, $dcms->browser_id, $dcms->ip_long, $_SERVER ['REQUEST_URI'], App::user()->id));
-            } else {
-                $res = $db->prepare("INSERT INTO `users_online` (`id_user`, `time_last`, `time_login`, `request`, `id_browser`, `ip_long`) VALUES (?, ?, ?, ?, ?, ?)");
-                $res->execute(Array(App::user()->id, TIME, TIME, $_SERVER ['REQUEST_URI'], $dcms->browser_id, $dcms->ip_long));
-                App::user()->count_visit++; // счетчик посещений
+    if (Authorize::isAuthorize()) {
+        App::user()->update(['last_visit' => TIME]); // запись последнего посещения
+        if (!AJAX) {
+            App::user()->increment('conversions'); // счетчик переходов
+            $userOnline = UserOnline::updateOrCreate(
+                ['id_user' => App::user()->id],
+                [
+                    'time_last' => TIME,
+                    'id_browser' => $dcms->browser_id,
+                    'ip_long' => $dcms->ip_long,
+                    'request' => $_SERVER ['REQUEST_URI'],
+                ]
+            );
+            $userOnline->increment('conversions');
+            if ($userOnline->wasRecentlyCreated) {
+                $userOnline->time_login = TIME;
+                $userOnline->save();
+                App::user()->increment('count_visit');
             }
         }
-    } else {
         // обработка гостя
         // зачистка гостей, вышедших из онлайна
-        $time_last = TIME - SESSION_LIFE_TIME;
-        $res = $db->prepare("DELETE FROM `guest_online` WHERE `time_last` < ?");
-        $res->execute(Array($time_last));
-
+        GuestOnline::where('updated_at', '<', Carbon::now()->subMinute(10)->toDateTimeString())->delete();
+    } else {
         if (!AJAX) {
             // при ajax запросе данные о переходе засчитывать не будем
-
-            $q = $db->prepare("SELECT * FROM `guest_online` WHERE `ip_long` = ? AND `browser_ua` = ? LIMIT 1");
-            $q->execute(Array($dcms->ip_long, (string) USER_AGENT));
-            if ($q->fetch()) {
-                // повторные переходы гостя
-                $res = $db->prepare("UPDATE `guest_online` SET `time_last` = ?, `request` = ?, `is_robot` = ?, `domain` = ?, `conversions` = `conversions` + 1 WHERE  `ip_long` = ? AND `browser_ua` = ? LIMIT 1");
-                $res->execute(Array(TIME, $_SERVER ['REQUEST_URI'], browser::getIsRobot() ? '1' : '0', $_SERVER['HTTP_HOST'], $dcms->ip_long, (string) USER_AGENT));
-            } else {
-                // новый гость
-                $res = $db->prepare("INSERT INTO `guest_online` (`ip_long`, `browser`, `browser_ua`, `time_last`, `time_start`, `domain`, `request`, `is_robot` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $res->execute(Array($dcms->ip_long, $dcms->browser_name, (string) USER_AGENT, TIME, TIME, $dcms->subdomain_main, $_SERVER ['REQUEST_URI'], browser::getIsRobot() ? '1' : '0'));
-            }
-        }
+            $guestOnline = GuestOnline::updateOrCreate(
+                [
+                    'ip_long' => $dcms->ip_long, 
+                    'browser_ua' => USER_AGENT, 
+                    'browser' => $dcms->browser_name
+                ],
+                [
+                    'request' => $_SERVER ['REQUEST_URI'],
+                    'is_robot' => browser::getIsRobot() ? '1' : '0',
+                    'domain' => $_SERVER['HTTP_HOST'],
+                ]
+            );
+            $guestOnline->increment('conversions');
+         }
     }
-
-    $cron_time = cache_events::get('cron');
-    if ($cron_time < TIME - 180) {
-        misc::log('cron не настроен на сервере. вызываем вручную', 'cron');
-        include H . '/sys/cron.php';
-    }
-    unset($cron_time);
-
     /**
      * при полном бане никуда кроме страницы бана нельзя
      */
@@ -212,8 +202,6 @@ if ($_SERVER['SCRIPT_NAME'] != '/sys/cron.php') {
     if (App::user()->group && App::user()->language != $user_language_pack->code && languages::exists(App::user()->language)) {
         $user_language_pack = new language_pack(App::user()->language);
     }
-}
-
 function view(string $template, array $params = [], bool $view = true)
 {
     static $blade;
@@ -234,7 +222,7 @@ function view(string $template, array $params = [], bool $view = true)
     }
     
 }
-function dd($array, bool $exit = true)
+function dd($array, bool $exit = true): void
 {
     echo '<pre>';
     print_r($array);
@@ -242,11 +230,24 @@ function dd($array, bool $exit = true)
     if ($exit)
         exit;
 }
-function redirect(string $path = '/') {
+function redirect(string $path = '/'): void
+{
     header('Location: ' . $path);
     exit;
 }
-function refresh(string $path = '/') {
+function refresh(string $path = '/'): void
+{
     header('Refresh:1; ' . $path);
     exit;
+}
+function elixir(string $path): string
+{
+    $dir = '/public/build/';
+    $manifest = file_get_contents(H . $dir . 'rev-manifest.json');
+    $manifest = json_decode($manifest);
+    if (empty($manifest->$path)) {
+        throw new \Exception("File# {$path} not exists");
+    }
+    $filePath = $dir . $manifest->$path;
+    return $filePath;
 }

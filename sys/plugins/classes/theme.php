@@ -36,7 +36,7 @@ class theme
     protected function _readConfig()
     {
         if (!is_file($this->_abs_path . '/config.ini')) {
-            throw new Exception(__('Конфиг не найден'));
+            throw new \Exception(__('Конфиг не найден'));
         }
         return ini::read($this->_abs_path . '/config.ini', true);
     }

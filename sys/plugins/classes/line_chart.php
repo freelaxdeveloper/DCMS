@@ -28,6 +28,7 @@ class line_chart extends ui
     public $y_text = '';
     public $value_suffix = '';
     public $title;
+    public $description = '';
 
     public function __construct($title)
     {
@@ -38,12 +39,15 @@ class line_chart extends ui
 
     public function fetch()
     {
-        $this->_data['y_text'] = $this->y_text;
-        $this->_data['value_suffix'] = $this->value_suffix;
-        $this->_data['series'] = $this->series;
-        $this->_data['categories'] = $this->categories;
-        $this->_data['title'] = $this->title;
-        return parent::fetch();
+        $id = mt_rand(1111, 9999);
+        $value_suffix = $this->value_suffix;
+        $categories = json_encode($this->categories);
+        $series = json_encode($this->series);
+        $title = $this->title;
+        $description = $this->description;
+        $y_text = $this->y_text;
+
+        return view('chart', compact('categories', 'series', 'id', 'title', 'y_text', 'value_suffix', 'description'));
     }
 
 } 

@@ -30,7 +30,9 @@ if (@function_exists('ini_set')) {
 /**
  * @const H путь к корневой директории сайта
  */
-define('H', $_SERVER ['DOCUMENT_ROOT']); // корневая директория сайта
+if (!defined('H')) {
+    define('H', $_SERVER ['DOCUMENT_ROOT']); // корневая директория сайта
+}
 
 /**
  * @const TEMP временная папка

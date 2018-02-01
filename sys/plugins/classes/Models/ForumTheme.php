@@ -4,9 +4,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{User,ForumTopic,ForumCategory,ForumMessage,ForumView};
 use App\App\App;
+use Carbon\Carbon;
 
 class ForumTheme extends Model{
-    public $timestamps = false;
     protected $guarded = ['id'];
 
     /**
@@ -98,11 +98,11 @@ class ForumTheme extends Model{
             });
     }
     /**
-     * обновенные темы
+     * обновленные темы
      */
     public function scopeLastThemes($query)
     {
-        return $query->group()->where('time_create', '>', TIME - 3600 * 24 * 7)
+        return $query->group()->where('updated_at', '>', Carbon::now()->subDay(7)->toDateTimeString())
             ->whereHas('topic', function ($query) {
                 $query->where('theme_view', '1');
             });

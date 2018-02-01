@@ -27,7 +27,6 @@ if (App::user()->group) {
 }
 
 $doc->title .= ' - ' . $theme->name;
-
 $doc->keywords[] = __('Форум');
 $doc->keywords[] = $theme->name;
 $doc->keywords[] = $theme->topic->name;

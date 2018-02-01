@@ -8,16 +8,17 @@ $doc->title = __('Статистика');
 if (!$dcms->log_of_visits) {
     $doc->err(__('Служба ведения статистики отключена'));
 }
-
 $res = DB::me()->query("SELECT * FROM `log_of_visits_for_days` ORDER BY `time_day` DESC LIMIT 30");
 
 $chart_hosts = new line_chart(__("Посетители за последний месяц"));
+$chart_hosts->y_text = 'Посетители';
 $chart_hosts->series[] = $s_hosts_full = new line_chart_series(__('С компьютера'));
 $chart_hosts->series[] = $s_hosts_mobile = new line_chart_series(__('Со смартфона'));
 $chart_hosts->series[] = $s_hosts_lite = new line_chart_series(__('С телефона'));
 $chart_hosts->series[] = $s_hosts_robot = new line_chart_series(__('Поисковые роботы'));
 
 $chart_hits = new line_chart(__("Переходы за последний месяц"));
+$chart_hits->y_text = 'Переходы';
 $chart_hits->series[] = $s_hits_full = new line_chart_series(__('С компьютера'));
 $chart_hits->series[] = $s_hits_mobile = new line_chart_series(__('Со смартфона'));
 $chart_hits->series[] = $s_hits_lite = new line_chart_series(__('С телефона'));

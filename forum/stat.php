@@ -3,6 +3,7 @@ include_once '../sys/inc/start.php';
 use App\{document,line_chart,line_chart_series,DB};
 
 $doc = new document(5);
+
 $doc->title = __('Форум - Статистика');
 
 $s_time = 86400; // кол-во секунд в сутках
@@ -10,6 +11,7 @@ $s_time = 86400; // кол-во секунд в сутках
 $cats = DB::me()->query('SELECT * FROM `forum_categories`')->fetchAll();
 
 $chart = new line_chart(__("Просмотры тем за последний месяц"));
+$chart->y_text = 'Темы';
 foreach ($cats AS $cat) {
     $series = new line_chart_series($cat['name']);
 
@@ -41,6 +43,7 @@ foreach ($cats AS $cat) {
 $chart->display();
 
 $chart = new line_chart(__("Новые сообщения в темах за последний месяц"));
+$chart->y_text = 'Сообщения';
 foreach ($cats AS $cat) {
     $series = new line_chart_series($cat['name']);
 

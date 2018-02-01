@@ -8,3 +8,14 @@
 <b>openssl rsa -in ./sys/key/private.pem -out sys/key/public.pem -outform PEM -pubout</b><br><br>
  - Для выполнения миграций<br>
 <b>php vendor/bin/phinx migrate -c config-phinx.php</b><br><br>
+
+gulp --production
+
+## To Do
+
+- [x] добавить Composer
+- [x] добавить gulp
+- [x] добавить систему миграций
+- [x] добавить шаблонизатор Blade
+- [ ] переписать всё под ORM eloquent
+- [ ] MVC

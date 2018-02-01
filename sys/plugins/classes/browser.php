@@ -83,7 +83,7 @@ abstract class browser
         );
 
         // определение большенства ботов
-        if (preg_match('#(app|bot|crawler|cURL|scaner|spider|validator)#ui', $user_agent)) {
+        if (preg_match('#(bot|crawler|cURL|scaner|spider|validator)#ui', $user_agent)) {
             $info['isRobot'] = true;
         }
 
