@@ -9,7 +9,6 @@ class ChatMini extends Migration
         $this->schema->create('chat_mini', function(Blueprint $table){
             $table->increments('id');
             $table->integer('id_user')->unsigned();
-            $table->integer('time')->unsigned();
             $table->text('message');
             $table->timestamps();
 

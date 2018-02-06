@@ -50,11 +50,11 @@ td {
 }
 
 .DCMS_nick_donate {
-	background-image: url("/sys/images/icons/donate.png");
+	background-image: url("/images/icons/donate.png");
 }
 
 .DCMS_nick_birthday {
-	background-image: url("/sys/images/icons/birthday.png");
+	background-image: url("/images/icons/birthday.png");
 }
 
 .DCMS_quote {
@@ -130,6 +130,6 @@ td {
 	width: 88px;
 }
 
-#browsers > a#firefox { background: url(/sys/images/browsers/firefox.png) no-repeat 50% 17px; }
-#browsers > a#chrome { background: url(/sys/images/browsers/chrome.png) no-repeat 50% 17px; }
-#browsers > a#opera { background: url(/sys/images/browsers/opera.png) no-repeat 50% 15px; }
+#browsers > a#firefox { background: url(/images/browsers/firefox.png) no-repeat 50% 17px; }
+#browsers > a#chrome { background: url(/images/browsers/chrome.png) no-repeat 50% 17px; }
+#browsers > a#opera { background: url(/images/browsers/opera.png) no-repeat 50% 15px; }

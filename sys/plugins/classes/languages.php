@@ -80,7 +80,7 @@ abstract class languages {
                 $xml_lang = empty($config['xml_lang']) ? $rd : $config['xml_lang'];
                 $disable_collect_phrases = !empty($config['disable_collect_phrases']);
 
-                $icon = file_exists($lpath . '/' . $rd . '/icon.png') ? '/sys/languages/' . $rd . '/icon.png' : false;
+                $icon = '/images/languages/' . $rd . '.png';
 
                 $list[$rd] = array('enname' => $enname, 'name' => $name, 'icon' => $icon, 'xml_lang' => $xml_lang, 'disable_collect_phrases' => $disable_collect_phrases);
             }

@@ -1,4 +1,6 @@
 <?php
+define('USER', 'test');
+define('PASS', '123');
 
 /**
  * @const TIME_START Время запуска скрипта в миллисекундах
@@ -31,9 +33,8 @@ if (@function_exists('ini_set')) {
  * @const H путь к корневой директории сайта
  */
 if (!defined('H')) {
-    define('H', $_SERVER ['DOCUMENT_ROOT']); // корневая директория сайта
+    define('H', $_SERVER ['DOCUMENT_ROOT'] . '/..'); // корневая директория сайта
 }
-
 /**
  * @const TEMP временная папка
  */

@@ -66,6 +66,6 @@ class design extends native_templating
      */
     function getIconPath($name)
     {
-        return '/sys/images/icons/' . basename($name, '.png') . '.png';
+        return '/images/icons/' . basename($name, '.png') . '.png';
     }
 }

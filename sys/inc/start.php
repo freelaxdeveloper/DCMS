@@ -10,8 +10,8 @@ version_compare(PHP_VERSION, '7.0', '>=') or die('Требуется PHP >= 7.0'
  * Выделены в отдельный файл чтобы избежать дублирования кода в инсталляторе
  */
 require_once dirname(__FILE__) . '/initialization.php';
-use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,user,misc,groups};
-use App\Models\{UserOnline,GuestOnline};
+use App\{cache_events,dcms,languages,language_pack,DB,mail,log_of_referers,log_of_visits,browser,misc,groups};
+use Dcms\Models\{UserOnline,GuestOnline,User};
 use Jenssegers\Blade\Blade;
 use Carbon\Carbon;
 use App\App\{App,Authorize};
@@ -140,7 +140,7 @@ try {
      * обработка данных пользователя
      */
     if (Authorize::isAuthorize()) {
-        App::user()->update(['last_visit' => TIME]); // запись последнего посещения
+        //App::user()->update(['last_visit' => TIME]); // запись последнего посещения
         if (!AJAX) {
             App::user()->increment('conversions'); // счетчик переходов
             $userOnline = UserOnline::updateOrCreate(
@@ -222,6 +222,9 @@ function view(string $template, array $params = [], bool $view = true)
     }
     
 }
+use Dcms\Core\{Router,Redirect};
+use Illuminate\Support\Collection;
+
 function dd($array, bool $exit = true): void
 {
     echo '<pre>';
@@ -230,24 +233,33 @@ function dd($array, bool $exit = true): void
     if ($exit)
         exit;
 }
-function redirect(string $path = '/'): void
+function redirect(string $path = '/')
 {
-    header('Location: ' . $path);
-    exit;
+    return (new Redirect($path));
 }
-function refresh(string $path = '/'): void
-{
-    header('Refresh:1; ' . $path);
-    exit;
-}
+
 function elixir(string $path): string
 {
-    $dir = '/public/build/';
-    $manifest = file_get_contents(H . $dir . 'rev-manifest.json');
+    $dir = '/build/';
+    $manifest = file_get_contents(H . '/public/' . $dir . 'rev-manifest.json');
     $manifest = json_decode($manifest);
     if (empty($manifest->$path)) {
         throw new \Exception("File# {$path} not exists");
     }
     $filePath = $dir . $manifest->$path;
     return $filePath;
+}
+
+function route(string $name, array $options = []): string
+{
+    array_unshift($options, App::current_language());
+    $routes = Router::getRoutes();
+    $route = (new Collection($routes))->where('name', $name)->first();
+    if (!$route) {
+        return '/';
+        // throw new \Exception("Name: {$name} not exists in routes");
+    }
+    preg_match_all('/\?*(\([^\(]*)\)\?*/i', $route['pattern'], $matches); // собираем всё что в скобках для последующей замены
+    $url = str_replace($matches[0], $options, $route['pattern']); // наша строчка с вставленными параметрами
+    return '/' . preg_replace('#/$#', '', $url);
 }

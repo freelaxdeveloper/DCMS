@@ -136,13 +136,13 @@ abstract class text {
 
         $bbcode = new bbcode($str);
 
-        $bbcode->mnemonics['[info]'] = '<img src="/sys/images/icons/info.png" alt="info" />';
-        $bbcode->mnemonics['[add]'] = '<img src="/sys/images/icons/bb.add.png" alt="add" />';
-        $bbcode->mnemonics['[del]'] = '<img src="/sys/images/icons/bb.del.png" alt="del" />';
-        $bbcode->mnemonics['[fix]'] = '<img src="/sys/images/icons/bb.fix.png" alt="fix" />';
-        $bbcode->mnemonics['[change]'] = '<img src="/sys/images/icons/bb.change.png" alt="change" />';
-        $bbcode->mnemonics['[secure]'] = '<img src="/sys/images/icons/bb.secure.png" alt="secure" />';
-        $bbcode->mnemonics['[notice]'] = '<img src="/sys/images/icons/bb.notice.png" alt="notice" />';
+        $bbcode->mnemonics['[info]'] = '<img src="/images/icons/info.png" alt="info" />';
+        $bbcode->mnemonics['[add]'] = '<img src="/images/icons/bb.add.png" alt="add" />';
+        $bbcode->mnemonics['[del]'] = '<img src="/images/icons/bb.del.png" alt="del" />';
+        $bbcode->mnemonics['[fix]'] = '<img src="/images/icons/bb.fix.png" alt="fix" />';
+        $bbcode->mnemonics['[change]'] = '<img src="/images/icons/bb.change.png" alt="change" />';
+        $bbcode->mnemonics['[secure]'] = '<img src="/images/icons/bb.secure.png" alt="secure" />';
+        $bbcode->mnemonics['[notice]'] = '<img src="/images/icons/bb.notice.png" alt="notice" />';
 
         $str = $bbcode->get_html();
 

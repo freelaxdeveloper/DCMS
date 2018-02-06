@@ -12,6 +12,7 @@ class Users extends Migration
             $table->string('login');
             $table->string('password');
             $table->string('token');
+            $table->string('url_token');
             $table->string('a_code')->nullable()->comment('Код активации');
             $table->string('recovery_password')->nullable()->comment('Ключ для восстановления пароля');
             $table->enum('sex', ['0', '1'])->default(1)->comment('Пол');
@@ -56,7 +57,7 @@ class Users extends Migration
             $table->string('theme_mobile')->nullable()->comment('тема для touch устройств');
             $table->integer('last_time_login')->nullable()->comment('Время посл.изменения логина');
             // $table->timestamp('last_time_login')->nullable()->comment('Время посл.изменения логина');
-
+            $table->json('info')->nullable();
             $table->timestamps();
 
         });

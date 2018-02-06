@@ -1,7 +1,7 @@
 .DCMS_icon{
 display: inline-block;
 overflow: hidden;
-background-image: url(/sys/themes/.common/icons.png);
+background-image: url(/images/icons.png);
 }
 .DCMS_icon.up{
 width: 12px;

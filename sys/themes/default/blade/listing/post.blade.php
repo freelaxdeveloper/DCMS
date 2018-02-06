@@ -2,12 +2,14 @@
      class="post clearfix icon time @if ($actions)actions @endif @if ($bottom)bottom @endif @if ($counter)counter @endif @if ($content)content @endif"
      data-ng-controller="ListingPostCtrl"
      data-post-url="{{$url}}">
-    <div class="post_image"><img src="<?= $image ?>" alt=""></div>
+    @if ($image)
+        <div class="post_image"><img src="<?= $image ?>" alt=""></div>
+    @endif
     <div class="post_head">
         <span class="post_icon">
-            @if ($icon_class)
+            @if (!empty($icon_class))
                 <span class="{{$icon_class}}"></span>
-            @else
+            @elseif (!empty($icon))
                 <img src="{{$icon}}" alt="">
             @endif
         </span>

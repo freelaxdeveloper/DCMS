@@ -34,6 +34,6 @@ abstract class smiles {
         if (empty($smiles[$smile])) {
             return false;
         }
-        return '<img src="/sys/images/smiles/' . $smiles[$smile] . '.gif" alt="' . $smile . '" />';
+        return '<img src="/images/smiles/' . $smiles[$smile] . '.gif" alt="' . $smile . '" />';
     }
 }

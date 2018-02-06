@@ -1,0 +1,14 @@
+# устанавливаем нужную кодировку
+php_value default_charset UTF-8
+# так безопаснее
+php_flag register_globals off
+# запрещаем передавать id сессии через адресную строку
+php_flag session.use_only_cookies on
+
+RewriteEngine On
+# если язык сайта не задан, перенаправляем на ru
+RewriteCond %{QUERY_STRING} ^$ [NC]
+RewriteRule ^$ /ru/? [R=301,L]
+
+RewriteCond $1 !^(index\.php|build|favicon\.ico|images|sys)
+RewriteRule ^(.*)$ /index.php/$1 [L]
