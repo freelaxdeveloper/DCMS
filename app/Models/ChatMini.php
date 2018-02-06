@@ -1,13 +1,12 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use Dcms\Models\User;
 
 class ChatMini extends Model{
     protected $table = 'chat_mini';
-    public $timestamps = false;
-    protected $guarded = ['id'];
+    protected $fillable = ['id_user', 'message'];
 
     public function user()
     {

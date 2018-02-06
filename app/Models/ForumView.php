@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ForumTheme;
+use Dcms\Models\ForumTheme;
 
 class ForumView extends Model{
     // public $timestamps = false;

@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{ForumCategory,ForumTheme};
+use Dcms\Models\{ForumCategory,ForumTheme};
 use App\App\App;
 
 class ForumTopic extends Model{

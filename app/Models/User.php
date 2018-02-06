@@ -1,12 +1,18 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\{files,files_file,groups};
-use App\Models\{ChatMini,Browser};
+use Dcms\Models\{ChatMini,Browser};
+use App\App\App;
 
 class User extends Model{
     protected $guarded = ['id'];
+    protected $hidden = ['password', 'token'];
+
+    protected $casts = [
+        'info' => 'array',
+    ];
 
     public function getIconAttribute(){
         // система
@@ -73,4 +79,29 @@ class User extends Model{
     {
         return 5;
     }
+
+
+    # проверяем токен
+    public function checkToken(): bool
+    {
+        if (!$this->id) {
+            return false;
+        }
+        if (!isset($_GET['token']) && !isset($_POST['token'])) {
+            return false;
+        }
+        $token = $_GET['token'] ?? $_POST['token'] ?? null;
+        if ($token == $this->url_token) {
+            $this->updateToken();
+            return true;
+        }
+        return false;
+    }
+    # обновляем токен
+    public function updateToken()
+    {
+        $this->url_token = App::generateToken(32);
+        return $this->save();
+    }
+
 }

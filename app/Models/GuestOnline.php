@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Browser,User};
+use Dcms\Models\{Browser,User};
 use App\App\App;
 
 class GuestOnline extends Model {

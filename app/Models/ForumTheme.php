@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{User,ForumTopic,ForumCategory,ForumMessage,ForumView};
+use Dcms\Models\{User,ForumTopic,ForumCategory,ForumMessage,ForumView};
 use App\App\App;
 use Carbon\Carbon;
 
@@ -92,7 +92,7 @@ class ForumTheme extends Model{
      */
     public function scopeLastPosts($query)
     {
-        return $query->group()->where('time_last', '>', TIME - 3600 * 24 * 7)
+        return $query->group()->where('updated_at', '>', Carbon::now()->subDay(7)->toDateTimeString())
             ->whereHas('topic', function ($query) {
                 $query->where('theme_view', '1');
             });

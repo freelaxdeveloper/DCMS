@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Browser,User};
+use Dcms\Models\{Browser,User};
 
 class UserOnline extends Model{
     protected $table = 'users_online';

@@ -18,7 +18,7 @@ if (false === ($themes = cache::get($cache_id))) {
         ->withCount(['messages' => function ($query) {
             $query->group();
         }, 'views'])
-        ->orderBy('time_last', 'DESC')->get();
+        ->orderBy('updated_at', 'DESC')->get();
 
         cache::set($cache_id, $themes, 30);
 }

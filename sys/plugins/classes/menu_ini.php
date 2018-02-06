@@ -49,7 +49,11 @@ class menu_ini {
             $post = $this->_listing->post();
 
             if (empty($value['razdel'])) {
-                $post->url = text::toValue(@$this->value($value['url']));
+                if (!empty($value['name'])) {
+                    $post->url = route($value['name']);
+                } else {
+                    $post->url = text::toValue($this->value($value['url']));
+                }
             } else {
                 $post->highlight = true;
             }

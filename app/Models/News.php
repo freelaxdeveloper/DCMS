@@ -1,18 +1,14 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{News,User};
+use Dcms\Models\User;
 use App\App\App;
 
-class NewsComment extends Model{
+class News extends Model{
     public $timestamps = false;
-    protected $fillable = ['id_news','time','id_user','text'];
+    protected $fillable = ['title','time','text','id_user'];
 
-    public function news()
-    {
-        return $this->hasOne(News::class, 'id', 'id_news');
-    }
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'id_user');
@@ -20,7 +16,11 @@ class NewsComment extends Model{
     public function getActionsAttribute(): array
     {
         $actions = [];
-        if (2 <= App::user()->group) {
+        if (4 <= App::user()->group) {
+            if (!$this->sended) {
+                $actions[] = ['url' =>  './news.send.php?id=' . $this->id, 'icon' => 'send'];
+            }
+            $actions[] = ['url' => './news.edit.php?id=' . $this->id, 'icon' => 'edit'];
             $actions[] = ['url' => './news.delete.php?id=' . $this->id, 'icon' => 'delete'];
         }
         return $actions;

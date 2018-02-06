@@ -163,7 +163,7 @@ class document extends design
         $document_generation_time = round(microtime(true) - TIME_START, 3); // время генерации страницы
         $lang = $user_language_pack;
         $title = $this->title;
-        $is_main = IS_MAIN;
+        $is_main = false;
         $returns = $this->returns;
         $returns = array_reverse($returns);
         $actions = $this->actions;

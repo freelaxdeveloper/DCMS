@@ -1,6 +1,6 @@
 <?php
 use App\{listing,DB,text,misc};
-use App\Models\News;
+use Dcms\Models\News;
 
 defined('DCMS') or die;
 

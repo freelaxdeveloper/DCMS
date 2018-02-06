@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{$title}}</title>
+    <title>@yield('title', $title)</title>
 
     <script>
         user = {!! $current_user !!};
@@ -54,16 +54,12 @@
     </style>
 </head>
 <body class="theme_light_full theme_light" ng-controller="DcmsCtrl">
-    <audio id="audio_notify" preload="auto" class="ng-hide">
-        <source src="/sys/themes/.common/notify.mp3" />
-        <source src="/sys/themes/.common/notify.ogg" />
-    </audio>
     <div id="main">
         <div id="top_part">
             <div id="header">
                 <div class="body_width_limit clearfix">
                     <h1 id="title">{{$title}}</h1>
-    
+
                     <div id="navigation" class="clearfix @if ( $is_main ) ng-hide @endif">
                         <a class="nav_item" href='/'>@__('Главная')</a>
                          @foreach ($returns as $link)

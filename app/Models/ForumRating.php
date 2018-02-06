@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ForumMessage;
+use Dcms\Models\ForumMessage;
 
 class ForumRating extends Model{
     public $timestamps = false;

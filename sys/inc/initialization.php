@@ -1,4 +1,6 @@
 <?php
+define('USER', 'test');
+define('PASS', '123');
 
 /**
  * @const TIME_START Время запуска скрипта в миллисекундах

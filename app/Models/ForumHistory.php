@@ -1,8 +1,8 @@
 <?php
-namespace App\Models;
+namespace Dcms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{ForumTheme,User};
+use Dcms\Models\{ForumTheme,User};
 
 class ForumHistory extends Model{
     public $timestamps = false;

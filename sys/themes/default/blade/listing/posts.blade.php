@@ -2,9 +2,11 @@
     data-ng-controller="ListingPostCtrl"
     data-post-url="@if (!empty($url)){{$url}}@endif">
     <div class="post_head">
-        <span class="post_icon">
-            <img src="{{ App\App\App::icon($icon) }}" alt="">
-        </span>
+        @if (!empty($icon))
+            <span class="post_icon">
+                <img src="{{ App\App\App::icon($icon) }}" alt="">
+            </span>
+        @endif
         @if (empty($url))
             {{$title}}
         @else
@@ -21,7 +23,7 @@
             <span class="post_counter">{{$counter}}</span>
         @endif
         @if (!empty($time))
-            <span class="post_time">{{ App\misc::when($time) }}</span>
+            <span class="post_time">{{ $time }}</span>
         @endif
     </div>
     @if (!empty($content))
