@@ -10,5 +10,5 @@ RewriteEngine On
 RewriteCond %{QUERY_STRING} ^$ [NC]
 RewriteRule ^$ /ru/? [R=301,L]
 
-RewriteCond $1 !^(index\.php|public|favicon\.ico|sys\/images\/*|sys\/api\.php)
+RewriteCond $1 !^(index\.php|build|favicon\.ico|images|sys)
 RewriteRule ^(.*)$ /index.php/$1 [L]

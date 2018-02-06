@@ -240,8 +240,8 @@ function redirect(string $path = '/')
 
 function elixir(string $path): string
 {
-    $dir = '/public/build/';
-    $manifest = file_get_contents(H . $dir . 'rev-manifest.json');
+    $dir = '/build/';
+    $manifest = file_get_contents(H . '/public/' . $dir . 'rev-manifest.json');
     $manifest = json_decode($manifest);
     if (empty($manifest->$path)) {
         throw new \Exception("File# {$path} not exists");

@@ -50,11 +50,11 @@ td {
 }
 
 .DCMS_nick_donate {
-	background-image: url("/sys/images/icons/donate.png");
+	background-image: url("/images/icons/donate.png");
 }
 
 .DCMS_nick_birthday {
-	background-image: url("/sys/images/icons/birthday.png");
+	background-image: url("/images/icons/birthday.png");
 }
 
 .DCMS_quote {
@@ -130,14 +130,14 @@ td {
 	width: 88px;
 }
 
-#browsers > a#firefox { background: url(/sys/images/browsers/firefox.png) no-repeat 50% 17px; }
-#browsers > a#chrome { background: url(/sys/images/browsers/chrome.png) no-repeat 50% 17px; }
-#browsers > a#opera { background: url(/sys/images/browsers/opera.png) no-repeat 50% 15px; }
+#browsers > a#firefox { background: url(/images/browsers/firefox.png) no-repeat 50% 17px; }
+#browsers > a#chrome { background: url(/images/browsers/chrome.png) no-repeat 50% 17px; }
+#browsers > a#opera { background: url(/images/browsers/opera.png) no-repeat 50% 15px; }
 
 .DCMS_icon{
 display: inline-block;
 overflow: hidden;
-background-image: url(/sys/themes/.common/icons.png);
+background-image: url(/images/icons.png);
 }
 .DCMS_icon.up{
 width: 12px;
@@ -4674,7 +4674,6 @@ html, body, #main {
     right: 3px;
     width: 40px;
     height: 40px;
-    background: url('img/waiter2.gif') no-repeat;
 }
 
 .form .msg {

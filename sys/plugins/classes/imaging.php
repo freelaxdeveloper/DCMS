@@ -36,7 +36,7 @@ abstract class imaging {
      * @return boolean
      */
     public static function add_copyright(&$img) {
-        if (!$img2 = @imagecreatefrompng(H . '/sys/images/copyright/to_screen.png'))
+        if (!$img2 = @imagecreatefrompng(H . '/images/copyright/to_screen.png'))
             return false;
         $x = imagesx($img);
         $y = imagesy($img);
@@ -57,7 +57,7 @@ abstract class imaging {
      */
     public static function add_icon(&$img, $path) {
         $type = files_types::getIconType($path);
-        if (!$img2 = @imagecreatefrompng(H . '/sys/images/icons_files/' . $type . '.png'))
+        if (!$img2 = @imagecreatefrompng(H . '/images/icons_files/' . $type . '.png'))
             return false;
         $x = imagesx($img);
         $y = imagesy($img);

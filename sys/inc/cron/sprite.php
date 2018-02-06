@@ -3,7 +3,7 @@ use App\{cache,cache_events,misc,sprite};
 
 if (!cache_events::get('check_sprite')) {
     cache_events::set('check_sprite', true, mt_rand(60, 180));
-    $icons_paths = (array) @glob(H.'/sys/images/icons/*.png');
+    $icons_paths = (array) @glob(H.'/public/images/icons/*.png');
     $sprite_icons_list_cache = cache::get('sprite_icons');
     $need_update_sprite = false;
 
@@ -32,8 +32,8 @@ if (!cache_events::get('check_sprite')) {
         $sprite = new sprite();
         $sprite->addImages($icons_paths);
         $sprite->bindIndexes();
-        $sprite->saveSpriteImage(H.'/sys/themes/.common/icons.png');
-        $sprite->saveSpriteCss(H.'/sys/themes/.common/icons.css', '/sys/themes/.common/icons.png', SPRITE_CLASS_PREFIX);
+        $sprite->saveSpriteImage(H.'/public/images/icons.png');
+        $sprite->saveSpriteCss(H.'/public/css/.common/icons.css', '/images/icons.png', SPRITE_CLASS_PREFIX);
         misc::log('Новый спрайт собран', 'cron');
     }
 }

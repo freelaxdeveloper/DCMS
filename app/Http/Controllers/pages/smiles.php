@@ -8,7 +8,7 @@ $doc->title = __('Смайлы');
 $smiles = smiles::get_ini();
 $smiles_a = array();
 // загружаем список смайлов
-$smiles_gl = (array) glob(H . '/sys/images/smiles/*.gif');
+$smiles_gl = (array) glob(H . '/images/smiles/*.gif');
 
 foreach ($smiles_gl as $path) {
     if (preg_match('#/([^/]+)\.gif$#', $path, $m))
@@ -25,7 +25,7 @@ $listing = new listing();
 for($i = $start; $i < $end && $i < $pages->posts; $i++){
     $post = $listing->post();
     $post->title = text::toValue($smiles_a[$i]);
-    $post->image = '/sys/images/smiles/' . $smiles_a[$i] . '.gif';
+    $post->image = '/images/smiles/' . $smiles_a[$i] . '.gif';
     $post->content = __('Варианты') . ': *' . implode('*, *', array_keys($smiles, $smiles_a[$i])) . '*';
 }
 $listing->display(__('Смайлы отсутствуют'));

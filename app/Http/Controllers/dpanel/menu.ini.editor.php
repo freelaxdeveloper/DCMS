@@ -107,11 +107,11 @@ if (!empty($_GET['menu'])) {
             $form->text('position', __('Позиция'), arraypos::getPosition($m_obj->menu_arr, $item_name));
             $form->text('url', __('Ссылка'), $item['url']);
 
-            $icons = (array) glob(H . '/sys/images/icons/*.png');
+            $icons = (array) glob(H . '/images/icons/*.png');
             $options = array();
             $options[] = array('', '[' . __('Отсутствует') . ']');
             foreach ($icons as $icon_path) {
-                $icon = str_replace(H . '/sys/images/icons/', '', filesystem::unixpath($icon_path));
+                $icon = str_replace(H . '/images/icons/', '', filesystem::unixpath($icon_path));
                 $options[] = array($icon, $icon, $icon == @$item['icon']);
             }
             $form->select('icon', __('Иконка'), $options);
@@ -178,11 +178,11 @@ if (!empty($_GET['menu'])) {
         $form->text('position', __('Позиция'), count($m_obj->menu_arr) + 1);
         $form->text('url', __('Ссылка'), 'http://');
 
-        $icons = (array) glob(H . '/sys/images/icons/*.png');
+        $icons = (array) glob(H . '/images/icons/*.png');
         $options = array();
         $options[] = array('', '[' . __('Отсутствует') . ']');
         foreach ($icons as $icon_path) {
-            $icon = str_replace(H . '/sys/images/icons/', '', filesystem::unixpath($icon_path));
+            $icon = str_replace(H . '/images/icons/', '', filesystem::unixpath($icon_path));
             $options[] = array($icon, $icon);
         }
         $form->select('icon', __('Иконка'), $options);
@@ -284,7 +284,7 @@ if (!empty($_GET['menu'])) {
         if (empty($item['razdel'])) {
             $post->content = __('Ссылка') . ": $item[url]\n";
             if (!empty($item['icon'])) {
-                $icon = array('size' => 'small', 'src' => '/sys/images/icons/' . $item['icon']);
+                $icon = array('size' => 'small', 'src' => '/images/icons/' . $item['icon']);
             }
         } else {
             $post->content = "[b]" . __('Разделитель') . "[/b]\n";

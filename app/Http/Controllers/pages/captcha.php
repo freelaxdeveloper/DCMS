@@ -92,11 +92,11 @@ imagefill($img, 0, 0, imagecolorallocate($img, 255, 255, 255));
 for ($i = 0; $i < 5; $i++) {
     $n = $code {$i};
     if ($png) {
-        $num[$n] = imagecreatefrompng(H . '/sys/images/captcha/' . $n . '.png');
+        $num[$n] = imagecreatefrompng(H . '/images/captcha/' . $n . '.png');
     } elseif ($gif) {
-        $num[$n] = imagecreatefromgif(H . '/sys/images/captcha/' . $n . '.gif');
+        $num[$n] = imagecreatefromgif(H . '/images/captcha/' . $n . '.gif');
     } elseif ($jpg) {
-        $num[$n] = imagecreatefromjpeg(H . '/sys/images/captcha/' . $n . '.jpg');
+        $num[$n] = imagecreatefromjpeg(H . '/images/captcha/' . $n . '.jpg');
     }
     imagecopy($img, $num[$n], $i * 10 + mt_rand(18,21), mt_rand(7,9), 0, 0, 15, 20);
 }

@@ -9,8 +9,8 @@ abstract class App{
 
     public static function icon(?string $icon): string
     {
-        $icon_path = '/sys/images/icons/' . basename($icon, '.png') . '.png';
-        if (!is_file(H . $icon_path)) {
+        $icon_path = '/images/icons/' . basename($icon, '.png') . '.png';
+        if (!is_file(H . '/public/' . $icon_path)) {
             return self::icon('info');
         }
         return $icon_path;

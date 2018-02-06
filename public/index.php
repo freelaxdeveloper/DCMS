@@ -1,5 +1,5 @@
 <?php
-include_once 'sys/inc/start.php';
+include_once '../sys/inc/start.php';
 use App\{document,widget,ini};
 use Dcms\Core\Router;
 # доступные языки, используется в роутах

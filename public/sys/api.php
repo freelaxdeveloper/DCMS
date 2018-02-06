@@ -1,5 +1,5 @@
 <?php
-include 'inc/start.php';
+include_once '../../sys/inc/start.php';
 use App\{api_response,api_request,ReflectionClass,api_smiles};
 
 if ( empty( $_POST['requests'] ) || ! is_string( $_POST['requests'] ) ) {

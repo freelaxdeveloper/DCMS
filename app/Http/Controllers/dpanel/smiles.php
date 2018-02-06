@@ -9,7 +9,7 @@ $doc->title = __('Смайлы');
 
 $smiles_a = array();
 // загружаем список смайлов
-$smiles_gl = (array) glob(H . '/sys/images/smiles/*.gif');
+$smiles_gl = (array) glob(H . '/images/smiles/*.gif');
 
 foreach ($smiles_gl as $path) {
     preg_match('#/([^/]+)\.gif$#', $path, $m);
@@ -21,7 +21,7 @@ if(!empty($_GET['delete']) && isset($smiles_a[$_GET['delete']])){
     foreach($phrases as $phrase){
         unset($smiles[$phrase]) ;
     }
-    if(!unlink(H . '/sys/images/smiles/' . $sm . '.gif')){
+    if(!unlink(H . '/images/smiles/' . $sm . '.gif')){
         $doc->err(__('Смайл %s не найден', $sm. '.gif')) ;
     }elseif(!ini::save(H . '/sys/ini/smiles.ini', $smiles)) {
         $doc->err(__('Нет прав на запись в файл %s', 'smiles.ini')) ;
@@ -74,7 +74,7 @@ if (!empty($_GET['smile']) && isset($smiles_a[$_GET['smile']])) {
     foreach ($phrases as $text) {
         $post = $listing->post();
         $post->title = $text;
-        $post->image = '/sys/images/smiles/' . $sm . '.gif';
+        $post->image = '/images/smiles/' . $sm . '.gif';
         $post->action('delete', '?smile=' . urlencode($sm) . '&amp;phrase=' . urlencode($text) . '&amp;act=delete');
     }
 
@@ -103,9 +103,9 @@ if(isset($_GET['add'])){
             $smile = @imagecreatefromgif($_FILES['file']['tmp_name']) ;
             if(!$smile){
                 $doc->err(__('Не верный формат')) ;
-            }elseif(file_exists(H . '/sys/images/smiles/' . $_FILES['file']['name'])){
+            }elseif(file_exists(H . '/images/smiles/' . $_FILES['file']['name'])){
                 $doc->err(__('Такой смайл уже существует')) ;
-            }elseif(move_uploaded_file($_FILES['file']['tmp_name'], H . '/sys/images/smiles/' . $_FILES['file']['name'])){
+            }elseif(move_uploaded_file($_FILES['file']['tmp_name'], H . '/images/smiles/' . $_FILES['file']['name'])){
                 $name = explode('.', text::for_filename($_FILES['file']['name'])) ;
                 $doc->msg(__('Смайл "%s" успешно добавлен', $_FILES['file']['name'])) ;
                 header('Refresh: 1; ?smile=' . $name[0]) ;
@@ -126,9 +126,9 @@ if(isset($_GET['add'])){
             $doc->err(__('Путь к файлу не распознан')) ;
         }elseif(!$fname = basename($purl['path'])){
             $doc->err(__('Не удалось получить имя файла из пути')) ;
-        }elseif(file_exists(H . '/sys/images/smiles/' . text::for_filename($fname))){
+        }elseif(file_exists(H . '/images/smiles/' . text::for_filename($fname))){
             $doc->err(__('Такой смайл уже существует')) ;
-        }elseif(copy($url, H . '/sys/images/smiles/' . text::for_filename($fname))){
+        }elseif(copy($url, H . '/images/smiles/' . text::for_filename($fname))){
             $name = explode('.', text::for_filename($fname)) ;
             $doc->msg(__('Смайл "%s" успешно добавлен', text::for_filename($fname))) ;
             header('Refresh: 1; ?smile=' . $name[0]) ;
@@ -152,7 +152,7 @@ if(isset($_GET['add'])){
 $listing = new listing();
 foreach ($smiles_a as $name => $path) {
     $post = $listing->post();
-    $post->image = '/sys/images/smiles/' . $name . '.gif';
+    $post->image = '/images/smiles/' . $name . '.gif';
     $post->setUrl(new url(null, array('smile' => $name)));
     $post->content = __('Варианты') . ': ' . implode(', ', array_keys($smiles, $name));
     $post->action('delete', '?delete=' . $name) ;
