@@ -1,7 +1,7 @@
 <?php
 namespace App\App;
 
-use App\Models\User;
+use Dcms\Models\User;
 use App\App\Crypt;
 
 abstract class Authorize{

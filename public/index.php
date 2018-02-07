@@ -28,6 +28,12 @@ $response = array_combine($only, $_POST);
 dd($response);
  */
 Router::get('', ['use' => 'home@index', 'name' => 'home']);
+Router::get('/captcha/(\?captcha_session\=[a-z0-9]+)', ['use' => 'captcha@captcha', 'name' => 'captcha']);
+
+Router::get('/auth/login', ['use' => 'auth@login', 'name' => 'auth:login', 'onlyGroup' => GROUP_GUEST]);
+Router::get('/auth/register', ['use' => 'auth@register', 'name' => 'auth:register', 'onlyGroup' => GROUP_GUEST]);
+Router::post('/auth/register', ['use' => 'auth@postRegister', 'name' => 'auth:postRegister', 'onlyGroup' => GROUP_GUEST]);
+Router::post('/auth/login', ['use' => 'auth@postLogin', 'name' => 'auth:postLogin', 'onlyGroup' => GROUP_GUEST]);
 
 Router::get('/chat_mini', ['use' => 'chatmini@messagesList', 'name' => 'chat']);
 Router::post('/chat_mini', ['use' => 'chatmini@send', 'name' => 'chatmini:send', 'group' => GROUP_USER]);
@@ -36,6 +42,8 @@ Router::get('/chat_mini/drop/(\?token\=[a-z0-9]+)', ['use' => 'chatmini@drop', '
 Router::get('/chat_mini/actions/([0-9]+)', ['use' => 'chatmini@actions', 'name' => 'chatminiActions']);
 
 Router::get('/user/([0-9]+)/view', ['use' => 'user@view', 'name' => 'user:view']);
+Router::get('/user/menu', ['use' => 'user@menu', 'name' => 'user:menu', 'group' => GROUP_USER]);
+Router::get('/user/exit/(\?token\=[a-z0-9]+)', ['use' => 'user@exit', 'name' => 'user:exit', 'group' => GROUP_USER]);
 
 Router::dispatch();
 

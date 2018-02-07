@@ -50,7 +50,11 @@ class menu_ini {
 
             if (empty($value['razdel'])) {
                 if (!empty($value['name'])) {
-                    $post->url = route($value['name']);
+                    $options = [];
+                    if (isset($value['token'])) {
+                        $options = ['?token=' . App::user()->url_token];
+                    }
+                    $post->url = route($value['name'], $options);
                 } else {
                     $post->url = text::toValue($this->value($value['url']));
                 }
