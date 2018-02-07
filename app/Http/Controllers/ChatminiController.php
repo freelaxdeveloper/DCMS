@@ -18,12 +18,14 @@ class ChatminiController extends Controller{
         if (App::user()->group >= GROUP_SMODER)
             $this->doc->act(__('Удаление сообщений'), route('chat:drop', ['?token=' . App::user()->url_token]));
 
-        $message_form = '';
-        $form = new form(route('chatmini:send'));
-        $form->hidden('token', antiflood::getToken('chat_mini'));
-        $form->textarea('message', __('Сообщение'), $message_form, true);
-        $form->button(__('Отправить'), 'send', false);
-        $form->display();
+        if (App::user()->group) {
+            $message_form = '';
+            $form = new form(route('chatmini:send'));
+            $form->hidden('token', antiflood::getToken('chat_mini'));
+            $form->textarea('message', __('Сообщение'), $message_form, true);
+            $form->button(__('Отправить'), 'send', false);
+            $form->display();
+        }
 
         $pages = new pages(ChatMini::count());
 

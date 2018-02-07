@@ -2,9 +2,9 @@
 namespace Dcms\Http\Controllers;
 
 use Dcms\Core\Controller;
-use Dcms\Models\User;
-use App\App\App;
-use App\{document,text,form,url,listing,misc,files};
+use Dcms\Models\{User,UserOnline};
+use App\App\{App,Authorize};
+use App\{document,text,form,url,listing,misc,files,menu_ini};
 
 class UserController extends Controller{
 
@@ -16,5 +16,25 @@ class UserController extends Controller{
             return redirect()->back()->with('err', __('Пользователь не найден'));
         }
         view('pages.profile', compact('user'));
+    }
+
+    public function menu()
+    {
+        $this->doc->title = __('Личное меню');
+
+        $menu = new menu_ini('user');
+        $menu->display();
+    }
+
+    public function exit()
+    {
+        $this->checkToken();
+
+        $userOnline = UserOnline::where('id_user', App::user()->id)->first();
+        $userOnline->delete();
+
+        Authorize::exit();
+
+        return redirect()->route('home')->with('msg', __('Авторизация успешно сброшена'));
     }
 }
