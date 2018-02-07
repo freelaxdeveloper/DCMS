@@ -76,15 +76,15 @@
                 <div id="navigation_user">
                     <div class="body_width_limit clearfix">
                         <a ng-show="+user.group" class="@if ( !$user->group )ng-hide @endif"
-                           href="/menu.user.php" ng-bind="user.login">{{$user->login}}</a>
+                           href="{{route('user:menu')}}" ng-bind="user.login">{{$user->login}}</a>
                         <a ng-show="+user.friend_new_count" class='ng-hide'
                            href='/my.friends.php' ng-bind="str.friends">@__('Друзья')</a>
                         <a ng-show="+user.mail_new_count" class='ng-hide'
                            href='/my.mail.php?only_unreaded' ng-bind="str.mail">@__('Почта')</a>
                         <a ng-hide="+user.group" class="ng-hide"
-                           href="/login.php?return={{URL}}" ng-bind="translates.auth">@__('Авторизаци')</a>
+                           href="{{route('auth:login')}}" ng-bind="translates.auth">@__('Авторизаци')</a>
                         <a ng-hide="+user.group" class="ng-hide"
-                           href="/reg.php?return={{URL}}" ng-bind="translates.reg">@__('Регистрация')</a>
+                           href="{{route('auth:register')}}" ng-bind="translates.reg">@__('Регистрация')</a>
     
                         @foreach ($actions as $link)
                            <a class="action" href="{{$link->url}}">{{$link->name}}</a>

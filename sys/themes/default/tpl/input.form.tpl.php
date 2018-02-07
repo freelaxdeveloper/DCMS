@@ -22,7 +22,7 @@
             case 'captcha':
                 ?>
                 <input type="hidden" name="captcha_session" value="<?= $element['session'] ?>"/>
-                <img id="captcha" src="/captcha.php?captcha_session=<?= $element['session'] ?>&amp;<?= SID ?>"
+                <img id="captcha" src="<?= route('captcha') ?>?captcha_session=<?= $element['session'] ?>"
                      alt="captcha"/><br/>
                 <?= $lang->getString("Введите число с картинки") ?>:<br/>
                 <input type="text" autocomplete="off" name="captcha" size="5" maxlength="5"/>
