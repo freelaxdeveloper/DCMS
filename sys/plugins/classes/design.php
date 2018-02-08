@@ -40,7 +40,7 @@ class design extends native_templating
         $this->theme = $theme;
 
         // папка шаблонов
-        $this->_dir_templates = H . '/sys/themes/' . $theme->getName() . '/tpl/';
+        $this->_dir_templates = H . '/resources/views/' . $theme->getName() . '/tpl/';
 
         // системные переменные
         $this->assign('theme', $theme);
@@ -48,7 +48,7 @@ class design extends native_templating
         $this->assign('copyright', $dcms->copyright, 2);
         $this->assign('lang', $user_language_pack);
         $this->assign('user', $user);
-        $this->assign('path', '/sys/themes/' . $theme->getName());
+        $this->assign('path', '/resources/views/' . $theme->getName());
     }
 
     /**

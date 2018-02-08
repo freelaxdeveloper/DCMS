@@ -206,7 +206,7 @@ function view(string $template, array $params = [], bool $view = true)
 {
     static $blade;
     if (!$blade) {
-        $blade = new Blade(H . '/sys/themes/default/blade', H . '/sys/themes/default/cache');
+        $blade = new Blade(H . '/resources/views/default/blade', H . '/resources/views/default/cache');
 
     }
     $blade->compiler()->directive('__', function ($text) {

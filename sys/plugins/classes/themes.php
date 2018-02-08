@@ -32,7 +32,7 @@ abstract class themes
 
         if (!$themes) {
             $themes = array();
-            $themes_path = H . '/sys/themes';
+            $themes_path = H . '/resources/views';
             $od = opendir($themes_path);
             while ($el_name = readdir($od)) {
                 if ($el_name{0} === '.') {

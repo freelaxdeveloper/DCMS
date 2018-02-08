@@ -17,8 +17,5 @@ class HomeController extends Controller{
             $widget = new widget(H . '/sys/widgets/' . $widget_name); // открываем
             $widget->display(); // отображаем
         }
-                
-        #$this->doc->title = __('Анкета');
-        #view('home');
     }
 }
