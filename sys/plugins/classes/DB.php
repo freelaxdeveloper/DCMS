@@ -44,7 +44,7 @@ class DB
 
         if (is_null(self::$pdo)) {
             if (!self::$db_name) {
-                throw new Exception('Укажите параметры соединения');
+                throw new \Exception('Укажите параметры соединения');
             }
 
             self::$pdo = new \PDO('mysql:host=' . self::$host . ';dbname=' . self::$db_name, self::$user, self::$password);

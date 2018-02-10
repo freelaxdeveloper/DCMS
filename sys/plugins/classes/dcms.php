@@ -238,12 +238,12 @@ class dcms
             true) OR die('Невозможно загрузить файл настроек по-умолчанию');
         if (!$settings = ini::read(H . '/sys/ini/settings.ini')) {
             // если установки небыли загружены, но при этом есть файл установки, то переадресуем на него
-            if (file_exists(H . '/install/index.php')) {
-                header("Location: /install/");
-                exit;
-            } else {
+            //if (file_exists(H . '/install/index.php')) {
+                /* redirect('/ru/install/');
+                exit; */
+            /* } else {
                 exit('Файл настроек не может быть загружен');
-            }
+            } */
         }
         $this->_data = array_merge($settings_default['DEFAULT'], $this->_data, $settings, $settings_default['REPLACE']);
     }

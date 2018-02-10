@@ -7,7 +7,7 @@ sys/files/*.!config.dir.ini
 sys/languages/*/_*.lng
 sys/ini/settings.ini
 sys/files/*
-sys/themes/default/cache/*
+resources/views/default/cache/*
 sys/files/*/.!config.dir.ini
 config.php
 sys/key/*

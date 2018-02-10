@@ -10,7 +10,7 @@ class ForumThemes extends Migration
             $table->increments('id');
             $table->integer('id_category')->unsigned();
             $table->integer('id_topic')->unsigned();
-            $table->integer('id_vote')->nullable();
+            $table->integer('id_vote')->unsigned()->nullable();
             $table->string('name');
             $table->enum('top', ['0', '1'])->default(0)->comment('Вверху');
             $table->unsignedSmallInteger('group_show')->default(0)->comment('Права для просмотра раздела');
@@ -18,7 +18,7 @@ class ForumThemes extends Migration
             $table->unsignedSmallInteger('group_edit')->default(0)->comment('Права для редактирования');
             $table->integer('id_autor')->unsigned()->comment('ID автора');
             $table->integer('id_last')->unsigned()->comment('ID последнего написавшего');
-            $table->integer('id_moderator')->nullable()->comment('ID модератора темы');
+            $table->integer('id_moderator')->unsigned()->nullable()->comment('ID модератора темы');
             $table->timestamps();
 
             $table->foreign('id_category')->references('id')->on('forum_categories');
